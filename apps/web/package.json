@@ -1,14 +1,18 @@
 {
   "name": "glass-ui-web",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "pnpm prebuild && astro dev",
+    "prebuild": "pnpm --filter=@glass-ui-kit/glass build:registry",
     "build": "astro build",
+    "preview": "astro preview",
     "lint": "eslint src"
   },
   "dependencies": {
     "astro": "latest",
     "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "@glass-ui-kit/glass": "workspace:*",
     "@glass-ui-kit/schema": "workspace:*"
   },
@@ -16,6 +20,9 @@
     "@glass-ui-kit/tsconfig": "workspace:*",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "tailwindcss": "4.0.0-alpha.32",
+    "@tailwindcss/vite": "4.0.0-alpha.32",
+    "@astrojs/react": "latest",
     "typescript": "^5.3.3"
   }
 }
