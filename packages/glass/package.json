@@ -5,10 +5,13 @@
   "main": "src/index.ts",
   "sideEffects": false,
   "scripts": {
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "build:registry": "bun run ./scripts/build-registry.ts"
   },
   "dependencies": {
-    "@glass-ui-kit/schema": "workspace:*"
+    "@glass-ui-kit/schema": "workspace:*",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
     "@glass-ui-kit/tsconfig": "workspace:*",
