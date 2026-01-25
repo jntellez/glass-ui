@@ -39,3 +39,16 @@ export function getCssPath(framework: Framework): string | null {
   // Fallback si no encuentra el archivo existente pero conocemos el framework
   return paths[framework]?.[0] || null;
 }
+
+export async function installDependencies(deps: string[], pm: PackageManager) {
+  const installCmd = pm === "npm" ? "install" : "add";
+  const args = [installCmd, ...deps];
+
+  // Bun.spawn es la forma nativa y rápida de ejecutar subprocesos en Bun
+  const proc = Bun.spawn([pm, ...args], {
+    stdout: "inherit",
+    stderr: "inherit",
+  });
+
+  await proc.exited;
+}

@@ -12,6 +12,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
+    "@glass-ui-kit/schema": "workspace:*",
     "commander": "^11.0.0",
     "chalk": "^5.0.0"
   },
