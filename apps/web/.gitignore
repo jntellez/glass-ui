@@ -1,0 +1,4 @@
+public/registry.json
+dist/
+.astro/
+node_modules/

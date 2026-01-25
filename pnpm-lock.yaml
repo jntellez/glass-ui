@@ -97,6 +97,12 @@ importers:
       '@glass-ui-kit/schema':
         specifier: workspace:*
         version: link:../schema
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      tailwind-merge:
+        specifier: ^3.4.0
+        version: 3.4.0
     devDependencies:
       '@glass-ui-kit/tsconfig':
         specifier: workspace:*
