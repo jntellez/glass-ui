@@ -1,0 +1,11 @@
+{
+  "extends": "@glass-ui-kit/tsconfig/base.json",
+  "compilerOptions": {
+    "target": "es2022",
+    "lib": ["esnext"],
+    "module": "esnext",
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src"]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "glass-ui-web",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "astro": "latest",
+    "react": "^19.0.0",
+    "@glass-ui-kit/glass": "workspace:*",
+    "@glass-ui-kit/schema": "workspace:*"
+  },
+  "devDependencies": {
+    "@glass-ui-kit/tsconfig": "workspace:*",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.3.3"
+  }
+}

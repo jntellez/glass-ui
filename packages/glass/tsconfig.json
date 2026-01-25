@@ -1,0 +1,9 @@
+{
+  "extends": "@glass-ui-kit/tsconfig/react.json",
+  "compilerOptions": {
+    "paths": {
+      "@glass-ui-kit/glass/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}

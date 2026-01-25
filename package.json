@@ -1,0 +1,22 @@
+{
+  "name": "glass-ui",
+  "private": true,
+  "packageManager": "pnpm@10.28.1",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "clean": "turbo clean && rm -rf node_modules",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo build --filter=packages/* && changeset publish"
+  },
+  "devDependencies": {
+    "turbo": "^2.7.5",
+    "@changesets/cli": "^2.29.8",
+    "prettier": "latest"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

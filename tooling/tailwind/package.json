@@ -1,0 +1,8 @@
+{
+  "name": "@glass-ui-kit/tailwind",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    "./glass-theme.css": "./src/glass-theme.css"
+  }
+}

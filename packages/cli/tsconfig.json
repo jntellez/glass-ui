@@ -1,0 +1,9 @@
+{
+  "extends": "@glass-ui-kit/tsconfig/bun.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "index.ts"]
+}

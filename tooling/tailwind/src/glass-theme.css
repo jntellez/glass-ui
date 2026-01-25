@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+/* Mapeo de Variables CSS a Utilidades de Tailwind v4.
+  Esto permite usar clases como: 
+  - bg-glass-surface
+  - border-glass-border
+  - backdrop-blur-glass
+*/
+
+@theme {
+  /* Colors */
+  --color-glass-surface: var(--glass-surface);
+  --color-glass-border: var(--glass-border);
+  --color-glass-highlight: var(--glass-highlight);
+
+  /* Shadows */
+  --shadow-glass: var(--glass-shadow);
+
+  /* Backdrop Filters (Blur) */
+  --backdrop-blur-glass: var(--glass-blur);
+
+  /* Animations (Sutiles para UI de cristal) */
+  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-slide-up: slide-up 0.4s ease-out;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slide-up {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+}

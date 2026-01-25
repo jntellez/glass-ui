@@ -1,0 +1,21 @@
+{
+  "name": "@glass-ui-kit/schema",
+  "version": "0.0.1",
+  "private": false,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "zod": "^3.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@glass-ui-kit/tsconfig": "workspace:*",
+    "typescript": "^5.3.3"
+  }
+}

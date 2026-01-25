@@ -1,0 +1,46 @@
+/* GLASS UI TOKENS
+  Single Source of Truth for Physics & Lighting
+*/
+
+:root {
+  /* --- LIGHT MODE PHYSICS (Daylight) --- */
+  
+  /* Superficie: Blanca, translúcida, sensación de vidrio esmerilado */
+  --glass-surface: rgba(255, 255, 255, 0.4);
+  
+  /* Borde: Define el límite físico. En light mode es sutilmente blanco */
+  --glass-border: rgba(255, 255, 255, 0.6);
+  
+  /* Highlight: El "brillo" especular en la parte superior/interna */
+  --glass-highlight: rgba(255, 255, 255, 0.5);
+  
+  /* Sombra: Difusa y suave, coloreada para realismo */
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  
+  /* Textura: Cuánto difumina lo que hay detrás */
+  --glass-blur: 12px;
+  
+  /* Saturación: Aumenta la viveza del fondo (efecto iOS) */
+  --glass-saturation: 110%;
+}
+
+.dark {
+  /* --- DARK MODE PHYSICS (Midnight) --- */
+  
+  /* Superficie: Oscura pero no negra total. Baja opacidad para dejar pasar luz */
+  --glass-surface: rgba(0, 0, 0, 0.3);
+  
+  /* Borde: Muy sutil, casi imperceptible, solo para contraste */
+  --glass-border: rgba(255, 255, 255, 0.08);
+  
+  /* Highlight: En dark mode, el brillo blanco distrae. Se reduce drásticamente */
+  --glass-highlight: rgba(255, 255, 255, 0.03);
+  
+  /* Sombra: Menos relevante en oscuridad, más enfocada */
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  
+  /* Textura: A veces se reduce el blur para legibilidad en contraste alto */
+  --glass-blur: 12px;
+  
+  --glass-saturation: 100%;
+}
