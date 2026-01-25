@@ -69,6 +69,10 @@ importers:
         version: 5.9.3
 
   packages/glass:
+    dependencies:
+      '@glass-ui-kit/schema':
+        specifier: workspace:*
+        version: link:../schema
     devDependencies:
       '@glass-ui-kit/tsconfig':
         specifier: workspace:*

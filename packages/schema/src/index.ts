@@ -1,1 +1,2 @@
-export const nombre = "Glass UI";
+export * from "./registry";
+// Futuras exportaciones (config, theme) irán aquí

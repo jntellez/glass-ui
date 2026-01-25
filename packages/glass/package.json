@@ -7,6 +7,9 @@
   "scripts": {
     "lint": "eslint src"
   },
+  "dependencies": {
+    "@glass-ui-kit/schema": "workspace:*"
+  },
   "devDependencies": {
     "@glass-ui-kit/tsconfig": "workspace:*",
     "@types/react": "^19.0.0",
