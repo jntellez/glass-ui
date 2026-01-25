@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+/* Import the shared Glass Physics from the tooling package.
+  In a real monorepo, you might import this from node_modules, 
+  but here we define the source of truth mapping.
+*/
+
+@theme {
+  /* Copying the tokens mapping from tooling/tailwind/src/glass-theme.css 
+     or importing it if configured as a package export. 
+     For this step, we ensure the variables exist.
+  */
+  
+  --color-glass-surface: var(--glass-surface);
+  --color-glass-border: var(--glass-border);
+  --color-glass-highlight: var(--glass-highlight);
+  --shadow-glass: var(--glass-shadow);
+  --backdrop-blur-glass: var(--glass-blur);
+}
+
+/* Base Glass Physics (Copied from packages/glass/src/tokens.css) */
+@layer base {
+  :root {
+    --glass-surface: rgba(255, 255, 255, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-highlight: rgba(255, 255, 255, 0.5);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    --glass-blur: 12px;
+    --glass-saturation: 110%;
+    
+    /* Base text for landing page */
+    --color-foreground: #09090b;
+    --color-background: #f4f4f5; 
+  }
+
+  .dark {
+    --glass-surface: rgba(0, 0, 0, 0.3);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-highlight: rgba(255, 255, 255, 0.03);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    --glass-blur: 12px;
+    --glass-saturation: 100%;
+
+    --color-foreground: #fafafa;
+    --color-background: #09090b; 
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    /* Complex background to test glass effect */
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.3) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.3) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+}
