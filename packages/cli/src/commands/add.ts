@@ -14,10 +14,11 @@ export const add = new Command()
   .argument("<component>", "The component to add")
   .action(async (componentName) => {
     try {
-      // 1. Validar entorno (Glass Config)
+      // 1. Validate Environment
       if (!exists("glass.config.json")) {
-        console.error(
-          chalk.red("❌ Missing glass.config.json. Run 'glass-ui init' first."),
+        console.error(chalk.red("❌ Missing glass.config.json"));
+        console.log(
+          chalk.gray("   Run 'glass-ui init' to set up your project first."),
         );
         process.exit(1);
       }
@@ -29,33 +30,35 @@ export const add = new Command()
         chalk.blue(`🔮 Fetching component: ${chalk.bold(componentName)}...`),
       );
 
-      // 2. Obtener Registry
+      // 2. Fetch Registry (Cached or Network)
       const registry = await fetchRegistry();
       const item = getItem(registry, componentName);
 
+      // 3. Validate Component Existence
       if (!item) {
         console.error(
-          chalk.red(`❌ Component '${componentName}' not found in registry.`),
+          chalk.red(`❌ Component '${chalk.bold(componentName)}' not found.`),
+        );
+        console.log(
+          chalk.gray(
+            `   Available components: ${registry.map((i) => i.name).join(", ")}`,
+          ),
         );
         process.exit(1);
       }
 
-      // 3. Resolver Rutas (Simple Alias Resolution)
-      // Asumimos que "@/components/ui" -> "./src/components/ui"
-      // En una versión futura, leeremos tsconfig.json para exactitud.
+      // 4. Resolve Paths
       const targetDirAlias = config.aliases.components || "@/components/ui";
       const targetDir = targetDirAlias.replace(/^@\//, "./src/");
 
-      // 4. Escribir Archivos
+      // 5. Write Files
       console.log(chalk.gray("   Writing files..."));
       for (const file of item.files) {
-        // file.path viene como "ui/glass-card.tsx" o simple "glass-card.tsx"
-        // Lo normalizamos al targetDir del usuario
         const fileName = path.basename(file.path);
         const filePath = path.join(targetDir, fileName);
 
         if (!file.content) {
-          console.warn(chalk.yellow(`⚠️  No content for ${fileName}`));
+          console.warn(chalk.yellow(`⚠️  Skipping empty file: ${fileName}`));
           continue;
         }
 
@@ -63,7 +66,7 @@ export const add = new Command()
         console.log(chalk.green(`   ✅ ${filePath}`));
       }
 
-      // 5. Instalar Dependencias
+      // 6. Install Dependencies
       if (item.dependencies?.length) {
         console.log(chalk.blue(`\n📦 Installing dependencies with ${pm}...`));
         await installDependencies(item.dependencies, pm);
@@ -73,7 +76,15 @@ export const add = new Command()
         chalk.bold.green(`\n🎉 ${componentName} added successfully!`),
       );
     } catch (error) {
-      console.error(chalk.red("❌ Error adding component:"), error);
+      // UX-Friendly Error Handling (No Stack Traces)
+      console.error(chalk.red("\n❌ Operation failed:"));
+
+      if (error instanceof Error) {
+        console.error(chalk.white(`   ${error.message}`));
+      } else {
+        console.error(chalk.white("   An unknown error occurred."));
+      }
+
       process.exit(1);
     }
   });
