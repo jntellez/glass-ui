@@ -4,44 +4,38 @@ import {
   type RegistryItem,
 } from "@glass-ui-kit/schema";
 
-// Placeholder: En producción esto apuntará a glassui.dev/registry.json
-const REGISTRY_URL = "https://glass-ui-kit.vercel.app/registry.json";
+const REGISTRY_URL = "https://ui-glass.vercel.app/registry.json";
 
 export async function fetchRegistry(): Promise<RegistryIndex> {
   try {
     const response = await fetch(REGISTRY_URL);
 
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error(
+        `Failed to fetch registry from ${REGISTRY_URL}. Status: ${response.status} ${response.statusText}`,
+      );
     }
 
     const data = await response.json();
-    return registryIndexSchema.parse(data);
-  } catch (error) {
-    // FALLBACK MOCK: Para permitir probar el CLI antes de desplegar la web
-    // Esto simula que el registry ya tiene un componente.
-    return [
-      {
-        name: "glass-card",
-        type: "registry:ui",
-        dependencies: ["clsx", "tailwind-merge"],
-        files: [
-          {
-            path: "glass-card.tsx",
-            type: "client",
-            content: `import { cn } from "@/lib/utils";
 
-export function GlassCard({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={cn("bg-glass-surface border border-glass-border backdrop-blur-glass p-6 rounded-xl", className)} {...props}>
-      {children}
-    </div>
-  );
-}`,
-          },
-        ],
-      },
-    ];
+    // Validate data against the shared schema
+    const parsedRegistry = registryIndexSchema.safeParse(data);
+
+    if (!parsedRegistry.success) {
+      console.error(
+        "❌ Registry schema validation failed:",
+        parsedRegistry.error.format(),
+      );
+      throw new Error("Invalid registry format received from server.");
+    }
+
+    return parsedRegistry.data;
+  } catch (error) {
+    // Re-throw with a clean message for the CLI consumer
+    if (error instanceof Error) {
+      throw new Error(`Registry connection failed: ${error.message}`);
+    }
+    throw new Error("Unknown error while connecting to registry.");
   }
 }
 
