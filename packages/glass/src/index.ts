@@ -1,1 +1,1 @@
-export * from "./ui/glass-card";
+export * from "./ui/card";

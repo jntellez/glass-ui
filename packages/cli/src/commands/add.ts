@@ -16,19 +16,16 @@ export const add = new Command()
     try {
       // 1. Validate Environment
       if (!exists("glass.config.json")) {
-        console.error(chalk.red("❌ Missing glass.config.json"));
-        console.log(
-          chalk.gray("   Run 'glass-ui init' to set up your project first."),
-        );
+        console.error(chalk.red("Configuration file not found."));
+        console.log(chalk.gray("Please run the init command first:"));
+        console.log(chalk.cyan("  npx @glass-ui-kit/cli@latest init"));
         process.exit(1);
       }
 
       const config = JSON.parse(await readFile("glass.config.json"));
       const pm = await getPackageManager();
 
-      console.log(
-        chalk.blue(`🔮 Fetching component: ${chalk.bold(componentName)}...`),
-      );
+      console.log(chalk.bold(`Fetching component: ${componentName}...`));
 
       // 2. Fetch Registry (Cached or Network)
       const registry = await fetchRegistry();
@@ -37,13 +34,10 @@ export const add = new Command()
       // 3. Validate Component Existence
       if (!item) {
         console.error(
-          chalk.red(`❌ Component '${chalk.bold(componentName)}' not found.`),
+          chalk.red(`Component '${componentName}' not found in registry.`),
         );
-        console.log(
-          chalk.gray(
-            `   Available components: ${registry.map((i) => i.name).join(", ")}`,
-          ),
-        );
+        console.log(chalk.gray("Available components:"));
+        console.log(chalk.gray(`  ${registry.map((i) => i.name).join(", ")}`));
         process.exit(1);
       }
 
@@ -52,37 +46,33 @@ export const add = new Command()
       const targetDir = targetDirAlias.replace(/^@\//, "./src/");
 
       // 5. Write Files
-      console.log(chalk.gray("   Writing files..."));
       for (const file of item.files) {
         const fileName = path.basename(file.path);
         const filePath = path.join(targetDir, fileName);
 
         if (!file.content) {
-          console.warn(chalk.yellow(`⚠️  Skipping empty file: ${fileName}`));
           continue;
         }
 
         await writeFile(filePath, file.content);
-        console.log(chalk.green(`   ✅ ${filePath}`));
+        console.log(chalk.green(`  Created ${filePath}`));
       }
 
       // 6. Install Dependencies
       if (item.dependencies?.length) {
-        console.log(chalk.blue(`\n📦 Installing dependencies with ${pm}...`));
+        console.log(chalk.cyan(`  Installing dependencies...`));
         await installDependencies(item.dependencies, pm);
       }
 
-      console.log(
-        chalk.bold.green(`\n🎉 ${componentName} added successfully!`),
-      );
+      console.log(chalk.bold.green(`\nDone.`));
     } catch (error) {
-      // UX-Friendly Error Handling (No Stack Traces)
-      console.error(chalk.red("\n❌ Operation failed:"));
+      // UX-Friendly Error Handling
+      console.error(chalk.red("\nOperation failed:"));
 
       if (error instanceof Error) {
-        console.error(chalk.white(`   ${error.message}`));
+        console.error(chalk.gray(`  ${error.message}`));
       } else {
-        console.error(chalk.white("   An unknown error occurred."));
+        console.error(chalk.gray("  An unknown error occurred."));
       }
 
       process.exit(1);

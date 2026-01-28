@@ -1,50 +1,41 @@
 import chalk from "chalk";
 import { Command } from "commander";
+import path from "node:path";
 import { writeFile, readFile, exists } from "../utils/filesystem";
 import {
   getFramework,
   getPackageManager,
   getCssPath,
+  installDependencies,
 } from "../utils/get-project-info";
-import { GLASS_TOKENS } from "../templates/tokens";
+import { GLASS_TOKENS, UTILS_CN } from "../utils/templates";
 
 export const init = new Command()
   .name("init")
-  .description("Initialize Glass UI configuration in your project")
+  .description("Initialize configuration and dependencies")
   .option("-y, --yes", "Skip confirmation prompt", false)
   .action(async (opts) => {
     try {
-      console.log(chalk.bold.blue("\n🔮 Initializing Glass UI..."));
+      console.log(chalk.bold("\nInitializing Glass UI..."));
 
       // 1. Detección de entorno
       const framework = await getFramework();
       const pm = await getPackageManager();
+      const cwd = process.cwd();
       const configPath = "glass.config.json";
 
-      console.log(
-        chalk.gray(`   Detected Framework: ${chalk.white(framework)}`),
-      );
-      console.log(chalk.gray(`   Detected Manager:   ${chalk.white(pm)}`));
-
-      // 2. Localización del CSS Global
+      // Paths predeterminados
+      // Intentamos detectar el CSS, si falla usamos default
       let cssPath = getCssPath(framework);
-
       if (!cssPath) {
-        console.log(
-          chalk.yellow("⚠️  Could not detect global CSS file automatically."),
-        );
-        // En un futuro aquí preguntaríamos al usuario, por ahora default
         cssPath = "src/index.css";
+        // Nota: Aquí podrías agregar un warning sutil si quieres,
+        // pero para mantenerlo limpio lo dejamos implícito.
       }
 
-      console.log(chalk.gray(`   Target CSS File:    ${chalk.white(cssPath)}`));
+      const utilsPath = path.join(cwd, "src/lib/utils.ts");
 
-      if (!opts.yes) {
-        // Simulación de pausa simple (en producción usaríamos prompts)
-        console.log(chalk.gray("\n   (Running in auto-mode with -y for MVP)"));
-      }
-
-      // 3. Crear archivo de configuración
+      // 2. Crear archivo de configuración
       if (!exists(configPath)) {
         await writeFile(
           configPath,
@@ -59,31 +50,59 @@ export const init = new Command()
             2,
           ),
         );
-        console.log(chalk.green(`✅ Created config: ${configPath}`));
+        console.log(chalk.green("  Created glass.config.json"));
       } else {
-        console.log(chalk.yellow(`ℹ️  Config file already exists.`));
+        console.log(chalk.gray("  glass.config.json already exists."));
       }
 
-      // 4. Inyección de CSS
+      // 3. Crear utilidad 'cn' (src/lib/utils.ts)
+      if (!exists(utilsPath)) {
+        // Aseguramos que el usuario tenga la utilidad base para clases condicionales
+        await writeFile(utilsPath, UTILS_CN);
+        console.log(chalk.green("  Created src/lib/utils.ts"));
+      } else {
+        console.log(chalk.gray("  src/lib/utils.ts already exists."));
+      }
+
+      // 4. Inyección de CSS (Glass Tokens)
       let cssContent = "";
       try {
-        cssContent = await readFile(cssPath);
+        if (exists(cssPath)) {
+          cssContent = await readFile(cssPath);
+        } else {
+          // Si no existe, lo creamos vacío para inyectarle los tokens
+          console.log(chalk.yellow(`  Creating new CSS file at ${cssPath}`));
+        }
       } catch (e) {
-        console.log(chalk.yellow(`ℹ️  Creating new CSS file at ${cssPath}`));
+        // Fallback silencioso
       }
 
       if (!cssContent.includes("--glass-surface")) {
         const newCssContent = `${GLASS_TOKENS}\n${cssContent}`;
         await writeFile(cssPath, newCssContent);
-        console.log(chalk.green(`✅ Injected tokens into ${cssPath}`));
+        console.log(chalk.green(`  Updated ${cssPath} with glass tokens`));
       } else {
-        console.log(chalk.gray(`ℹ️  Tokens already present in ${cssPath}`));
+        console.log(chalk.gray(`  Tokens already present in ${cssPath}`));
       }
 
-      console.log(chalk.bold.green("\n🎉 Setup complete. Ready to build."));
-      console.log(chalk.gray("   Try running: npx glass-ui add card"));
+      // 5. Instalación de Dependencias (Crítico para 'cn')
+      console.log(
+        chalk.cyan(`  Installing dependencies (clsx, tailwind-merge)...`),
+      );
+      await installDependencies(["clsx", "tailwind-merge"], pm);
+
+      // Mensaje Final Profesional
+      console.log(chalk.bold.green("\nSetup complete."));
+      console.log(`Try adding a component:\n`);
+      console.log(chalk.cyan(`  npx @glass-ui-kit/cli@latest add card`));
+      console.log("");
     } catch (error) {
-      console.error(chalk.red("\n❌ Error initializing:"), error);
+      console.error(chalk.red("\nInitialization failed:"));
+      if (error instanceof Error) {
+        console.error(chalk.gray(error.message));
+      } else {
+        console.error(chalk.gray(String(error)));
+      }
       process.exit(1);
     }
   });

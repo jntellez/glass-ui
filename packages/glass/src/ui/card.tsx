@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "../lib/utils"
 
-const GlassCard = React.forwardRef<
+const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
@@ -15,6 +15,6 @@ const GlassCard = React.forwardRef<
     {...props}
   />
 ))
-GlassCard.displayName = "GlassCard"
+Card.displayName = "Card"
 
-export { GlassCard }
+export { Card }

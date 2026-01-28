@@ -7,12 +7,12 @@ import type { RegistryIndex } from "@glass-ui-kit/schema";
  */
 export const registry: RegistryIndex = [
   {
-    name: "glass-card",
+    name: "card",
     type: "registry:ui",
     dependencies: ["clsx", "tailwind-merge"],
     files: [
       {
-        path: "ui/glass-card.tsx", // La ruta relativa a src/
+        path: "ui/card.tsx",
         type: "client",
       },
     ],
