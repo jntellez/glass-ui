@@ -1,8 +1,26 @@
 {
   "name": "@glass-ui-kit/cli",
-  "version": "0.0.1",
-  "description": "The official CLI for Glass UI",
-  "private": false,
+  "version": "0.1.0",
+  "description": "The official CLI for Glass UI. Add glassmorphism components to your React projects in seconds.",
+  "keywords": [
+    "glassmorphism",
+    "design-system",
+    "react",
+    "cli",
+    "ui",
+    "tailwind"
+  ],
+  "homepage": "https://github.com/jntellez/glass-ui#readme",
+  "bugs": {
+    "url": "https://github.com/jntellez/glass-ui/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jntellez/glass-ui.git",
+    "directory": "packages/cli"
+  },
+  "license": "MIT",
+  "author": "Glass UI Team",
   "type": "module",
   "bin": {
     "glass-ui": "./dist/index.js"
@@ -30,19 +48,6 @@
     "bun-types": "latest",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
-  },
-  "keywords": [
-    "glassmorphism",
-    "react",
-    "cli",
-    "ui",
-    "tailwind"
-  ],
-  "author": "Glass UI Team",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jntellez/glass-ui.git"
   },
   "publishConfig": {
     "access": "public"
