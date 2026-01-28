@@ -3,23 +3,48 @@
   "version": "0.0.1",
   "description": "The official CLI for Glass UI",
   "private": false,
+  "type": "module",
   "bin": {
     "glass-ui": "./dist/index.js"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
-    "build": "bun build ./src/index.ts --compile --outfile dist/index.js",
+    "build": "tsup src/index.ts --format esm --clean",
     "dev": "bun run ./src/index.ts",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "@glass-ui-kit/schema": "workspace:*",
-    "commander": "^11.0.0",
-    "chalk": "^5.0.0"
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "node-fetch": "^3.3.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@glass-ui-kit/tsconfig": "workspace:*",
+    "@types/node": "^20.11.0",
     "bun-types": "latest",
-    "typescript": "^5.3.3",
-    "@types/node": "^20.11.0"
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "glassmorphism",
+    "react",
+    "cli",
+    "ui",
+    "tailwind"
+  ],
+  "author": "Glass UI Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jntellez/glass-ui.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
