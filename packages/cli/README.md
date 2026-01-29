@@ -35,13 +35,6 @@ npx @glass-ui-kit/cli add card
 
 ```
 
-You can also run the command without any arguments to view a list of all available components:
-
-```bash
-npx @glass-ui-kit/cli add
-
-```
-
 ## Documentation
 
 Visit [https://ui-glass.vercel.app](https://ui-glass.vercel.app) to view the registry and documentation.
