@@ -42,15 +42,3 @@ Visit [https://ui-glass.vercel.app](https://ui-glass.vercel.app) to view the reg
 ## License
 
 Licensed under the [MIT license](https://github.com/jntellez/glass-ui/blob/master/LICENSE).
-
----
-
-### Keywords
-
-components
-ui
-glassmorphism
-tailwind
-design-system
-react
-cli
