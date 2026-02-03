@@ -2,11 +2,18 @@
   "name": "@glass-ui-kit/glass",
   "version": "0.0.0",
   "private": true,
-  "main": "src/index.ts",
+  "main": "./src/ui/index.ts",
+  "module": "./src/ui/index.ts",
+  "types": "./src/ui/index.ts",
   "sideEffects": false,
   "scripts": {
     "lint": "eslint src",
     "build:registry": "bun run ./scripts/build-registry.ts"
+  },
+  "exports": {
+    ".": "./src/ui/index.ts",
+    "./css": "./src/css/index.css",
+    "./tokens": "./src/css/tokens.css"
   },
   "dependencies": {
     "@glass-ui-kit/schema": "workspace:*",

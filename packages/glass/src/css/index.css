@@ -1,0 +1,30 @@
+@import './tokens.css';
+
+@layer components {
+  /* .glass -> La clase fundacional.
+    Usa las variables por defecto (--glass-bg, etc).
+  */
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* PRESETS DE INTENSIDAD
+    No reescriben propiedades CSS (background, border).
+    Solo re-asignan las variables locales.
+  */
+  .glass-strong {
+    --glass-bg: var(--glass-bg-strong);
+    --glass-border: var(--glass-border-strong);
+    --glass-blur: var(--glass-blur-strong);
+  }
+
+  .glass-soft {
+    --glass-bg: var(--glass-bg-soft);
+    --glass-border: var(--glass-border-soft);
+    --glass-blur: var(--glass-blur-soft);
+  }
+}

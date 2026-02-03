@@ -1,0 +1,35 @@
+@layer base {
+  :root {
+    /* === BASE PRIMITIVES (Default) === */
+    --glass-bg: rgba(255, 255, 255, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    --glass-blur: 12px;
+    --glass-saturation: 110%;
+
+    /* === SEMANTIC VARIANTS (Tokens) === */
+    /* Strong: Para alto contraste o énfasis */
+    --glass-bg-strong: rgba(255, 255, 255, 0.75);
+    --glass-border-strong: rgba(255, 255, 255, 0.8);
+    --glass-blur-strong: 20px;
+
+    /* Soft: Para fondos sutiles */
+    --glass-bg-soft: rgba(255, 255, 255, 0.2);
+    --glass-border-soft: rgba(255, 255, 255, 0.3);
+    --glass-blur-soft: 8px;
+  }
+
+  .dark {
+    /* === DARK PRIMITIVES === */
+    --glass-bg: rgba(15, 23, 42, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+    /* === DARK VARIANTS === */
+    --glass-bg-strong: rgba(15, 23, 42, 0.85);
+    --glass-border-strong: rgba(255, 255, 255, 0.15);
+    
+    --glass-bg-soft: rgba(15, 23, 42, 0.3);
+    --glass-border-soft: rgba(255, 255, 255, 0.05);
+  }
+}
