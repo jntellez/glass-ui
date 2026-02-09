@@ -8,7 +8,9 @@ import {
   getCssPath,
   installDependencies,
 } from "../utils/get-project-info";
-import { GLASS_TOKENS, UTILS_CN } from "../utils/templates";
+// CHANGE: Imports actualizados a la nueva estructura
+import { GLASS_BASE_STYLES } from "../templates/styles";
+import { UTILS_CN } from "../templates/utils";
 
 export const init = new Command()
   .name("init")
@@ -77,8 +79,10 @@ export const init = new Command()
         // Fallback silencioso
       }
 
-      if (!cssContent.includes("--glass-surface")) {
-        const newCssContent = `${GLASS_TOKENS}\n${cssContent}`;
+      // CHANGE: Verificamos la nueva variable principal (--glass-bg)
+      if (!cssContent.includes("--glass-bg")) {
+        // CHANGE: Inyectamos GLASS_BASE_STYLES (que trae tokens + clases)
+        const newCssContent = `${GLASS_BASE_STYLES}\n${cssContent}`;
         await writeFile(cssPath, newCssContent);
         console.log(chalk.green(`  Updated ${cssPath} with glass tokens`));
       } else {
