@@ -1,107 +1,50 @@
 # 🧊 Glass UI
 
-A modern, opinionated design system for React, focused on premium **Glassmorphism** aesthetics.  
-Built on **Tailwind CSS v4** and **TypeScript**.
+Beautifully designed glassmorphism components built with React, TypeScript, and Tailwind CSS.
 
-> **Note**  
-> Glass UI is **not** a traditional component library installed as a dependency.  
-> It is a tool that **copies source code directly into your project**, giving you full ownership and complete customization.
+This is **not** a component library. It's a collection of re-usable components that you can copy and paste into your apps.
 
-## Architecture
+**[Read the documentation](https://ui-glass.vercel.app)**
 
-This repository is a **monorepo** managed with **pnpm** and **Turborepo**, composed of:
+## Philosophy
 
-- **@glass-ui-kit/cli**  
-  The command-line interface used to initialize projects and add components.
+Glass UI follows the philosophy of ownership. We do not distribute the components as an npm package. instead, we provide a CLI to scaffold the code directly into your project.
 
-- **@glass-ui-kit/glass**  
-  The source of truth for all components, tokens, and registry definitions.
-
-- **apps/web**  
-  The documentation site and public registry host.
-
-## Features
-
-- **Zero Runtime Overhead**  
-  Components are copied into your project — no heavy npm bundles.
-
-- **Tailwind v4 Native**  
-  Built specifically for the new Tailwind engine.
-
-- **Type-Safe by Default**  
-  Written in TypeScript with strict Zod validation.
-
-- **Themeable Glass Physics**  
-  CSS variables enable real-time light/dark mode transitions.
+- **Copy and paste.** You own the code. Customize it to your needs.
+- **Glassmorphism.** Physics-based tokens for blur, saturation, and transparency.
+- **Type-safe.** Written in TypeScript.
+- **Accessible.** Built on top of accessible primitives.
 
 ## Quick Start
 
-You don’t need to clone this repository to use Glass UI.  
-You only need the CLI.
+Use the CLI to initialize your project and add components.
+
+### Initialize
+
+Run the `init` command to set up the base configuration and CSS variables.
 
 ```bash
-npx @glass-ui-kit/cli init
-npx @glass-ui-kit/cli add card
+npx @glass-ui-kit/cli@latest init
+
 ```
+
+### Add components
+
+Use the `add` command to add components to your project. The CLI will automatically install dependencies and resolve imports.
+
+```bash
+npx @glass-ui-kit/cli@latest add card
+
+```
+
+## Monorepo Structure
+
+This repository is managed with [Turbo](https://turbo.build/) and pnpm.
+
+- `apps/web`: The documentation site and component registry.
+- `packages/cli`: The command line interface (`@glass-ui-kit/cli`).
+- `packages/glass`: The source of truth for all components.
 
 ## License
 
-MIT © Glass UI Contributors
-
-## @glass-ui-kit/cli
-
-The official Command Line Interface for **Glass UI**.  
-Use this tool to initialize your project and add pre-built glassmorphism components directly into your codebase.
-
-## Installation
-
-You can run the CLI directly via `npx` (recommended) or install it globally.
-
-```bash
-# Run directly (recommended)
-npx @glass-ui-kit/cli init
-
-# Or install globally
-npm install -g @glass-ui-kit/cli
-```
-
-## Commands
-
-### `init`
-
-Initializes Glass UI in your project.
-
-```bash
-glass-ui init
-```
-
-**What it does:**
-
-- Detects your framework (Next.js, Vite, Astro)
-- Creates a `glass.config.json` file
-- Injects base CSS variables (Glass Physics) into your global CSS
-
-### `add`
-
-Adds a Glass UI component to your project.
-
-```bash
-glass-ui add <component>
-```
-
-**Example:**
-
-```bash
-glass-ui add glass-card
-```
-
-**What it does:**
-
-- Fetches component source code from the remote registry
-- Installs required dependencies (e.g. `clsx`, `tailwind-merge`)
-- Writes the component to your configured directory
-  (e.g. `src/components/ui/glass-card.tsx`)
-
-## License
-
-MIT
+MIT © [Glass UI](LISENSE)
