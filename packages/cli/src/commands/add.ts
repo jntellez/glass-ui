@@ -6,7 +6,9 @@ import { fetchRegistry, getItem } from "../utils/registry";
 import {
   getPackageManager,
   installDependencies,
+  Config,
 } from "../utils/get-project-info";
+import { transformImports } from "../utils/transformers";
 
 export const add = new Command()
   .name("add")
@@ -22,22 +24,19 @@ export const add = new Command()
         process.exit(1);
       }
 
-      const config = JSON.parse(await readFile("glass.config.json"));
+      // Leemos la config y la tipeamos
+      const config: Config = JSON.parse(await readFile("glass.config.json"));
       const pm = await getPackageManager();
 
       console.log(chalk.bold(`Fetching component: ${componentName}...`));
 
-      // 2. Fetch Registry (Cached or Network)
+      // 2. Fetch Registry
       const registry = await fetchRegistry();
       const item = getItem(registry, componentName);
 
-      // 3. Validate Component Existence
+      // 3. Validate Component
       if (!item) {
-        console.error(
-          chalk.red(`Component '${componentName}' not found in registry.`),
-        );
-        console.log(chalk.gray("Available components:"));
-        console.log(chalk.gray(`  ${registry.map((i) => i.name).join(", ")}`));
+        console.error(chalk.red(`Component '${componentName}' not found.`));
         process.exit(1);
       }
 
@@ -45,7 +44,7 @@ export const add = new Command()
       const targetDirAlias = config.aliases.components || "@/components/ui";
       const targetDir = targetDirAlias.replace(/^@\//, "./src/");
 
-      // 5. Write Files
+      // 5. Write Files (CON TRANSFORMACIÓN)
       for (const file of item.files) {
         const fileName = path.basename(file.path);
         const filePath = path.join(targetDir, fileName);
@@ -54,7 +53,10 @@ export const add = new Command()
           continue;
         }
 
-        await writeFile(filePath, file.content);
+        // === CAMBIO CRÍTICO: Transformamos el contenido antes de guardar ===
+        const transformedContent = transformImports(file.content, config);
+
+        await writeFile(filePath, transformedContent);
         console.log(chalk.green(`  Created ${filePath}`));
       }
 
@@ -66,15 +68,10 @@ export const add = new Command()
 
       console.log(chalk.bold.green(`\nDone.`));
     } catch (error) {
-      // UX-Friendly Error Handling
       console.error(chalk.red("\nOperation failed:"));
-
       if (error instanceof Error) {
         console.error(chalk.gray(`  ${error.message}`));
-      } else {
-        console.error(chalk.gray("  An unknown error occurred."));
       }
-
       process.exit(1);
     }
   });
