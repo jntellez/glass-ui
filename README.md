@@ -47,4 +47,4 @@ This repository is managed with [Turbo](https://turbo.build/) and pnpm.
 
 ## License
 
-MIT © [Glass UI](LISENSE)
+MIT © [Glass UI](LICENSE)
