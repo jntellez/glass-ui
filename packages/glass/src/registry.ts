@@ -17,4 +17,15 @@ export const registry: RegistryIndex = [
       },
     ],
   },
+  {
+    name: "button",
+    type: "registry:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/button.tsx",
+        type: "client",
+      },
+    ],
+  },
 ];
