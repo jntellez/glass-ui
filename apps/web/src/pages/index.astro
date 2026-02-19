@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
 // Direct import from the source package via workspace
-import { Card } from "@glass-ui-kit/glass";
+import { Card, Button } from "@glass-ui-kit/glass";
 ---
 
 <html lang="en">
@@ -33,23 +33,18 @@ import { Card } from "@glass-ui-kit/glass";
   </head>
   <body class="min-h-screen font-sans antialiased p-8 md:p-20">
     <main class="max-w-4xl mx-auto space-y-12">
-      <div
-        class="flex justify-between items-center bg-glass-surface border border-glass-border backdrop-blur-glass p-6 rounded-2xl shadow-glass"
-      >
+      <Card className="flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold tracking-tight">Glass UI Kit</h1>
           <p class="text-sm opacity-70">Registry & Visual Validation System</p>
         </div>
 
-        <button
-          id="theme-toggle"
-          class="px-4 py-2 rounded-lg bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/20 transition-colors font-medium text-sm"
-        >
-          Toggle Theme
-        </button>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <Button id="theme-toggle" className="">Toggle Theme</Button>
+      </Card>
+      <div class="grid
+        grid-cols-1
+        md:grid-cols-2
+        gap-8">
         <section class="space-y-4">
           <h2 class="text-lg font-semibold opacity-80">Registry Status</h2>
           <div
