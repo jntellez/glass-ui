@@ -1,57 +1,36 @@
 @import "tailwindcss";
 
-@source "../../../packages/glass";
+/* 1. Le decimos a Tailwind que escanee el código de los componentes */
+@source "../../../../packages/glass";
 
+/* 2. IMPORTAMOS LA ÚNICA FUENTE DE VERDAD (El paquete real) */
+/* Esto trae automáticamente tokens.css y la clase .glass exacta que usa el CLI */
+@import "../../../../packages/glass/src/css/index.css";
+
+/* 3. (Opcional) Exponemos las variables al motor de Tailwind v4 si las necesitas como utilidades */
 @theme {
-  --color-glass-surface: var(--glass-surface);
+  --color-glass-bg: var(--glass-bg);
   --color-glass-border: var(--glass-border);
-  --color-glass-highlight: var(--glass-highlight);
   --shadow-glass: var(--glass-shadow);
+  --shadow-glass-sm: var(--glass-shadow-sm);
+  --shadow-glass-md: var(--glass-shadow-md);
+  --shadow-glass-lg: var(--glass-shadow-lg);
   --backdrop-blur-glass: var(--glass-blur);
-}
-
-@layer components {
-  .glass {
-    background: var(--glass-surface);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    box-shadow: var(--glass-shadow);
-  }
-  .glass-strong {
-    --glass-bg: var(--glass-bg-strong);
-    --glass-border: var(--glass-border-strong);
-    --glass-blur: var(--glass-blur-strong);
-  }
-
-  .glass-soft {
-    --glass-bg: var(--glass-bg-soft);
-    --glass-border: var(--glass-border-soft);
-    --glass-blur: var(--glass-blur-soft);
-  }
+  --radius-glass-sm: var(--glass-radius-sm);
+  --radius-glass-md: var(--glass-radius-md);
+  --radius-glass-lg: var(--glass-radius-lg);
+  --radius-glass-xl: var(--glass-radius-xl);
 }
 
 @layer base {
+  /* 4. Estilos exclusivos de la aplicación web (Landing Page) */
+  /* Aquí SOLO definimos el tema general, sin tocar las físicas del cristal */
   :root {
-    --glass-surface: rgba(255, 255, 255, 0.4);
-    --glass-border: rgba(255, 255, 255, 0.6);
-    --glass-highlight: rgba(255, 255, 255, 0.5);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    --glass-blur: 12px;
-    --glass-saturation: 110%;
-    
     --color-foreground: #09090b;
     --color-background: #f4f4f5; 
   }
 
   .dark {
-    --glass-surface: rgba(0, 0, 0, 0.3);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-highlight: rgba(255, 255, 255, 0.03);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-    --glass-blur: 12px;
-    --glass-saturation: 100%;
-
     --color-foreground: #fafafa;
     --color-background: #09090b; 
   }
@@ -59,6 +38,7 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    /* Fondo complejo para validar visualmente el cristal */
     background-image: 
         radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.3) 0px, transparent 50%),
         radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.3) 0px, transparent 50%);
