@@ -28,4 +28,15 @@ export const registry: RegistryIndex = [
       },
     ],
   },
+  {
+    name: "input",
+    type: "registry:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/input.tsx",
+        type: "client",
+      },
+    ],
+  },
 ];
