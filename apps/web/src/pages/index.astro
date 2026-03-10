@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
 // Direct import from the source package via workspace
-import { Card, Button, Input } from "@glass-ui-kit/glass";
+import { Card, Button, Input, Badge } from "@glass-ui-kit/glass";
 ---
 
 <html lang="en">
@@ -59,6 +59,21 @@ import { Card, Button, Input } from "@glass-ui-kit/glass";
               ● Serving Static JSON
             </p>
           </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-lg font-semibold opacity-80">Component: Badge</h2>
+
+          <Card className="w-full max-w-sm space-y-4">
+            <h3 class="font-semibold text-lg">Badge Preview</h3>
+            <div class="flex flex-wrap gap-2">
+              <Button>Button</Button>
+              <Badge>Default</Badge>
+              <Badge className="glass">Glass</Badge>
+              <Badge className="glass glass-strong">Strong</Badge>
+              <Badge className="glass glass-soft">Soft</Badge>
+            </div>
+          </Card>
         </section>
 
         <section class="space-y-4">
