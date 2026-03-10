@@ -39,4 +39,15 @@ export const registry: RegistryIndex = [
       },
     ],
   },
+  {
+    name: "badge",
+    type: "registry:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/badge.tsx",
+        type: "client",
+      },
+    ],
+  },
 ];
