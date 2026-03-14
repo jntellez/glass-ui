@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /* 1. Le decimos a Tailwind que escanee el código de los componentes */
 @source "../../../../packages/glass";

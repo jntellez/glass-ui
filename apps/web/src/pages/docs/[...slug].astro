@@ -1,0 +1,48 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import "@/styles/global.css";
+
+export async function getStaticPaths() {
+  const docsEntries = await getCollection("docs");
+  return docsEntries.map((entry: CollectionEntry<"docs">) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"docs">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{entry.data.title} | Glass UI</title>
+  </head>
+
+  <body class="bg-zinc-950 text-zinc-50 min-h-screen flex flex-col">
+    <main class="max-w-3xl mx-auto py-12 px-6 flex-1 w-full">
+      <header class="mb-10">
+        <h1 class="text-4xl font-bold tracking-tight mb-2">
+          {entry.data.title}
+        </h1>
+        {
+          entry.data.description && (
+            <p class="text-zinc-400 text-lg">{entry.data.description}</p>
+          )
+        }
+      </header>
+
+      <article
+        class="prose dark:prose-invert prose-headings:text-white prose-p:text-zinc-300 prose-a:text-zinc-100 prose-strong:text-white prose-code:text-zinc-300 max-w-none"
+      >
+        <Content />
+      </article>
+    </main>
+  </body>
+</html>
