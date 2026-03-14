@@ -10,8 +10,10 @@
     "lint": "eslint src"
   },
   "dependencies": {
+    "@astrojs/mdx": "^5.0.0",
     "@glass-ui-kit/glass": "workspace:*",
-    "@glass-ui-kit/schema": "workspace:*"
+    "@glass-ui-kit/schema": "workspace:*",
+    "@tailwindcss/typography": "^0.5.19"
   },
   "devDependencies": {
     "@astrojs/react": "latest",
