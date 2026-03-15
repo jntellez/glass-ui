@@ -1,5 +1,9 @@
 @layer base {
   :root {
+    /* === TEXT TOKENS (Light) === */
+    --foreground: #18181b;
+    --muted-foreground: #3f3f46;
+
     /* === BASE PRIMITIVES (Default) === */
     --glass-bg: rgba(255, 255, 255, 0.4);
     --glass-border: rgba(255, 255, 255, 0.5);
@@ -18,19 +22,21 @@
     --glass-radius-lg: 1rem;
     --glass-radius-xl: 1.5rem;
 
-    /* === SEMANTIC VARIANTS (Tokens) === */
-    /* Strong: Para alto contraste o énfasis */
+    /* === SEMANTIC VARIANTS === */
     --glass-bg-strong: rgba(255, 255, 255, 0.75);
     --glass-border-strong: rgba(255, 255, 255, 0.8);
     --glass-blur-strong: 20px;
 
-    /* Soft: Para fondos sutiles */
     --glass-bg-soft: rgba(255, 255, 255, 0.2);
     --glass-border-soft: rgba(255, 255, 255, 0.3);
     --glass-blur-soft: 8px;
   }
 
   .dark {
+    /* === TEXT TOKENS (Dark) === */
+    --foreground: #fafafa;
+    --muted-foreground: #d4d4d8;
+
     /* === DARK PRIMITIVES === */
     --glass-bg: rgba(15, 23, 42, 0.6);
     --glass-border: rgba(255, 255, 255, 0.08);
