@@ -5,16 +5,15 @@
     --muted-foreground: #3f3f46;
 
     /* === BASE PRIMITIVES (Default) === */
-    --glass-bg: rgba(255, 255, 255, 0.4);
-    --glass-border: rgba(255, 255, 255, 0.5);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    --glass-blur: 12px;
-    --glass-saturation: 110%;
+    --glass-bg: rgba(255, 255, 255, 0.35);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    --glass-blur: 6px;
 
     /* === SHADOW SIZES === */
-    --glass-shadow-sm: 0 2px 8px 0 rgba(31, 38, 135, 0.08);
-    --glass-shadow-md: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    --glass-shadow-lg: 0 16px 48px 0 rgba(31, 38, 135, 0.25);
+    --glass-shadow-sm: 0 2px 8px 0 rgba(0, 0, 0, 0.06);
+    --glass-shadow-md: 0 4px 30px 0 rgba(0, 0, 0, 0.1);
+    --glass-shadow-lg: 0 8px 40px 0 rgba(0, 0, 0, 0.2);
 
     /* === BORDER RADIUS === */
     --glass-radius-sm: 0.375rem;
@@ -23,13 +22,13 @@
     --glass-radius-xl: 1.5rem;
 
     /* === SEMANTIC VARIANTS === */
-    --glass-bg-strong: rgba(255, 255, 255, 0.75);
+    --glass-bg-strong: rgba(255, 255, 255, 0.5);
     --glass-border-strong: rgba(255, 255, 255, 0.8);
-    --glass-blur-strong: 20px;
+    --glass-blur-strong: 10px;
 
     --glass-bg-soft: rgba(255, 255, 255, 0.2);
-    --glass-border-soft: rgba(255, 255, 255, 0.3);
-    --glass-blur-soft: 8px;
+    --glass-border-soft: rgba(255, 255, 255, 0.4);
+    --glass-blur-soft: 2px;
   }
 
   .dark {
@@ -38,20 +37,20 @@
     --muted-foreground: #d4d4d8;
 
     /* === DARK PRIMITIVES === */
-    --glass-bg: rgba(15, 23, 42, 0.6);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.2);
 
     /* === DARK SHADOW SIZES === */
-    --glass-shadow-sm: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
-    --glass-shadow-md: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-    --glass-shadow-lg: 0 16px 48px 0 rgba(0, 0, 0, 0.5);
+    --glass-shadow-sm: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+    --glass-shadow-md: 0 4px 30px 0 rgba(0, 0, 0, 0.2);
+    --glass-shadow-lg: 0 8px 40px 0 rgba(0, 0, 0, 0.35);
 
     /* === DARK VARIANTS === */
-    --glass-bg-strong: rgba(15, 23, 42, 0.85);
-    --glass-border-strong: rgba(255, 255, 255, 0.15);
+    --glass-bg-strong: rgba(255, 255, 255, 0.15);
+    --glass-border-strong: rgba(255, 255, 255, 0.2);
     
-    --glass-bg-soft: rgba(15, 23, 42, 0.3);
-    --glass-border-soft: rgba(255, 255, 255, 0.05);
+    --glass-bg-soft: rgba(255, 255, 255, 0.03);
+    --glass-border-soft: rgba(255, 255, 255, 0.06);
   }
 }
