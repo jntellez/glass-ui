@@ -7,7 +7,7 @@
     /* === BASE PRIMITIVES (Default) === */
     --glass-bg: rgba(255, 255, 255, 0.35);
     --glass-border: rgba(255, 255, 255, 0.6);
-    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    --glass-shadow: var(--glass-shadow-sm);
     --glass-blur: 6px;
 
     /* === SHADOW SIZES === */
@@ -39,7 +39,7 @@
     /* === DARK PRIMITIVES === */
     --glass-bg: rgba(255, 255, 255, 0.08);
     --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.2);
+    --glass-shadow: var(--glass-shadow-sm);
 
     /* === DARK SHADOW SIZES === */
     --glass-shadow-sm: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
