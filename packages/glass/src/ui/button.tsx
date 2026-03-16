@@ -17,7 +17,7 @@ const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HT
           "disabled:pointer-events-none disabled:opacity-50",
           !hasCustomSurface && [
             "border border-glass-border",
-            "shadow-glass-md",
+            "shadow-glass-sm",
           ],
           "hover:scale-98 hover:shadow-glass-sm",
           !hasCustomSurface && [
