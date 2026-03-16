@@ -12,6 +12,7 @@ const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HT
         ref={ref}
         className={cn(
           "inline-flex items-center justify-center whitespace-nowrap rounded-glass-sm text-sm font-medium transition-all duration-200",
+          "transform-gpu will-change-transform antialiased",
           "h-10 px-4 py-2",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 dark:focus-visible:ring-white/50 focus-visible:ring-offset-2",
           "disabled:pointer-events-none disabled:opacity-50",
