@@ -8,8 +8,11 @@
 /* Esto trae automáticamente tokens.css y la clase .glass exacta que usa el CLI */
 @import "../../../../packages/glass/src/css/index.css";
 
+@variant dark (&:where(.dark, .dark *));
 /* 3. (Opcional) Exponemos las variables al motor de Tailwind v4 si las necesitas como utilidades */
 @theme {
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
   --color-glass-bg: var(--glass-bg);
   --color-glass-border: var(--glass-border);
   --shadow-glass: var(--glass-shadow);
@@ -39,10 +42,10 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    /* Fondo complejo para validar visualmente el cristal */
     background-image: 
-        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.3) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.3) 0px, transparent 50%);
+      radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 40vw),
+      radial-gradient(circle at 100% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 40vw);
     background-attachment: fixed;
+    background-repeat: no-repeat;
   }
 }
