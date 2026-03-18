@@ -7,9 +7,10 @@ export interface Props {
   code: string;
   lang?: string;
   filename?: string;
+  showLineNumbers?: boolean;
 }
 
-const { code, lang = "tsx", filename } = Astro.props;
+const { code, lang = "tsx", filename, showLineNumbers = false } = Astro.props;
 ---
 
 <Card className="relative p-0 my-6 overflow-hidden">
@@ -25,8 +26,8 @@ const { code, lang = "tsx", filename } = Astro.props;
 
   <div
     class:list={[
-      "overflow-x-auto pr-6",
-      filename ? "p-4 show-line-numbers" : "p-4",
+      "overflow-x-auto pr-6 p-4",
+      showLineNumbers && "show-line-numbers",
     ]}
   >
     <Code
