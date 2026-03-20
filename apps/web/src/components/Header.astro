@@ -1,0 +1,58 @@
+---
+import ThemeToggle from "@/components/ThemeToggle.tsx";
+import { Button } from "@glass-ui-kit/glass";
+import { Icon } from "astro-icon/components";
+---
+
+<header class="glass sticky top-0 border-0 border-b-1 shadow-none z-50">
+  <div class="pl-1 pr-4 md:px-8 h-14 flex items-center">
+    <div class="flex items-center">
+      <a href="/">
+        <Button
+          className="h-8 text-base font-bold border-none shadow-none px-3"
+        >
+          Glass UI
+        </Button>
+      </a>
+
+      <nav
+        class="hidden sm:flex items-center font-medium text-muted-foreground"
+      >
+        <a href="/docs">
+          <Button className="h-8 border-none shadow-none px-3">Docs</Button>
+        </a>
+        <a href="/docs/components">
+          <Button className="h-8 border-none shadow-none px-3">
+            Components
+          </Button>
+        </a>
+        <a href="/customization">
+          <Button className="h-8 border-none shadow-none px-3">
+            Customization
+          </Button>
+        </a>
+      </nav>
+    </div>
+
+    <div class="flex flex-1 items-center justify-end gap-4">
+      <Button
+        className="hidden md:inline-flex items-center h-8 font-normal hover:scale-none pr-20 md:pr-26"
+      >
+        <span class="lg:hidden">Search...</span>
+        <span class="hidden lg:inline">Search documentation...</span>
+      </Button>
+
+      <a
+        href="https://github.com/jntellez/glass-ui"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <Button className="w-8 h-8 p-0">
+          <Icon name="simple-icons:github" class="w-4.5 h-4.5" />
+        </Button>
+      </a>
+
+      <ThemeToggle client:load />
+    </div>
+  </div>
+</header>
