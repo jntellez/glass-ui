@@ -9,7 +9,7 @@ import { Icon } from "astro-icon/components";
     <div class="flex items-center">
       <a href="/">
         <Button
-          className="h-8 text-base font-bold border-none shadow-none px-3"
+          className="h-8 text-base font-bold border-none shadow-none hover:shadow-none px-3"
         >
           Glass UI
         </Button>
@@ -17,15 +17,21 @@ import { Icon } from "astro-icon/components";
 
       <nav class="hidden sm:flex items-center font-medium text-foreground">
         <a href="/docs">
-          <Button className="h-8 border-none shadow-none px-3">Docs</Button>
+          <Button className="h-8 border-none shadow-none hover:shadow-none px-3"
+            >Docs</Button
+          >
         </a>
         <a href="/docs/components">
-          <Button className="h-8 border-none shadow-none px-3">
+          <Button
+            className="h-8 border-none shadow-none hover:shadow-none px-3"
+          >
             Components
           </Button>
         </a>
         <a href="/customization">
-          <Button className="h-8 border-none shadow-none px-3">
+          <Button
+            className="h-8 border-none shadow-none hover:shadow-none px-3"
+          >
             Customization
           </Button>
         </a>
