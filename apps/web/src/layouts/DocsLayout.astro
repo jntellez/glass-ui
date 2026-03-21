@@ -1,0 +1,33 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Sidebar from "@/components/Sidebar.astro";
+
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<Layout title={title} description={description}>
+  <div
+    class="w-full flex-1 items-start lg:grid lg:grid-cols-[260px_1fr] xl:grid-cols-[260px_1fr_240px] md:gap-6 lg:gap-10"
+  >
+    <Sidebar />
+
+    <main class="relative py-6 lg:py-8 flex w-full justify-center">
+      <div class="w-full max-w-2xl">
+        <slot />
+      </div>
+    </main>
+
+    <aside
+      class="hidden xl:block fixed top-[57px] z-30 h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto xl:sticky"
+    >
+      <div class="h-full py-6 pl-6 lg:py-8">
+        <slot name="toc" />
+      </div>
+    </aside>
+  </div>
+</Layout>
