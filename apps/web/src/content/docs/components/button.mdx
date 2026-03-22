@@ -1,20 +1,77 @@
 ---
 title: Button
-description: Displays a button or a component that looks like a button with a glassmorphism effect.
+description: Displays a button or a component that looks like a button. Used to trigger an action or event, such as submitting a form, opening a dialog, or performing an operation.
 ---
 
-import ComponentPreview from "../../../components/ComponentPreview.tsx";
-
-# Button
-
-The `Button` component utilizes CSS tokens to generate an optimized glass effect.
-
-## Preview
-
-<ComponentPreview name="button-demo" client:load />
+import CommandTabs from "@/components/CommandTabs.tsx";
+import CodeBlock from "@/components/CodeBlock.tsx";
+import ComponentPreview from "@/components/ComponentPreview.tsx";
 
 ## Installation
 
-```bash
-npx glass-ui add button
-```
+Run the following command to add the `Button` component to your project:
+
+<CommandTabs
+  npm="npx glass-ui add button"
+  pnpm="pnpm dlx glass-ui add button"
+  yarn="yarn dlx glass-ui add button"
+  bun="bunx glass-ui add button"
+  client:load
+/>
+
+## Usage
+
+Import the component and use it in your React application:
+
+<CodeBlock 
+  lang="tsx"
+  code={`import { Button } from "@/components/ui/button"
+
+  export default function ButtonDemo() {
+    return (
+      <Button className="glass">
+        Haz clic aquí
+      </Button>
+    )
+  }`
+  } />
+
+## Examples
+
+Glass UI buttons are designed to be composable. By default, they have a transparent background, and you can apply different utility classes to achieve the desired glassmorphism effect.
+
+### Default
+
+A basic button without glass classes. It features a transparent background and subtle hover states.
+
+<ComponentPreview name="button-default" client:visible />
+
+### Glass
+
+Applies the standard glassmorphism effect, combining backdrop blur, subtle borders, and a translucent background.
+
+<ComponentPreview name="button-glass" client:visible />
+
+### Glass Soft
+
+A softer, more transparent glass effect. Ideal for secondary actions that shouldn't compete with the primary UI elements.
+
+<ComponentPreview name="button-glass-soft" client:visible />
+
+### Glass Strong
+
+A pronounced glass effect with higher opacity, perfect for high-emphasis actions or elements resting over complex backgrounds.
+
+<ComponentPreview name="button-glass-strong" client:visible />
+
+### Disabled
+
+Displays a disabled state with reduced opacity and disabled pointer events.
+
+<ComponentPreview name="button-disabled" client:visible />
+
+### Combinations
+
+You can place multiple button variants together to establish a clear visual hierarchy in your interfaces.
+
+<ComponentPreview name="button-combinations" client:visible />
