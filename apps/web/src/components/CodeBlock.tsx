@@ -42,19 +42,33 @@ export default function CodeBlock({
           <div className={`flex-1 overflow-x-auto pt-4 pb-4 pr-4 ${!showLineNumbers ? "pl-4" : ""} editor-scrollbar no-scrollbar`}>
             <pre className="bg-transparent! p-0! m-0! min-w-max px-4">
               <code className="flex flex-col">
-                {tokens.map((line, i) => (
-                  <div key={i} {...getLineProps({ line, key: i, className: "flex items-center h-6" })}>
-                    {line.map((token, key) => (
-                      <span key={key} {...getTokenProps({ token, key })} />
-                    ))}
-                  </div>
-                ))}
+                {tokens.map((line, i) => {
+                  const { key: lineKey, ...lineProps } = getLineProps({
+                    line,
+                    key: i,
+                    className: "flex items-center h-6",
+                  });
+
+                  return (
+                    <div key={lineKey as string | number} {...lineProps}>
+                      {line.map((token, key) => {
+                        const { key: tokenKey, ...tokenProps } = getTokenProps({
+                          token,
+                          key,
+                        });
+
+                        return <span key={tokenKey as string | number} {...tokenProps} />;
+                      })}
+                    </div>
+                  );
+                })}
               </code>
             </pre>
           </div>
         </div>
-      )}
-    </Highlight>
+      )
+      }
+    </Highlight >
   );
 
   return (
