@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import DocsLayout from "@/layouts/DocsLayout.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
+import DocsPager from "@/components/DocsPager.astro";
 import { H1 } from "@/components/Typography";
 import { P } from "@/components/Typography";
 
@@ -31,10 +32,16 @@ const { Content, headings } = await entry.render();
     <H1>
       {entry.data.title}
     </H1>
-    {entry.data.description && <P>{entry.data.description}</P>}
+    {
+      entry.data.description && (
+        <P className="mt-4!">{entry.data.description}</P>
+      )
+    }
   </div>
 
   <div class="prose prose-zinc dark:prose-invert max-w-none">
     <Content />
   </div>
+
+  <DocsPager />
 </DocsLayout>

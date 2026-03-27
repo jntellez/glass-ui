@@ -1,0 +1,43 @@
+---
+import { flattenedDocs } from "@/config/docs";
+import { Button } from "@glass-ui-kit/glass";
+import { Icon } from "astro-icon/components";
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "");
+
+const currentIndex = flattenedDocs.findIndex(
+  (item) => item.href === currentPath,
+);
+
+const prev = currentIndex > 0 ? flattenedDocs[currentIndex - 1] : null;
+const next =
+  currentIndex !== -1 && currentIndex < flattenedDocs.length - 1
+    ? flattenedDocs[currentIndex + 1]
+    : null;
+---
+
+<div class="flex flex-row items-center justify-between mt-14 mb-8">
+  {
+    prev ? (
+      <a href={prev.href}>
+        <Button>
+          <Icon name="lucide:chevron-left" class="w-4 h-4 mr-2" />
+          {prev.title}
+        </Button>
+      </a>
+    ) : (
+      <div />
+    )
+  }
+
+  {
+    next && (
+      <a href={next.href}>
+        <Button>
+          {next.title}
+          <Icon name="lucide:chevron-right" class="w-4 h-4 ml-2" />
+        </Button>
+      </a>
+    )
+  }
+</div>
