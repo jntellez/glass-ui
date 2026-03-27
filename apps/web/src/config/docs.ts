@@ -13,6 +13,7 @@ export const sidebarNav: SidebarSection[] = [
     title: "Getting Started",
     items: [
       { title: "Installation", href: "/docs/getting-started/installation" },
+      { title: "Components", href: "/docs//components" },
       { title: "CLI", href: "/docs/getting-started/cli" },
     ],
   },
