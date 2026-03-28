@@ -30,7 +30,7 @@ export default function CardDemo() {
           <Input id="password" type="password" />
         </div>
 
-        <Button className="glass w-full mt-2">Sign In</Button>
+        <Button className="glass glass-soft w-full mt-2">Sign In</Button>
       </div>
     </Card>
   )
