@@ -16,6 +16,24 @@ import buttonDisabledCode from "./button/button-disabled.tsx?raw";
 import ButtonCombinations from "./button/button-combinations";
 import buttonCombinationsCode from "./button/button-combinations.tsx?raw";
 
+import BadgeDemo from "./badge/badge-demo";
+import badgeDemoCode from "./badge/badge-demo.tsx?raw";
+
+import BadgeWeights from "./badge/badge-weights";
+import badgeWeightsCode from "./badge/badge-weights.tsx?raw";
+
+import BadgeIcon from "./badge/badge-icon";
+import badgeIconCode from "./badge/badge-icon.tsx?raw";
+
+import BadgeLink from "./badge/badge-link";
+import badgeLinkCode from "./badge/badge-link.tsx?raw";
+
+import BadgeCustomColors from "./badge/badge-custom-colors";
+import badgeCustomColorsCode from "./badge/badge-custom-colors.tsx?raw";
+
+import BadgeSpinner from "./badge/badge-spinner";
+import badgeSpinnerCode from "./badge/badge-spinner.tsx?raw";
+
 export const examples = {
   "button-default": {
     component: ButtonDefault,
@@ -40,6 +58,30 @@ export const examples = {
   "button-combinations": {
     component: ButtonCombinations,
     code: buttonCombinationsCode,
+  },
+  "badge-demo": {
+    component: BadgeDemo,
+    code: badgeDemoCode,
+  },
+  "badge-weights": {
+    component: BadgeWeights,
+    code: badgeWeightsCode,
+  },
+  "badge-icon": {
+    component: BadgeIcon,
+    code: badgeIconCode,
+  },
+  "badge-link": {
+    component: BadgeLink,
+    code: badgeLinkCode,
+  },
+  "badge-custom-colors": {
+    component: BadgeCustomColors,
+    code: badgeCustomColorsCode,
+  },
+  "badge-spinner": {
+    component: BadgeSpinner,
+    code: badgeSpinnerCode,
   },
 } as const;
 
