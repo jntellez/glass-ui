@@ -7,6 +7,8 @@ import CommandTabs from '@/components/CommandTabs.tsx';
 import CodeBlock from '@/components/CodeBlock.tsx';
 import ComponentPreview from '@/components/ComponentPreview.tsx';
 
+<ComponentPreview name="button-demo" client:load />
+
 ## Installation
 
 <CommandTabs 
@@ -33,6 +35,11 @@ import ComponentPreview from '@/components/ComponentPreview.tsx';
 />
 
 ## Examples
+
+### Sizes
+Use the size classes (**btn-sm**, **btn-md**, **btn-lg**) to change the button's dimensions. If no size class is provided, the button defaults to **btn-md**.
+
+<ComponentPreview name="button-sizes" client:load />
 
 ### Default
 A basic button without any glass utility classes. It provides the base structure and transparent background.
@@ -64,15 +71,38 @@ You can mix and match different glass classes to establish a clear visual hierar
 
 <ComponentPreview name="button-combinations" client:load />
 
+### Icon
+Use the **btn-icon** class to create a perfectly square button.
+
+<ComponentPreview name="button-icon" client:load />
+
+### With Icon
+You can easily add icons to your buttons.
+
+<ComponentPreview name="button-with-icon" client:load />
+
+### With Spinner
+Displays a loading state using an animated spinner icon.
+
+<ComponentPreview name="button-spinner" client:load />
+
 ## Styling
 
-There are no variant props. The styling is controlled entirely using classes, as the system is based on glassmorphism.
+There are no variant or size props. The styling and dimensions are controlled entirely using classes, keeping the component perfectly composable and aligned with the utility-first approach.
 
 <CodeBlock 
   lang="tsx"
-  code={`<Button className="glass" />
+  code={`/* Visual Styles */
+  <Button className="glass" />
+  <Button className="glass glass-soft" />
+  <Button className="glass glass-strong" />
 
-<Button className="glass glass-soft" />
+  /* Sizes (Defaults to md) */
+  <Button className="glass btn-sm" />
+  <Button className="glass btn-lg" />
 
-<Button className="glass glass-strong" />`} 
+  /* Icon */
+  <Button className="glass btn-icon">
+    <Icon />
+  </Button>`} 
 />

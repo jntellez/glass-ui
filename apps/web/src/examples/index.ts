@@ -1,3 +1,9 @@
+import ButtonDemo from "./button/button-demo";
+import buttonDemoCode from "./button/button-demo.tsx?raw";
+
+import ButtonSizes from "./button/button-sizes";
+import buttonSizesCode from "./button/button-sizes.tsx?raw";
+
 import ButtonDefault from "./button/button-default";
 import buttonDefaultCode from "./button/button-default.tsx?raw";
 
@@ -15,6 +21,15 @@ import buttonDisabledCode from "./button/button-disabled.tsx?raw";
 
 import ButtonCombinations from "./button/button-combinations";
 import buttonCombinationsCode from "./button/button-combinations.tsx?raw";
+
+import Buttonicon from "./button/button-icon";
+import buttoniconCode from "./button/button-icon.tsx?raw";
+
+import ButtonWithIcon from "./button/button-with-icon";
+import buttonWithIconCode from "./button/button-with-icon.tsx?raw";
+
+import ButtonSpinner from "./button/button-spinner";
+import buttonSpinnerCode from "./button/button-spinner.tsx?raw";
 
 import BadgeDemo from "./badge/badge-demo";
 import badgeDemoCode from "./badge/badge-demo.tsx?raw";
@@ -35,6 +50,14 @@ import BadgeSpinner from "./badge/badge-spinner";
 import badgeSpinnerCode from "./badge/badge-spinner.tsx?raw";
 
 export const examples = {
+  "button-demo": {
+    component: ButtonDemo,
+    code: buttonDemoCode,
+  },
+  "button-sizes": {
+    component: ButtonSizes,
+    code: buttonSizesCode,
+  },
   "button-default": {
     component: ButtonDefault,
     code: buttonDefaultCode,
@@ -50,6 +73,18 @@ export const examples = {
   "button-glass-strong": {
     component: ButtonGlassStrong,
     code: buttonGlassStrongCode,
+  },
+  "button-icon": {
+    component: Buttonicon,
+    code: buttoniconCode,
+  },
+  "button-with-icon": {
+    component: ButtonWithIcon,
+    code: buttonWithIconCode,
+  },
+  "button-spinner": {
+    component: ButtonSpinner,
+    code: buttonSpinnerCode,
   },
   "button-disabled": {
     component: ButtonDisabled,
