@@ -28,20 +28,24 @@ const { Content, headings } = await entry.render();
 >
   <TableOfContents slot="toc" headings={headings} />
 
-  <div class="mb-10">
-    <H1>
-      {entry.data.title}
-    </H1>
-    {
-      entry.data.description && (
-        <P className="mt-4!">{entry.data.description}</P>
-      )
-    }
+  <div>
+    <div class="mb-10">
+      <H1>
+        {entry.data.title}
+      </H1>
+      {
+        entry.data.description && (
+          <P className="mt-4!">{entry.data.description}</P>
+        )
+      }
+    </div>
+
+    <div class="prose prose-zinc dark:prose-invert max-w-none">
+      <Content />
+    </div>
   </div>
 
-  <div class="prose prose-zinc dark:prose-invert max-w-none">
-    <Content />
+  <div>
+    <DocsPager />
   </div>
-
-  <DocsPager />
 </DocsLayout>

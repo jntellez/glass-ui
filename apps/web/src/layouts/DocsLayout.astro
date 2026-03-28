@@ -16,8 +16,10 @@ const { title, description } = Astro.props;
   >
     <Sidebar />
 
-    <main class="relative py-6 lg:py-8 flex w-full justify-center">
-      <div class="w-full max-w-2xl">
+    <main
+      class="relative pt-6 lg:pt-8 flex min-h-[calc(100vh-57px)] justify-center"
+    >
+      <div class="flex flex-col justify-between w-full max-w-2xl">
         <slot />
       </div>
     </main>
