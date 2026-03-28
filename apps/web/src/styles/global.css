@@ -48,6 +48,15 @@
     background-attachment: fixed;
     background-repeat: no-repeat;
   }
+
+  .prose code::before,
+  .prose code::after {
+    content: none !important;
+  }
+
+  .prose :not(pre) > code {
+    @apply relative rounded-md bg-glass-bg shadow-glass-sm px-[0.3rem] py-[0.2rem] font-mono text-sm text-foreground;
+  }
 }
 
 .no-scrollbar {
