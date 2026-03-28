@@ -1,0 +1,88 @@
+---
+title: Input
+description: Interactive input field used to capture text and user data in the interface.
+---
+
+import CommandTabs from '@/components/CommandTabs.tsx';
+import CodeBlock from '@/components/CodeBlock.tsx';
+import ComponentPreview from '@/components/ComponentPreview.tsx';
+
+<ComponentPreview name="input-demo" client:load />
+
+## Installation
+
+<CommandTabs 
+  npm="npx glass-ui add input" 
+  pnpm="pnpm dlx glass-ui add input"
+  yarn="yarn dlx glass-ui add input"
+  bun="bunx glass-ui add input"
+  client:load 
+/>
+
+## Usage
+
+<CodeBlock 
+  lang="tsx" 
+  code={`import { Input } from "@/components/ui/input"
+
+  export default function App() {
+    return (
+      <Input type="email" placeholder="Email address" />
+    )
+  }`} 
+/>
+
+## Examples
+
+### Default
+The standard input applies base styles including a subtle border and shadow. It automatically defaults to the medium size (`input-md`) if no size class is provided.
+
+<ComponentPreview name="input-default" client:load />
+
+### Sizes
+Use the size classes (`input-sm`, `input-md`, `input-lg`) to change the input's dimensions.
+
+<ComponentPreview name="input-sizes" client:load />
+
+### Glass Surfaces
+You can completely transform the input's surface by adding glassmorphism classes.
+
+<ComponentPreview name="input-glass" client:load />
+
+### Error State
+Glass UI inputs **do not use an `error` prop**. Instead, you maintain full control by composing error states using standard Tailwind CSS classes.
+
+<ComponentPreview name="input-error" client:load />
+
+### Form Composition
+Since the input acts as a pure structural base, it can be easily composed with native HTML labels, descriptions, and buttons using Tailwind's standard layout utilities.
+
+<ComponentPreview name="input-composition" client:load />
+
+### Password Toggle
+Compose the base `Input` with an icon `Button` to create a custom password reveal toggle.
+<ComponentPreview name="input-password" client:load />
+
+### Disabled
+The disabled state is automatically handled by the component using Tailwind's native `disabled` attribute.
+
+<ComponentPreview name="input-disabled" client:load />
+
+## Styling & API
+
+Following the system's core philosophy, the `Input` component **has no variant, size, or state props**. It accepts standard HTML input attributes and delegates all visual control to CSS classes.
+
+<CodeBlock 
+  lang="tsx"
+  code={`/* Sizes (Defaults to md) */
+<Input className="input-sm" />
+<Input className="input-lg" />
+
+/* Surfaces */
+<Input className="glass" />
+<Input className="glass glass-soft" />
+<Input className="glass glass-strong" />
+
+/* Custom States (e.g., Validation) */
+<Input className="border-red-500 focus-visible:ring-red-500" />`} 
+/>
