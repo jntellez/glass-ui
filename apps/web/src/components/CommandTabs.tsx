@@ -12,30 +12,78 @@ interface CommandTabsProps {
 
 type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 
-export default function CommandTabs({ npm, pnpm, yarn, bun }: CommandTabsProps) {
-  const [activeTab, setActiveTab] = React.useState<PackageManager>(pnpm ? "pnpm" : "npm");
+const STORAGE_KEY = "glass-ui-settings";
 
-  const commands: Record<PackageManager, string | undefined> = {
+export default function CommandTabs({ npm, pnpm, yarn, bun }: CommandTabsProps) {
+  const commands = React.useMemo<Record<PackageManager, string | undefined>>(() => ({
     npm,
     pnpm,
     yarn,
     bun,
-  };
+  }), [npm, pnpm, yarn, bun]);
 
-  const availableTabs = (Object.keys(commands) as PackageManager[]).filter(
-    (key) => commands[key] !== undefined
-  );
+  const availableTabs = React.useMemo(() => {
+    return (Object.keys(commands) as PackageManager[]).filter(
+      (key) => commands[key] !== undefined
+    );
+  }, [commands]);
+
+  const [activeTab, setActiveTab] = React.useState<PackageManager>("npm");
+
+  React.useEffect(() => {
+    try {
+      const storedSettings = localStorage.getItem(STORAGE_KEY);
+      if (storedSettings) {
+        const parsedSettings = JSON.parse(storedSettings);
+        const savedTab = parsedSettings.packageManager;
+
+        if (savedTab && availableTabs.includes(savedTab)) {
+          setActiveTab(savedTab);
+        }
+      }
+    } catch (error) {
+      console.error("Error al leer la configuración de Glass UI:", error);
+    }
+
+    const handleCustomEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<PackageManager>;
+      const newTab = customEvent.detail;
+
+      if (availableTabs.includes(newTab)) {
+        setActiveTab(newTab);
+      }
+    };
+
+    window.addEventListener("pm-change", handleCustomEvent);
+    return () => window.removeEventListener("pm-change", handleCustomEvent);
+  }, [availableTabs]);
+
+  const handleTabChange = (tab: PackageManager) => {
+    setActiveTab(tab);
+
+    try {
+      const storedSettings = localStorage.getItem(STORAGE_KEY);
+      const parsedSettings = storedSettings ? JSON.parse(storedSettings) : {};
+
+      parsedSettings.packageManager = tab;
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedSettings));
+    } catch (error) {
+      console.error("Error al guardar la configuración de Glass UI:", error);
+    }
+
+    window.dispatchEvent(new CustomEvent("pm-change", { detail: tab }));
+  };
 
   const activeCommand = commands[activeTab] || npm;
 
   return (
     <Card className="p-0 my-6 shadow-glass-m overflow-hidden">
-
       <div className="relative flex gap-1.5 p-1.5 pb-2.5 items-center overflow-x-auto">
         {availableTabs.map((tab) => (
           <Button
             key={tab}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => handleTabChange(tab)}
             className={`relative h-7 px-3 text-sm font-medium transition-colors ${activeTab === tab
               ? "glass glass-strong text-foreground"
               : "text-muted-foreground hover:text-foreground"
@@ -52,7 +100,6 @@ export default function CommandTabs({ npm, pnpm, yarn, bun }: CommandTabsProps) 
           <InlineCode className="bg-transparent px-0">{activeCommand}</InlineCode>
         </div>
       </div>
-
     </Card>
   );
 }
