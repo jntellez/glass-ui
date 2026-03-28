@@ -49,6 +49,21 @@ import badgeCustomColorsCode from "./badge/badge-custom-colors.tsx?raw";
 import BadgeSpinner from "./badge/badge-spinner";
 import badgeSpinnerCode from "./badge/badge-spinner.tsx?raw";
 
+import CardDemo from "./card/card-demo";
+import cardDemoCode from "./card/card-demo.tsx?raw";
+
+import CardDefault from "./card/card-default";
+import cardDefaultCode from "./card/card-default.tsx?raw";
+
+import CardSoft from "./card/card-soft";
+import cardSoftCode from "./card/card-soft.tsx?raw";
+
+import CardStrong from "./card/card-strong";
+import cardStrongCode from "./card/card-strong.tsx?raw";
+
+import CardInteractive from "./card/card-interactive";
+import cardInteractiveCode from "./card/card-interactive.tsx?raw";
+
 export const examples = {
   "button-demo": {
     component: ButtonDemo,
@@ -117,6 +132,26 @@ export const examples = {
   "badge-spinner": {
     component: BadgeSpinner,
     code: badgeSpinnerCode,
+  },
+  "card-demo": {
+    component: CardDemo,
+    code: cardDemoCode,
+  },
+  "card-default": {
+    component: CardDefault,
+    code: cardDefaultCode,
+  },
+  "card-soft": {
+    component: CardSoft,
+    code: cardSoftCode,
+  },
+  "card-strong": {
+    component: CardStrong,
+    code: cardStrongCode,
+  },
+  "card-interactive": {
+    component: CardInteractive,
+    code: cardInteractiveCode,
   },
 } as const;
 
