@@ -30,7 +30,7 @@ const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HT
             "hover:bg-glass-bg/80",
             "hover:border-glass-border/80"
           ],
-          "active:scale-95 active:translate-y-0 active:duration-100",
+          "active:scale-95 active:duration-100",
           !hasCustomSurface && [
             "active:bg-glass-bg/60",
             "active:border-glass-border/60"
