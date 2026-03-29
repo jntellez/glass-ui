@@ -1,18 +1,23 @@
+// AUTO-GENERATED FILE. DO NOT EDIT MANUALLY.
+// Run 'pnpm run sync' to update this content.
+
 export const GLASS_BASE_STYLES = `
-/* === Glass UI – Design Tokens === */
 @layer base {
   :root {
+    /* === TEXT TOKENS (Light) === */
+    --foreground: #18181b;
+    --muted-foreground: #3f3f46;
+
     /* === BASE PRIMITIVES (Default) === */
-    --glass-bg: rgba(255, 255, 255, 0.4);
-    --glass-border: rgba(255, 255, 255, 0.5);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    --glass-blur: 12px;
-    --glass-saturation: 110%;
+    --glass-bg: rgba(255, 255, 255, 0.35);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-shadow: var(--glass-shadow-sm);
+    --glass-blur: 6px;
 
     /* === SHADOW SIZES === */
-    --glass-shadow-sm: 0 2px 8px 0 rgba(31, 38, 135, 0.08);
-    --glass-shadow-md: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    --glass-shadow-lg: 0 16px 48px 0 rgba(31, 38, 135, 0.25);
+    --glass-shadow-sm: 0 2px 8px 0 rgba(0, 0, 0, 0.06);
+    --glass-shadow-md: 0 4px 30px 0 rgba(0, 0, 0, 0.1);
+    --glass-shadow-lg: 0 8px 40px 0 rgba(0, 0, 0, 0.2);
 
     /* === BORDER RADIUS === */
     --glass-radius-sm: 0.375rem;
@@ -20,40 +25,43 @@ export const GLASS_BASE_STYLES = `
     --glass-radius-lg: 1rem;
     --glass-radius-xl: 1.5rem;
 
-    /* === SEMANTIC VARIANTS (Tokens) === */
-    /* Strong: Para alto contraste o énfasis */
-    --glass-bg-strong: rgba(255, 255, 255, 0.75);
+    /* === SEMANTIC VARIANTS === */
+    --glass-bg-strong: rgba(255, 255, 255, 0.5);
     --glass-border-strong: rgba(255, 255, 255, 0.8);
-    --glass-blur-strong: 20px;
+    --glass-blur-strong: 10px;
 
-    /* Soft: Para fondos sutiles */
     --glass-bg-soft: rgba(255, 255, 255, 0.2);
-    --glass-border-soft: rgba(255, 255, 255, 0.3);
-    --glass-blur-soft: 8px;
+    --glass-border-soft: rgba(255, 255, 255, 0.4);
+    --glass-blur-soft: 2px;
   }
 
   .dark {
+    /* === TEXT TOKENS (Dark) === */
+    --foreground: #fafafa;
+    --muted-foreground: #d4d4d8;
+
     /* === DARK PRIMITIVES === */
-    --glass-bg: rgba(15, 23, 42, 0.6);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: var(--glass-shadow-sm);
 
     /* === DARK SHADOW SIZES === */
-    --glass-shadow-sm: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
-    --glass-shadow-md: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-    --glass-shadow-lg: 0 16px 48px 0 rgba(0, 0, 0, 0.5);
+    --glass-shadow-sm: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+    --glass-shadow-md: 0 4px 30px 0 rgba(0, 0, 0, 0.2);
+    --glass-shadow-lg: 0 8px 40px 0 rgba(0, 0, 0, 0.35);
 
     /* === DARK VARIANTS === */
-    --glass-bg-strong: rgba(15, 23, 42, 0.85);
-    --glass-border-strong: rgba(255, 255, 255, 0.15);
+    --glass-bg-strong: rgba(255, 255, 255, 0.15);
+    --glass-border-strong: rgba(255, 255, 255, 0.2);
 
-    --glass-bg-soft: rgba(15, 23, 42, 0.3);
-    --glass-border-soft: rgba(255, 255, 255, 0.05);
+    --glass-bg-soft: rgba(255, 255, 255, 0.03);
+    --glass-border-soft: rgba(255, 255, 255, 0.06);
   }
 }
 
-/* === Glass UI – Tailwind v4 Theme Mapping === */
 @theme {
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
   --color-glass-bg: var(--glass-bg);
   --color-glass-border: var(--glass-border);
   --shadow-glass: var(--glass-shadow);
@@ -67,27 +75,99 @@ export const GLASS_BASE_STYLES = `
   --radius-glass-xl: var(--glass-radius-xl);
 }
 
+/* --- Global Utilities Injected by Glass UI --- */
+
+/* Hide native reveal icons in password inputs */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Provisional gradient background to highlight Glassmorphism */
+body {
+  /* Pastel gradient for light mode */
+  background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+  background-attachment: fixed;
+  color: var(--foreground);
+  min-height: 100vh;
+}
+
+.dark body {
+  /* Deep gradient for dark mode */
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  background-attachment: fixed;
+  color: var(--foreground);
+}
+
 @layer components {
-  /* La clase base obligatoria */
-  .glass {
+  /* .glass -> La clase fundacional.
+    Usa las variables por defecto (--glass-bg, etc).
+  */
+  .glass,
+  .hover\\:glass:hover {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    backdrop-filter: blur(var(--glass-blur));
     box-shadow: var(--glass-shadow);
   }
 
-  /* Variantes semánticas (solo reasignan variables) */
-  .glass-strong {
+  /* PRESETS DE INTENSIDAD
+    No reescriben propiedades CSS (background, border).
+    Solo re-asignan las variables locales.
+  */
+  .glass-strong,
+  .hover\\:glass-strong:hover {
     --glass-bg: var(--glass-bg-strong);
     --glass-border: var(--glass-border-strong);
     --glass-blur: var(--glass-blur-strong);
   }
 
-  .glass-soft {
+  .glass-soft,
+  .hover\\:glass-soft:hover {
     --glass-bg: var(--glass-bg-soft);
     --glass-border: var(--glass-border-soft);
     --glass-blur: var(--glass-blur-soft);
+  }
+
+  /* SIZES */
+  .input-sm,
+  .btn-sm {
+    height: 1.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    gap: 0.375rem;
+  }
+
+  .input-md,
+  .btn-md {
+    height: 2rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    gap: 0.5rem;
+  }
+
+  .input-lg,
+  .btn-lg {
+    height: 2.5rem;
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    gap: 0.625rem;
+  }
+
+  /* ICON BUTTON */
+  .btn-icon {
+    padding: 0;
+    aspect-ratio: 1 / 1;
   }
 }
 `;

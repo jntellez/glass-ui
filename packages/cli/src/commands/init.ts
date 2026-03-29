@@ -81,8 +81,7 @@ export const init = new Command()
 
       // CHANGE: Verificamos la nueva variable principal (--glass-bg)
       if (!cssContent.includes("--glass-bg")) {
-        // CHANGE: Inyectamos GLASS_BASE_STYLES (que trae tokens + clases)
-        const newCssContent = `${GLASS_BASE_STYLES}\n${cssContent}`;
+        const newCssContent = `${cssContent.trimEnd()}\n\n${GLASS_BASE_STYLES}`;
         await writeFile(cssPath, newCssContent);
         console.log(chalk.green(`  Updated ${cssPath} with glass tokens`));
       } else {

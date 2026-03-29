@@ -33,8 +33,9 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --clean",
-    "dev": "bun run ./src/index.ts",
+    "sync": "node scripts/sync-styles.mjs",
+    "build": "pnpm run sync && tsup src/index.ts --format esm --clean",
+    "dev": "pnpm run sync && bun run ./src/index.ts",
     "lint": "eslint src",
     "prepublishOnly": "pnpm run build"
   },
