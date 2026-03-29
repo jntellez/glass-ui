@@ -97,7 +97,7 @@ export default function CommandTabs({ npm, pnpm, yarn, bun }: CommandTabsProps) 
 
       <div className="not-prose px-4 pb-3 pt-0.5">
         <div className="flex items-center overflow-x-auto">
-          <InlineCode className="bg-transparent px-0">{activeCommand}</InlineCode>
+          <InlineCode className="bg-transparent font-normal px-0">{activeCommand}</InlineCode>
         </div>
       </div>
     </Card>
