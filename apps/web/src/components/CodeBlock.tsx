@@ -24,40 +24,49 @@ export default function CodeBlock({
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <div
           className={cn(
-            "flex text-sm font-mono not-prose w-full",
+            "relative flex text-sm font-mono not-prose w-full",
             isDark ? "hidden dark:flex" : "flex dark:hidden"
           )}
           style={{ ...style, backgroundColor: "transparent" }}
         >
           {showLineNumbers && (
-            <div className="flex flex-col w-12 shrink-0 pt-4 pb-4 select-none">
+            <div className="absolute top-0 left-0 bottom-0 w-12 flex flex-col pt-4 pb-4 select-none pointer-events-none z-0">
               {tokens.map((_, i) => (
-                <span key={`line-${i}`} className="h-6 flex items-center justify-end pr-4 text-muted-foreground opacity-60">
+                <span key={`line-${i}`} className="h-6 block leading-6 text-right pr-4 text-muted-foreground opacity-60">
                   {i + 1}
                 </span>
               ))}
             </div>
           )}
 
-          <div className={`flex-1 overflow-x-auto pt-4 pb-4 pr-4 ${!showLineNumbers ? "pl-4" : ""} editor-scrollbar no-scrollbar`}>
-            <pre className="bg-transparent! p-0! m-0! min-w-max px-4">
-              <code className="flex flex-col">
+          <div
+            className={cn(
+              "flex-1 overflow-x-auto pt-4 pb-4 pr-4 editor-scrollbar no-scrollbar z-10",
+              showLineNumbers ? "pl-12" : "pl-4"
+            )}
+            style={{
+              maskImage: showLineNumbers ? 'linear-gradient(to right, transparent 48px, black 48px)' : 'none',
+              WebkitMaskImage: showLineNumbers ? 'linear-gradient(to right, transparent 48px, black 48px)' : 'none'
+            }}
+          >
+            <pre className="bg-transparent! p-0! m-0! min-w-max">
+              <code className="block">
                 {tokens.map((line, i) => {
                   const { key: lineKey, ...lineProps } = getLineProps({
                     line,
                     key: i,
-                    className: "flex items-center h-6",
+                    className: "block h-6 leading-6",
                   });
 
                   return (
-                    <div key={lineKey as string | number} {...lineProps}>
+                    <div key={i} {...lineProps}>
                       {line.map((token, key) => {
                         const { key: tokenKey, ...tokenProps } = getTokenProps({
                           token,
                           key,
                         });
 
-                        return <span key={tokenKey as string | number} {...tokenProps} />;
+                        return <span key={key} {...tokenProps} />;
                       })}
                     </div>
                   );
@@ -66,9 +75,8 @@ export default function CodeBlock({
             </pre>
           </div>
         </div>
-      )
-      }
-    </Highlight >
+      )}
+    </Highlight>
   );
 
   return (
