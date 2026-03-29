@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { Badge, Button } from "@glass-ui-kit/glass";
+import ExternalLink from "@/components/ExternalLink";
 ---
 
 <Layout title="Glass UI - Modern Component Library">
@@ -39,7 +40,7 @@ import { Badge, Button } from "@glass-ui-kit/glass";
       <div
         class="mt-8 flex items-center justify-center gap-4 w-full sm:w-auto z-10"
       >
-        <a href="/docs/getting-started/installation">
+        <a href="/docs/installation">
           <Button className="glass glass-strong">Get started</Button>
         </a>
 
@@ -52,18 +53,10 @@ import { Badge, Button } from "@glass-ui-kit/glass";
     {/* Footer */}
     <footer class="p-4">
       <p class="text-sm text-muted-foreground text-center">
-        Built by <a
-          href="https://jntellez.dev"
-          target="_blank"
-          rel="noreferrer"
-          class="font-medium text-foreground underline-offset-2 hover:underline transition-all"
-          >jntellez</a
-        >. The source code is available on <a
-          href="https://github.com/jntellez/glass-ui"
-          target="_blank"
-          rel="noreferrer"
-          class="font-medium text-foreground underline-offset-2 hover:underline transition-all"
-          >GitHub</a
+        Built by <ExternalLink href="https://jntellez.dev"
+          >jntellez</ExternalLink
+        >. The source code is available on <ExternalLink
+          href="https://github.com/jntellez/glass-ui">GitHub</ExternalLink
         >.
       </p>
     </footer>
