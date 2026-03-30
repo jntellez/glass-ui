@@ -24,7 +24,7 @@ export default function CopyButton({ code }: CopyButtonProps) {
   return (
     <Button
       onClick={copyToClipboard}
-      className="glass glass-soft cursor-pointer shadow-glass-sm absolute top-1.5 right-1.5 z-10 h-7 w-7 p-1 items-center justify-center"
+      className="glass absolute top-1.5 right-1.5 z-40 h-7 w-7 p-1 hover:glass-strong"
       aria-label="Copy to clipboard"
     >
       {hasCopied
