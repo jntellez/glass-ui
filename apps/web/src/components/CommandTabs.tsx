@@ -42,7 +42,7 @@ export default function CommandTabs({ npm, pnpm, yarn, bun }: CommandTabsProps) 
         }
       }
     } catch (error) {
-      console.error("Error al leer la configuración de Glass UI:", error);
+      console.error("Error to read config:", error);
     }
 
     const handleCustomEvent = (e: Event) => {
@@ -69,7 +69,7 @@ export default function CommandTabs({ npm, pnpm, yarn, bun }: CommandTabsProps) 
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedSettings));
     } catch (error) {
-      console.error("Error al guardar la configuración de Glass UI:", error);
+      console.error("Error to save config:", error);
     }
 
     window.dispatchEvent(new CustomEvent("pm-change", { detail: tab }));
@@ -84,7 +84,7 @@ export default function CommandTabs({ npm, pnpm, yarn, bun }: CommandTabsProps) 
           <Button
             key={tab}
             onClick={() => handleTabChange(tab)}
-            className={`relative h-7 px-3 text-sm font-medium transition-colors ${activeTab === tab
+            className={`relative h-7 px-3 font-mono text-sm transition-colors ${activeTab === tab
               ? "glass glass-strong text-foreground"
               : "text-muted-foreground hover:text-foreground"
               }`}
