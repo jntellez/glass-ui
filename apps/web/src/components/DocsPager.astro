@@ -1,18 +1,48 @@
 ---
-import { flattenedDocs } from "@/config/docs";
+import { flattenedDocs, frameworkDocs, sidebarNav } from "@/config/docs";
 import { Button } from "@glass-ui-kit/glass";
 import { Icon } from "astro-icon/components";
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "");
 
-const currentIndex = flattenedDocs.findIndex(
+const componentDocs =
+  sidebarNav.find((sec) => sec.title === "Components")?.items || [];
+
+const isolatedGroups = [
+  {
+    prefix: "/docs/installation/",
+    items: frameworkDocs,
+    parent: { title: "Installation", href: "/docs/installation" },
+  },
+  {
+    prefix: "/docs/components/",
+    items: componentDocs,
+    parent: { title: "Components", href: "/docs/components" },
+  },
+];
+
+const activeGroup = isolatedGroups.find(
+  (group) =>
+    currentPath.startsWith(group.prefix) &&
+    group.items.some((item) => item.href === currentPath),
+);
+
+const activeDocsList = activeGroup ? activeGroup.items : flattenedDocs;
+
+const currentIndex = activeDocsList.findIndex(
   (item) => item.href === currentPath,
 );
 
-const prev = currentIndex > 0 ? flattenedDocs[currentIndex - 1] : null;
+const prev =
+  currentIndex > 0
+    ? activeDocsList[currentIndex - 1]
+    : activeGroup && currentIndex === 0
+      ? activeGroup.parent
+      : null;
+
 const next =
-  currentIndex !== -1 && currentIndex < flattenedDocs.length - 1
-    ? flattenedDocs[currentIndex + 1]
+  currentIndex !== -1 && currentIndex < activeDocsList.length - 1
+    ? activeDocsList[currentIndex + 1]
     : null;
 ---
 
@@ -20,8 +50,8 @@ const next =
   {
     prev ? (
       <a href={prev.href}>
-        <Button>
-          <Icon name="lucide:chevron-left" class="w-4 h-4 mr-2" />
+        <Button className="glass glass-soft">
+          <Icon name="lucide:chevron-left" class="w-4 h-4" />
           {prev.title}
         </Button>
       </a>
@@ -33,9 +63,9 @@ const next =
   {
     next && (
       <a href={next.href}>
-        <Button>
+        <Button className="glass glass-soft">
           {next.title}
-          <Icon name="lucide:chevron-right" class="w-4 h-4 ml-2" />
+          <Icon name="lucide:chevron-right" class="w-4 h-4" />
         </Button>
       </a>
     )

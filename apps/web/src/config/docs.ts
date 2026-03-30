@@ -28,7 +28,15 @@ export const sidebarNav: SidebarSection[] = [
   },
 ];
 
-// Esto une todos los 'items' en un solo array: [Installation, CLI, Badge, Button...]
+// Main list
 export const flattenedDocs: NavItem[] = sidebarNav.flatMap(
   (section) => section.items,
 );
+
+// Sublist for installation page
+export const frameworkDocs: NavItem[] = [
+  { title: "Next.js", href: "/docs/installation/next" },
+  { title: "Vite", href: "/docs/installation/vite" },
+  { title: "Astro", href: "/docs/installation/astro" },
+  { title: "Manual", href: "/docs/installation/manual" },
+];
