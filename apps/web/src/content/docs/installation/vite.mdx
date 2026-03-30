@@ -1,0 +1,174 @@
+---
+title: Vite
+description: Install and configure Glass UI in a React Vite project.
+---
+
+import CommandTabs from '@/components/CommandTabs.tsx';
+import CodeBlock from '@/components/CodeBlock.tsx';
+import Steps from '@/components/Steps.tsx';
+
+## Installation
+
+<Steps>
+
+### Create a new project
+
+Start by creating a new React project using Vite and TypeScript. If you already have a project, you can skip this step.
+
+<CommandTabs 
+  npm="npm create vite@latest" 
+  pnpm="pnpm create vite"
+  yarn="yarn create vite"
+  bun="bun create vite"
+  client:load 
+/>
+
+### Install Tailwind CSS
+
+Install Tailwind CSS and its Vite plugin. If your project already has it configured, you can skip this step.
+
+<CommandTabs
+  npm="npm install tailwindcss @tailwindcss/vite"
+  pnpm="pnpm add tailwindcss @tailwindcss/vite"
+  yarn="yarn add tailwindcss @tailwindcss/vite"
+  bun="bun add tailwindcss @tailwindcss/vite"
+  client:load
+/>
+
+#### Configure Vite Plugin
+
+Add the Tailwind CSS plugin to your `vite.config.ts` file:
+
+<CodeBlock
+  client:load 
+  lang="ts"
+  showLineNumbers
+  filename="vite.config.ts"
+  highlightLines="3, 6"
+  code={`import { defineConfig } from "vite"
+  import react from "@vitejs/plugin-react"
+  import tailwindcss from "@tailwindcss/vite"
+
+  export default defineConfig({
+    plugins: [react(), tailwindcss()],
+  })`}
+/>
+
+#### Import Tailwind CSS
+
+Replace the contents of your `src/index.css` with the Tailwind import directive:
+
+<CodeBlock
+  client:load 
+  lang="css"
+  filename="src/index.css"
+  code={`@import "tailwindcss";`}
+/>
+
+### Configure Path Aliases
+
+Glass UI requires the `@/` path alias for absolute imports. If your project already has this configured, you can skip this step.
+
+First, install Node types to use the `path` module:
+
+<CommandTabs
+  npm="npm install -D @types/node"
+  pnpm="pnpm add -D @types/node"
+  yarn="yarn add -D @types/node"
+  bun="bun add -D @types/node"
+  client:load
+/>
+
+#### Update `vite.config.ts`
+
+Add the resolve alias to your Vite configuration:
+
+<CodeBlock
+  client:load 
+  lang="ts"
+  filename="vite.config.ts"
+  showLineNumbers
+  highlightLines="4, 8-11"
+  code={`import { defineConfig } from "vite"
+  import react from "@vitejs/plugin-react"
+  import tailwindcss from "@tailwindcss/vite"
+  import path from "path"
+
+  // https://vite.dev/config/
+  export default defineConfig({
+    plugins: [react(), tailwindcss()],
+    resolve: {
+      alias: {
+        "@": path.resolve(\_\_dirname, "./src"),
+      },
+    },
+  })`}
+/>
+
+#### Update `tsconfig.app.json`
+
+Vite uses multiple `tsconfig` files. Add the `paths` configuration to your `tsconfig.app.json` (or `tsconfig.json` if you are on an older Vite version):
+
+<CodeBlock
+  client:load 
+  filename="tsconfig.app.json"
+  showLineNumbers
+  highlightLines="3-5"
+  lang="json"
+  code={`{
+    "compilerOptions": {
+      "paths": {
+        "@/*": ["./src/*"]
+      },
+      // ... other options
+    }
+  }`}
+/>
+
+### Run the CLI
+
+Run the `init` command to set up your configuration, base utilities, and global styles.
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli@latest init"
+  pnpm="pnpm dlx @glass-ui-kit/cli@latest init"
+  yarn="yarn dlx @glass-ui-kit/cli@latest init"
+  bun="bunx @glass-ui-kit/cli@latest init"
+  client:load
+/>
+
+### Add your first component
+
+You can now start adding glassmorphism components to your project. Let's add the `Card` component:
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli@latest add card"
+  pnpm="pnpm dlx @glass-ui-kit/cli@latest add card"
+  yarn="yarn dlx @glass-ui-kit/cli@latest add card"
+  bun="bunx @glass-ui-kit/cli@latest add card"
+  client:load
+/>
+
+#### Use the component
+
+Clear your `src/App.tsx` and replace it with the following code to see Glass UI in action:
+
+<CodeBlock
+  client:load 
+  lang="tsx"
+  code={`import { Card } from "@/components/ui/card"
+
+  function App() {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md text-center text-xl">
+          <h1>Welcome to Glass UI</h1>
+        </Card>
+      </div>
+    )
+  }
+
+  export default App`}
+/>
+
+</Steps>
