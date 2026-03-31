@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "pnpm prebuild && astro dev",
     "prebuild": "pnpm --filter=@glass-ui-kit/schema build && pnpm --filter=@glass-ui-kit/glass build:registry",
-    "build": "astro build",
+    "build": "rm -rf .astro && astro build",
     "preview": "astro preview",
     "lint": "eslint src"
   },
