@@ -1,8 +1,8 @@
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Highlight, themes } from "prism-react-renderer";
 import CopyButton from "./CopyButton";
 import { cn } from "../lib/utils";
-import { Card } from "@glass-ui-kit/glass";
+import { Card, Button } from "@glass-ui-kit/glass";
 import "@/lib/prism-setup";
 
 interface ReactCodeBlockProps {
@@ -11,6 +11,7 @@ interface ReactCodeBlockProps {
   filename?: string;
   showLineNumbers?: boolean;
   highlightLines?: string;
+  expandable?: boolean;
   className?: string;
 }
 
@@ -34,10 +35,12 @@ export default function CodeBlock({
   filename,
   showLineNumbers = false,
   highlightLines = "",
+  expandable = false,
   className
 }: ReactCodeBlockProps) {
 
   const highlightedSet = useMemo(() => parseHighlightLines(highlightLines), [highlightLines]);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const renderCode = (theme: any, isDark: boolean) => (
     <Highlight theme={theme} code={code.trim()} language={lang as any}>
@@ -116,19 +119,57 @@ export default function CodeBlock({
   );
 
   return (
-    <Card className={`relative p-0 flex flex-col my-6 overflow-hidden ${className}`}>
+    <Card className={cn("relative p-0 flex flex-col my-6 overflow-hidden", className)}>
+
+      {expandable && (
+        <Button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="glass absolute top-1.5 right-10 z-40 h-7 hover:glass-strong"
+          aria-label={isExpanded ? "Collapse code" : "Expand code"}
+        >
+          {isExpanded ? "Collapse" : "Expand"}
+        </Button>
+      )}
+
       <CopyButton code={code} />
 
       {filename && (
-        <div className="border-b border-glass-border px-4 py-1.5 shrink-0 bg-transparent">
-          <span className="font-mono text-sm text-foreground">{filename}</span>
+        <div className="border-b border-glass-border flex items-center h-[41px] px-4 py-1.5 shrink-0 bg-transparent z-20">
+          <span className="font-mono text-sm text-foreground pr-20 block truncate">{filename}</span>
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto editor-scrollbar no-scrollbar">
+      <div
+        className={cn(
+          "flex-1 w-full editor-scrollbar no-scrollbar",
+          expandable && !isExpanded ? "max-h-[320px] overflow-hidden" : "overflow-y-auto min-h-0"
+        )}
+        style={{
+          maskImage: expandable && !isExpanded ? 'linear-gradient(to bottom, black calc(100% - 150px), transparent 100%)' : 'none',
+          WebkitMaskImage: expandable && !isExpanded ? 'linear-gradient(to bottom, black calc(100% - 150px), transparent 100%)' : 'none'
+        }}
+      >
         {renderCode(themes.github, false)}
         {renderCode(themes.vsDark, true)}
       </div>
+
+      {expandable && (
+        <div
+          className={cn(
+            "flex justify-center w-full z-20 shrink-0",
+            !isExpanded
+              ? "absolute bottom-4 left-0 pointer-events-none"
+              : "py-3 border-t border-glass-border bg-transparent"
+          )}
+        >
+          <Button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="glass glass-strong pointer-events-auto"
+          >
+            {isExpanded ? "Collapse" : "Expand"}
+          </Button>
+        </div>
+      )}
     </Card>
   );
 }
