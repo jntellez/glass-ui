@@ -1,6 +1,6 @@
 {
   "name": "@glass-ui-kit/cli",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "The official CLI for Glass UI. Add glassmorphism components to your React projects in seconds.",
   "keywords": [
     "glassmorphism",

@@ -101,14 +101,21 @@ export const init = new Command()
 
       // 5. Instalación de Dependencias (Crítico para 'cn')
       console.log(
-        chalk.cyan(`  Installing dependencies (clsx, tailwind-merge)...`),
+        chalk.cyan(
+          `  Installing dependencies (clsx, tailwind-merge, lucide-react)...`,
+        ),
       );
-      await installDependencies(["clsx", "tailwind-merge"], pm);
+      await installDependencies(["clsx", "tailwind-merge", "lucide-react"], pm);
+
+      const runCommand =
+        pm === "bun" ? "bunx" : pm === "pnpm" ? "pnpm dlx" : "npx";
 
       // Mensaje Final Profesional
       console.log(chalk.bold.green("\nSetup complete."));
       console.log(`Try adding a component:\n`);
-      console.log(chalk.cyan(`  npx @glass-ui-kit/cli@latest add card`));
+      console.log(
+        chalk.cyan(`  ${runCommand} @glass-ui-kit/cli@latest add card`),
+      );
       console.log("");
     } catch (error) {
       console.error(chalk.red("\nInitialization failed:"));
