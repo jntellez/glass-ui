@@ -1,0 +1,179 @@
+---
+title: Astro
+description: Install and configure Glass UI in an Astro project.
+---
+
+import CommandTabs from '@/components/CommandTabs.tsx';
+import CodeBlock from '@/components/CodeBlock.tsx';
+import Steps from '@/components/Steps.tsx';
+
+## Installation
+
+<Steps>
+
+### Create a new project
+
+Start by creating a fresh Astro project. If you already have a project, you can skip this step.
+
+<CommandTabs 
+  npm="npm create astro@latest" 
+  pnpm="pnpm create astro@latest"
+  yarn="yarn create astro"
+  bun="bun create astro"
+  client:load 
+/>
+
+### Add React
+
+Add the official React integration to your Astro project:
+
+<CommandTabs 
+  npm="npx astro add react" 
+  pnpm="pnpm astro add react"
+  yarn="yarn astro add react"
+  bun="bunx astro add react"
+  client:load 
+/>
+
+### Install Tailwind CSS
+
+Install Tailwind CSS and its Vite plugin. If your project already has it configured, you can skip this step.
+
+<CommandTabs
+  npm="npm install tailwindcss @tailwindcss/vite"
+  pnpm="pnpm add tailwindcss @tailwindcss/vite"
+  yarn="yarn add tailwindcss @tailwindcss/vite"
+  bun="bun add tailwindcss @tailwindcss/vite"
+  client:load
+/>
+
+#### Configure Astro
+
+Add the Tailwind CSS plugin to your `astro.config.mjs` file via the Vite configuration:
+
+<CodeBlock
+  client:load 
+  lang="js"
+  filename="astro.config.mjs"
+  showLineNumbers
+  highlightLines="4, 9-11"
+  code={`// @ts-check
+  import { defineConfig } from "astro/config";
+  import react from "@astrojs/react";
+  import tailwindcss from "@tailwindcss/vite";
+
+  // https://astro.build/config
+  export default defineConfig({
+    integrations: [react()],
+    vite: {
+      plugins: [tailwindcss()],
+    },
+  });`}
+/>
+
+#### Import Tailwind CSS
+
+Create a `src/styles/global.css` file and add the Tailwind import directive:
+
+<CodeBlock
+  client:load 
+  lang="css"
+  filename="src/styles/global.css"
+  code={`@import "tailwindcss";`}
+/>
+
+#### Add Styles to Layout
+
+Import the `global.css` file into your main layout so the styles are applied globally across your application:
+
+<CodeBlock
+  client:load 
+  lang="astro"
+  filename="src/layouts/Layout.astro"
+  showLineNumbers
+  highlightLines="2"
+  code={`---
+  import "@/styles/global.css";
+  ---
+
+  <!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width" />
+      <meta name="generator" content={Astro.generator} />
+      <title>Glass UI</title>
+    </head>
+    <body>
+      <slot />
+    </body>
+  </html>`}
+/>
+
+### Configure Path Aliases
+
+Verify that your `tsconfig.json` includes the `paths` configuration:
+
+<CodeBlock
+  client:load 
+  filename="tsconfig.json"
+  showLineNumbers
+  highlightLines="3-5"
+  lang="json"
+  code={`{
+    "compilerOptions": {
+      "paths": {
+        "@/*": ["./src/*"]
+      },
+    },
+  }`}
+/>
+
+### Run the CLI
+
+Run the `init` command to set up your configuration, base utilities, and global styles.
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli@latest init"
+  pnpm="pnpm dlx @glass-ui-kit/cli@latest init"
+  yarn="yarn dlx @glass-ui-kit/cli@latest init"
+  bun="bunx @glass-ui-kit/cli@latest init"
+  client:load
+/>
+
+### Add your first component
+
+You can now start adding glassmorphism components to your project. Let's add the `Card` component:
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli@latest add card"
+  pnpm="pnpm dlx @glass-ui-kit/cli@latest add card"
+  yarn="yarn dlx @glass-ui-kit/cli@latest add card"
+  bun="bunx @glass-ui-kit/cli@latest add card"
+  client:load
+/>
+
+#### Use the component
+
+Replace the contents of your `src/pages/index.astro` with the following code:
+
+<CodeBlock
+  client:load 
+  lang="astro"
+  filename="src/pages/index.astro"
+  showLineNumbers
+  code={`---
+  import Layout from "@/layouts/Layout.astro";
+  import { Card } from "@/components/ui/card";
+  ---
+
+  <Layout>
+    <div class="min-h-screen flex items-center justify-center">
+      <Card className="w-full max-w-md text-center text-xl">
+        <h1>Welcome to Glass UI</h1>
+      </Card>
+    </div>
+  </Layout>`}
+/>
+
+</Steps>
