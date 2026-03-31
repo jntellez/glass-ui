@@ -8,10 +8,23 @@ import { P } from "@/components/Typography";
 
 export async function getStaticPaths() {
   const docsEntries = await getCollection("docs");
-  return docsEntries.map((entry: CollectionEntry<"docs">) => ({
-    params: { slug: entry.id },
-    props: { entry },
-  }));
+
+  return docsEntries.map((entry) => {
+    let cleanSlug: string | undefined = entry.id;
+
+    cleanSlug = cleanSlug.replace(/\.mdx?$/, "");
+
+    if (cleanSlug.endsWith("/index")) {
+      cleanSlug = cleanSlug.replace(/\/index$/, "");
+    } else if (cleanSlug === "index") {
+      cleanSlug = undefined;
+    }
+
+    return {
+      params: { slug: cleanSlug },
+      props: { entry },
+    };
+  });
 }
 
 interface Props {
@@ -19,6 +32,7 @@ interface Props {
 }
 
 const { entry } = Astro.props;
+
 const { Content, headings } = await render(entry);
 ---
 
