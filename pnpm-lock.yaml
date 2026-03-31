@@ -53,6 +53,9 @@ importers:
       prism-react-renderer:
         specifier: ^2.4.1
         version: 2.4.1(react@19.2.3)
+      prismjs:
+        specifier: ^1.30.0
+        version: 1.30.0
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.4.0
