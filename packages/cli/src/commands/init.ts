@@ -8,7 +8,6 @@ import {
   getCssPath,
   installDependencies,
 } from "../utils/get-project-info";
-// CHANGE: Imports actualizados a la nueva estructura
 import { GLASS_BASE_STYLES } from "../templates/styles";
 import { UTILS_CN } from "../templates/utils";
 
@@ -26,16 +25,20 @@ export const init = new Command()
       const cwd = process.cwd();
       const configPath = "glass.config.json";
 
+      // Detectar si existe la carpeta src/ en la raíz del proyecto
+      const hasSrc = exists("src");
+
       // Paths predeterminados
-      // Intentamos detectar el CSS, si falla usamos default
       let cssPath = getCssPath(framework);
-      if (!cssPath) {
-        cssPath = "src/index.css";
-        // Nota: Aquí podrías agregar un warning sutil si quieres,
-        // pero para mantenerlo limpio lo dejamos implícito.
+      if (!cssPath || framework === "next") {
+        cssPath = hasSrc ? "src/app/globals.css" : "app/globals.css";
       }
 
-      const utilsPath = path.join(cwd, "src/lib/utils.ts");
+      // Configurar dinámicamente la ruta física de utils.ts
+      const utilsPath = path.join(
+        cwd,
+        hasSrc ? "src/lib/utils.ts" : "lib/utils.ts",
+      );
 
       // 2. Crear archivo de configuración
       if (!exists(configPath)) {
@@ -46,7 +49,10 @@ export const init = new Command()
               framework,
               style: "default",
               css: cssPath,
-              aliases: { components: "@/components/ui", utils: "@/lib/utils" },
+              aliases: {
+                components: "@/components/ui",
+                utils: "@/lib/utils",
+              },
             },
             null,
             2,
@@ -57,33 +63,38 @@ export const init = new Command()
         console.log(chalk.gray("  glass.config.json already exists."));
       }
 
-      // 3. Crear utilidad 'cn' (src/lib/utils.ts)
+      // 3. Crear utilidad 'cn' dinámicamente
       if (!exists(utilsPath)) {
-        // Aseguramos que el usuario tenga la utilidad base para clases condicionales
         await writeFile(utilsPath, UTILS_CN);
-        console.log(chalk.green("  Created src/lib/utils.ts"));
+        const displayPath = hasSrc ? "src/lib/utils.ts" : "lib/utils.ts";
+        console.log(chalk.green(`  Created ${displayPath}`));
       } else {
-        console.log(chalk.gray("  src/lib/utils.ts already exists."));
+        const displayPath = hasSrc ? "src/lib/utils.ts" : "lib/utils.ts";
+        console.log(chalk.gray(`  ${displayPath} already exists.`));
       }
 
       // 4. Inyección de CSS (Glass Tokens)
       let cssContent = "";
       try {
         if (exists(cssPath)) {
+          // Aún leemos el archivo para saber si ya tiene los tokens y no sobreescribir repetidamente
           cssContent = await readFile(cssPath);
         } else {
-          // Si no existe, lo creamos vacío para inyectarle los tokens
           console.log(chalk.yellow(`  Creating new CSS file at ${cssPath}`));
         }
       } catch (e) {
         // Fallback silencioso
       }
 
-      // CHANGE: Verificamos la nueva variable principal (--glass-bg)
+      // CAMBIO: Reemplazo total del archivo
       if (!cssContent.includes("--glass-bg")) {
-        const newCssContent = `${cssContent.trimEnd()}\n\n${GLASS_BASE_STYLES}`;
+        const newCssContent = `@import "tailwindcss";\n\n${GLASS_BASE_STYLES}`;
         await writeFile(cssPath, newCssContent);
-        console.log(chalk.green(`  Updated ${cssPath} with glass tokens`));
+        console.log(
+          chalk.green(
+            `  Overwrote ${cssPath} with Tailwind import and glass tokens`,
+          ),
+        );
       } else {
         console.log(chalk.gray(`  Tokens already present in ${cssPath}`));
       }

@@ -40,9 +40,19 @@ export const add = new Command()
         process.exit(1);
       }
 
-      // 4. Resolve Paths
+      // NUEVO: Detectar si existe la carpeta src/ en la raíz
+      const hasSrc = exists("src");
+
+      // 4. Resolve Paths (Lógica dinámica para src/)
       const targetDirAlias = config.aliases.components || "@/components/ui";
-      const targetDir = targetDirAlias.replace(/^@\//, "./src/");
+
+      // Removemos el prefijo del alias (ej. "@/") para obtener el path relativo
+      const relativeAliasPath = targetDirAlias.replace(/^@\//, "");
+
+      // Construimos el path físico dependiendo de si existe src/
+      const targetDir = hasSrc
+        ? `./src/${relativeAliasPath}`
+        : `./${relativeAliasPath}`;
 
       // 5. Write Files (CON TRANSFORMACIÓN)
       for (const file of item.files) {
