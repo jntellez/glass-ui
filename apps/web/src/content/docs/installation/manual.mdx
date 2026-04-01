@@ -47,6 +47,8 @@ Ensure your project has path aliases configured. Update your `tsconfig.json` (or
   }`}
 />
 
+If your project already uses a different prefix (like ~/*), you can use that instead, but remember to update the imports in the components you copy later.
+
 ### Add the utility function
 
 Create a `src/lib/utils.ts` file. This helper function is used by all Glass UI components to conditionally merge Tailwind classes without style conflicts:
@@ -246,8 +248,9 @@ Create a `glass.config.json` file at the root of your project:
   filename="glass.config.json"
   showLineNumbers
   code={`{
+    "framework": "remix",
     "style": "default",
-    "css": "src/styles/global.css",
+    "css": "app/app.css",
     "aliases": {
       "components": "@/components/ui",
       "utils": "@/lib/utils"
@@ -255,6 +258,6 @@ Create a `glass.config.json` file at the root of your project:
   }`}
 />
 
-Adjust the `css` path according to your actual setup.
+Adjust the `framework` and `css` paths according to your project structure. The `aliases` defined here must match your `tsconfig.json` exactly.
 
 </Steps>
