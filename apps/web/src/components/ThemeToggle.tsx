@@ -69,7 +69,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
           key={value}
           onClick={() => setTheme(value)}
           className={cn(
-            "flex z-10 w-8 rounded-glass-sm transition-colors duration-200 justify-center items-center",
+            "flex z-10 h-8 w-8 rounded-glass-sm transition-colors duration-200 justify-center items-center",
             theme === value ? "text-foreground" : "text-muted-foreground hover:text-foreground"
           )}
           aria-label={label}
