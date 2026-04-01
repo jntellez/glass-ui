@@ -2,36 +2,20 @@ import { Card } from '@glass-ui-kit/glass';
 import { SiNextdotjs, SiVite, SiAstro, SiReact } from '@icons-pack/react-simple-icons';
 
 const frameworks = [
-  {
-    name: "Next.js",
-    href: "/docs/installation/next",
-    icon: SiNextdotjs,
-  },
-  {
-    name: "Vite",
-    href: "/docs/installation/vite",
-    icon: SiVite,
-  },
-  {
-    name: "Astro",
-    href: "/docs/installation/astro",
-    icon: SiAstro,
-  },
-  {
-    name: "Manual",
-    href: "/docs/installation/manual",
-    icon: SiReact,
-  },
+  { name: "Next.js", slug: "next", icon: SiNextdotjs },
+  { name: "Vite", slug: "vite", icon: SiVite },
+  { name: "Astro", slug: "astro", icon: SiAstro },
+  { name: "Manual", slug: "manual", icon: SiReact },
 ];
 
-export default function FrameworkGrid() {
+export default function FrameworkGrid({ basePath }: { basePath?: string }) {
   return (
     <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
       {frameworks.map((fw) => {
         const Icon = fw.icon;
 
         return (
-          <a key={fw.name} href={fw.href} className="no-underline">
+          <a key={fw.name} href={`${basePath}/${fw.slug}`} className="no-underline">
             <Card
               className="aspect-square hover:glass-strong flex flex-col items-center justify-center transition-colors duration-200"
             >
