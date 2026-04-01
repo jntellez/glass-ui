@@ -32,7 +32,9 @@ export default function FrameworkGrid() {
 
         return (
           <a key={fw.name} href={fw.href} className="no-underline">
-            <Card className="hover:glass-strong flex flex-col items-center justify-center transition-colors duration-200">
+            <Card
+              className="aspect-square hover:glass-strong flex flex-col items-center justify-center transition-colors duration-200"
+            >
               <div className="flex flex-col items-center py-2">
                 <Icon className="h-10 w-10 text-foreground" />
                 <p className="mt-1.5 mb-0 font-medium text-foreground">{fw.name}</p>
