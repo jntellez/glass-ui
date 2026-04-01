@@ -28,17 +28,33 @@ export const init = new Command()
       // Detectar si existe la carpeta src/ en la raíz del proyecto
       const hasSrc = exists("src");
 
+      // NUEVO: Definir el directorio base según el framework
+      let baseDir = hasSrc ? "src" : "";
+      if (framework === "remix") {
+        baseDir = "app"; // Remix usa 'app/' por convención
+      }
+
       // Paths predeterminados
       let cssPath = getCssPath(framework);
+      // NUEVO: Fallback ajustado para incluir Remix
       if (!cssPath || framework === "next") {
-        cssPath = hasSrc ? "src/app/globals.css" : "app/globals.css";
+        if (framework === "next") {
+          cssPath = hasSrc ? "src/app/globals.css" : "app/globals.css";
+        } else if (framework === "remix") {
+          cssPath = "app/app.css";
+        } else {
+          cssPath = hasSrc ? "src/index.css" : "index.css";
+        }
       }
 
       // Configurar dinámicamente la ruta física de utils.ts
-      const utilsPath = path.join(
-        cwd,
-        hasSrc ? "src/lib/utils.ts" : "lib/utils.ts",
-      );
+      const utilsRelativePath = baseDir
+        ? `${baseDir}/lib/utils.ts`
+        : "lib/utils.ts";
+      const utilsPath = path.join(cwd, utilsRelativePath);
+
+      // NUEVO: Alias dinámico (Remix usa ~/ y los demás @/)
+      const aliasPrefix = framework === "remix" ? "~" : "@";
 
       // 2. Crear archivo de configuración
       if (!exists(configPath)) {
@@ -50,8 +66,8 @@ export const init = new Command()
               style: "default",
               css: cssPath,
               aliases: {
-                components: "@/components/ui",
-                utils: "@/lib/utils",
+                components: `${aliasPrefix}/components/ui`,
+                utils: `${aliasPrefix}/lib/utils`,
               },
             },
             null,
@@ -66,11 +82,9 @@ export const init = new Command()
       // 3. Crear utilidad 'cn' dinámicamente
       if (!exists(utilsPath)) {
         await writeFile(utilsPath, UTILS_CN);
-        const displayPath = hasSrc ? "src/lib/utils.ts" : "lib/utils.ts";
-        console.log(chalk.green(`  Created ${displayPath}`));
+        console.log(chalk.green(`  Created ${utilsRelativePath}`));
       } else {
-        const displayPath = hasSrc ? "src/lib/utils.ts" : "lib/utils.ts";
-        console.log(chalk.gray(`  ${displayPath} already exists.`));
+        console.log(chalk.gray(`  ${utilsRelativePath} already exists.`));
       }
 
       // 4. Inyección de CSS (Glass Tokens)

@@ -40,19 +40,23 @@ export const add = new Command()
         process.exit(1);
       }
 
-      // NUEVO: Detectar si existe la carpeta src/ en la raíz
       const hasSrc = exists("src");
 
-      // 4. Resolve Paths (Lógica dinámica para src/)
+      // 4. Resolve Paths (Lógica dinámica para src/ y app/ de Remix)
       const targetDirAlias = config.aliases.components || "@/components/ui";
 
-      // Removemos el prefijo del alias (ej. "@/") para obtener el path relativo
-      const relativeAliasPath = targetDirAlias.replace(/^@\//, "");
+      // Removemos el prefijo del alias (ej. "@/" o "~/") para obtener el path relativo
+      const relativeAliasPath = targetDirAlias.replace(/^[@~]\//, "");
 
-      // Construimos el path físico dependiendo de si existe src/
-      const targetDir = hasSrc
-        ? `./src/${relativeAliasPath}`
-        : `./${relativeAliasPath}`;
+      // Construimos el path físico dependiendo del framework o de si existe src/
+      let targetDir = "";
+      if (config.framework === "remix") {
+        targetDir = `./app/${relativeAliasPath}`;
+      } else if (hasSrc) {
+        targetDir = `./src/${relativeAliasPath}`;
+      } else {
+        targetDir = `./${relativeAliasPath}`;
+      }
 
       // 5. Write Files (CON TRANSFORMACIÓN)
       for (const file of item.files) {
