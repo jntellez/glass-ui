@@ -1,5 +1,10 @@
 ---
-import { flattenedDocs, frameworkDocs, sidebarNav } from "@/config/docs";
+import {
+  flattenedDocs,
+  installationDocs,
+  darkModeDocs,
+  sidebarNav,
+} from "@/config/docs";
 import { Button } from "@glass-ui-kit/glass";
 import { Icon } from "astro-icon/components";
 
@@ -11,8 +16,13 @@ const componentDocs =
 const isolatedGroups = [
   {
     prefix: "/docs/installation/",
-    items: frameworkDocs,
+    items: installationDocs,
     parent: { title: "Installation", href: "/docs/installation" },
+  },
+  {
+    prefix: "/docs/dark-mode/",
+    items: darkModeDocs,
+    parent: { title: "Dark Mode", href: "/docs/dark-mode" },
   },
   {
     prefix: "/docs/components/",

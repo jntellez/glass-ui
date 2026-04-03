@@ -13,6 +13,7 @@ export const sidebarNav: SidebarSection[] = [
     title: "Getting Started",
     items: [
       { title: "Installation", href: "/docs/installation" },
+      { title: "Dark Mode", href: "/docs/dark-mode" },
       { title: "Components", href: "/docs/components" },
       { title: "CLI", href: "/docs/cli" },
     ],
@@ -34,9 +35,17 @@ export const flattenedDocs: NavItem[] = sidebarNav.flatMap(
 );
 
 // Sublist for installation page
-export const frameworkDocs: NavItem[] = [
+export const installationDocs: NavItem[] = [
   { title: "Next.js", href: "/docs/installation/next" },
   { title: "Vite", href: "/docs/installation/vite" },
   { title: "Astro", href: "/docs/installation/astro" },
   { title: "Manual", href: "/docs/installation/manual" },
+];
+
+// Sublist for dark mode page
+export const darkModeDocs: NavItem[] = [
+  { title: "Next.js", href: "/docs/dark-mode/next" },
+  { title: "Vite", href: "/docs/dark-mode/vite" },
+  { title: "Astro", href: "/docs/dark-mode/astro" },
+  { title: "Manual", href: "/docs/dark-mode/manual" },
 ];
