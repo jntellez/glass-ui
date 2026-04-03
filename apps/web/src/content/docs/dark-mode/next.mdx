@@ -1,0 +1,162 @@
+---
+title: Next.js
+description: Implement dark mode in your Next.js project.
+---
+
+import CommandTabs from '@/components/CommandTabs.tsx';
+import CodeBlock from '@/components/CodeBlock.tsx';
+import Steps from '@/components/Steps.tsx';
+
+## Implementation with next-themes
+
+For Next.js, the most robust way to handle dark mode is by using the `next-themes` library.
+
+<Steps>
+
+### Install the dependency
+
+Install `next-themes` in your project using your preferred package manager:
+
+<CommandTabs 
+  npm="npm install next-themes" 
+  pnpm="pnpm add next-themes"
+  yarn="yarn add next-themes"
+  bun="bun add next-themes"
+  client:load 
+/>
+
+### Create the ThemeProvider
+
+Create a `theme-provider.tsx` component (usually in your `components/` folder) to wrap your application:
+
+<CodeBlock
+  client:load 
+  filename="components/theme-provider.tsx"
+  lang="tsx"
+  showLineNumbers
+  code={`"use client"
+
+  import * as React from "react"
+  import { ThemeProvider as NextThemesProvider } from "next-themes"
+  import { type ThemeProviderProps } from "next-themes/dist/types"
+
+  export function ThemeProvider({
+    children,
+    ...props
+  }: ThemeProviderProps) {
+    return <NextThemesProvider {...props}>
+      {children}
+    </NextThemesProvider>
+  }`}
+/>
+
+### Wrap your application
+
+Add the `ThemeProvider` to your main layout, making sure to include the `suppressHydrationWarning` prop in the `<html>` tag:
+
+<CodeBlock
+  client:load 
+  filename="app/layout.tsx"
+  lang="tsx"
+  showLineNumbers
+  highlightLines="5, 8-13, 15"
+  code={`import { ThemeProvider } from "@/components/theme-provider"
+
+  export default function RootLayout({ children }: { children: React.ReactNode }) {
+    return (
+      <html lang="en" suppressHydrationWarning>
+        <head />
+        <body>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    )
+  }`}
+/>
+
+### Add a Theme Toggle
+
+Add a theme toggle anywhere in your application to switch between light and dark mode:
+
+<CodeBlock
+  client:load 
+  filename="components/theme-toggle.tsx"
+  lang="tsx"
+  showLineNumbers
+  expandable
+  code={`"use client";
+
+  import { useState, useEffect } from "react";
+  import { Sun, Monitor, Moon } from "lucide-react";
+  import { useTheme } from "next-themes";
+  import { cn } from "@/lib/utils";
+
+  type Theme = "light" | "system" | "dark";
+
+  const LENS_POSITIONS: Record<Theme, string> = {
+    light: "translate-x-0",
+    system: "translate-x-full",
+    dark: "translate-x-[200%]",
+  };
+
+  const THEME_OPTIONS = [
+    { value: "light", icon: Sun, label: "Light theme" },
+    { value: "system", icon: Monitor, label: "System theme" },
+    { value: "dark", icon: Moon, label: "Dark theme" },
+  ] as const;
+
+  export default function ThemeToggle({ className }: { className?: string }) {
+    const [mounted, setMounted] = useState(false);
+    const { theme, setTheme } = useTheme();
+
+    useEffect(() => {
+      setMounted(true);
+    }, []);
+
+    const currentTheme = (theme as Theme) || "system";
+
+    return (
+      <div
+        className={cn(
+          "relative border border-glass-border shadow-glass-sm w-[97px] h-8 flex items-center rounded-glass-sm",
+          className
+        )}
+        role="radiogroup"
+        aria-label="Theme toggle"
+      >
+        <div
+          className={cn(
+            "absolute w-8 h-8 rounded-glass-sm z-0 glass",
+            mounted ? "transition-transform duration-300 cubic-bezier(0.4, 0.0, 0.2, 1)" : "",
+            LENS_POSITIONS[currentTheme]
+          )}
+        />
+
+        {THEME_OPTIONS.map(({ value, icon: Icon, label }) => (
+          <button
+            key={value}
+            onClick={() => setTheme(value)}
+            className={cn(
+              "flex z-10 h-8 w-8 rounded-glass-sm transition-colors duration-200 justify-center items-center",
+              currentTheme === value ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+            )}
+            aria-label={label}
+            role="radio"
+            aria-checked={currentTheme === value}
+          >
+            <Icon className="h-4 w-4" />
+          </button>
+        ))}
+      </div>
+    );
+  }`}
+/>
+
+</Steps>
