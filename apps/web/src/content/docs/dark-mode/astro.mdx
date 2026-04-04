@@ -1,0 +1,185 @@
+---
+title: Astro
+description: Implement dark mode in your Astro project.
+---
+
+import CodeBlock from '@/components/CodeBlock.tsx';
+import Steps from '@/components/Steps.tsx';
+
+## Implementation in Astro
+
+Astro generates static HTML by default. To avoid the "Flash of Unstyled Content" (FOUC), you should inject a small inline script in your `<head>` to evaluate the theme before the page renders.
+
+<Steps>
+
+### Configure the inline script
+
+Add the following script to the `<head>` of your main layout file (`Layout.astro`). This script reads the theme from `localStorage` or defaults to the system preference.
+
+<CodeBlock
+  client:load 
+  filename="src/layouts/Layout.astro"
+  highlightLines="12-35"
+  lang="astro"
+  showLineNumbers
+  code={`---
+  // Your imports...
+  ---
+
+  <!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width" />
+      <title>Astro App</title>
+      
+      <script is:inline>
+        const getThemePreference = () => {
+          if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+            return localStorage.getItem("theme");
+          }
+          return window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        };
+
+        const isDark = getThemePreference() === "dark";
+        document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+
+        if (typeof localStorage !== "undefined") {
+          const observer = new MutationObserver(() => {
+            const isDark = document.documentElement.classList.contains("dark");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+          });
+          observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["class"],
+          });
+        }
+      </script>
+    </head>
+    <body>
+      <slot />
+    </body>
+  </html>`}
+/>
+
+### Add a Theme Toggle (React)
+
+You can use the standalone `ThemeToggle` component which handles document classes and local storage directly without requiring a context provider:
+
+<CodeBlock
+  client:load 
+  filename="src/components/ThemeToggle.tsx"
+  lang="tsx"
+  showLineNumbers
+  expandable
+  code={`import { useState, useEffect } from "react";
+  import { Sun, Monitor, Moon } from "lucide-react";
+  import { cn } from "@/lib/utils";
+
+  type Theme = "light" | "system" | "dark";
+
+  const LENS_POSITIONS: Record<Theme, string> = {
+    light: "translate-x-0",
+    system: "translate-x-full",
+    dark: "translate-x-[200%]",
+  };
+
+  const THEME_OPTIONS = [
+    { value: "light", icon: Sun, label: "Light theme" },
+    { value: "system", icon: Monitor, label: "System theme" },
+    { value: "dark", icon: Moon, label: "Dark theme" },
+  ] as const;
+
+  export default function ThemeToggle({ className }: { className?: string }) {
+    const [mounted, setMounted] = useState(false);
+    const [theme, setTheme] = useState<Theme>("system");
+
+    useEffect(() => {
+      const stored = (localStorage.getItem("theme") as Theme) || "system";
+      setTheme(stored);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setMounted(true);
+        });
+      });
+    }, []);
+
+    useEffect(() => {
+      if (!mounted) return;
+
+      const root = window.document.documentElement;
+      localStorage.setItem("theme", theme);
+
+      root.classList.remove("light", "dark");
+
+      if (theme === "system") {
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+        root.classList.add(systemTheme);
+        return;
+      }
+
+      root.classList.add(theme);
+    }, [theme, mounted]);
+
+    return (
+      <div
+        className={cn(
+          "relative border border-glass-border shadow-glass-sm w-[97px] h-8 flex items-center rounded-glass-sm",
+          className
+        )}
+        role="radiogroup"
+        aria-label="Theme toggle"
+      >
+        <div
+          className={cn(
+            "absolute w-8 h-8 rounded-glass-sm z-0 glass",
+            mounted ? "transition-transform duration-300 cubic-bezier(0.4, 0.0, 0.2, 1)" : "",
+            LENS_POSITIONS[theme]
+          )}
+        />
+
+        {THEME_OPTIONS.map(({ value, icon: Icon, label }) => (
+          <button
+            key={value}
+            onClick={() => setTheme(value)}
+            className={cn(
+              "flex z-10 h-8 w-8 rounded-glass-sm transition-colors duration-200 justify-center items-center",
+              theme === value ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+            )}
+            aria-label={label}
+            role="radio"
+            aria-checked={theme === value}
+          >
+            <Icon className="h-4 w-4" />
+          </button>
+        ))}
+      </div>
+    );
+  }`}
+/>
+
+### Render the component
+
+When using the component in an `.astro` file, remember to include the `client:load` directive to ensure interactivity:
+
+<CodeBlock
+  client:load 
+  filename="src/components/Header.astro"
+  highlightLines="2, 6"
+  lang="astro"
+  showLineNumbers
+  code={`---
+  import ThemeToggle from "./ThemeToggle";
+  ---
+
+  <header>
+    <ThemeToggle client:load />
+  </header>`}
+/>
+
+</Steps>
