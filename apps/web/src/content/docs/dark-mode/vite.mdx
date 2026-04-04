@@ -1,0 +1,203 @@
+---
+title: Vite
+description: Implement dark mode in your Vite project.
+---
+
+import CodeBlock from '@/components/CodeBlock.tsx';
+import Steps from '@/components/Steps.tsx';
+
+## Implementation in Vite (React)
+
+For Vite projects using React, the most effective approach is to use a custom Context Provider to manage the theme state and persist it to `localStorage`.
+
+<Steps>
+
+### Create the ThemeProvider
+
+Create a `theme-provider.tsx` file in your components folder to manage the theme state and sync it with the document's root element:
+
+<CodeBlock
+  client:load 
+  filename="src/components/theme-provider.tsx"
+  lang="tsx"
+  showLineNumbers
+  expandable
+  code={`import { createContext, useContext, useEffect, useState } from "react"
+
+  type Theme = "dark" | "light" | "system"
+
+  type ThemeProviderProps = {
+    children: React.ReactNode
+    defaultTheme?: Theme
+    storageKey?: string
+  }
+
+  type ThemeProviderState = {
+    theme: Theme
+    setTheme: (theme: Theme) => void
+  }
+
+  const initialState: ThemeProviderState = {
+    theme: "system",
+    setTheme: () => null,
+  }
+
+  const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+
+  export function ThemeProvider({
+    children,
+    defaultTheme = "system",
+    storageKey = "vite-ui-theme",
+    ...props
+  }: ThemeProviderProps) {
+    const [theme, setTheme] = useState<Theme>(
+      () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+    )
+
+    useEffect(() => {
+      const root = window.document.documentElement
+
+      root.classList.remove("light", "dark")
+
+      if (theme === "system") {
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+          .matches
+          ? "dark"
+          : "light"
+
+        root.classList.add(systemTheme)
+        return
+      }
+
+      root.classList.add(theme)
+    }, [theme])
+
+    const value = {
+      theme,
+      setTheme: (theme: Theme) => {
+        localStorage.setItem(storageKey, theme)
+        setTheme(theme)
+      },
+    }
+
+    return (
+      <ThemeProviderContext.Provider {...props} value={value}>
+        {children}
+      </ThemeProviderContext.Provider>
+    )
+  }
+
+  export const useTheme = () => {
+    const context = useContext(ThemeProviderContext)
+
+    if (context === undefined)
+      throw new Error("useTheme must be used within a ThemeProvider")
+
+    return context
+  }`}
+/>
+
+If you see a Vite Fast Refresh warning, you can safely ignore it by adding `// eslint-disable-next-line react-refresh/only-export-components` directly above the `export const useTheme` line.
+
+### Wrap your application
+
+Add the `ThemeProvider` to your main entry point, typically `main.tsx` or `App.tsx`:
+
+<CodeBlock
+  client:load 
+  filename="src/main.tsx"
+  lang="tsx"
+  showLineNumbers
+  highlightLines="5, 9-11"
+  code={`import { StrictMode } from 'react'
+  import { createRoot } from 'react-dom/client'
+  import './index.css'
+  import App from './App.tsx'
+  import { ThemeProvider } from "@/components/theme-provider"
+
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <App />
+      </ThemeProvider>
+    </StrictMode>,
+  )
+  `}
+/>
+
+### Add a Theme Toggle
+
+Use the `ThemeToggle` component to allow users to switch between themes.
+
+<CodeBlock
+  client:load 
+  filename="components/theme-toggle.tsx"
+  lang="tsx"
+  showLineNumbers
+  expandable
+  code={`import { useState, useEffect } from "react";
+  import { Sun, Monitor, Moon } from "lucide-react";
+  import { useTheme } from "@/components/theme-provider";
+  import { cn } from "@/lib/utils";
+
+  type Theme = "light" | "system" | "dark";
+
+  const LENS_POSITIONS: Record<Theme, string> = {
+    light: "translate-x-0",
+    system: "translate-x-full",
+    dark: "translate-x-[200%]",
+  };
+
+  const THEME_OPTIONS = [
+    { value: "light", icon: Sun, label: "Light theme" },
+    { value: "system", icon: Monitor, label: "System theme" },
+    { value: "dark", icon: Moon, label: "Dark theme" },
+  ] as const;
+
+  export default function ThemeToggle({ className }: { className?: string }) {
+    const [mounted, setMounted] = useState(false);
+    const { theme, setTheme } = useTheme();
+
+    useEffect(() => {
+      const timer = setTimeout(() => setMounted(true), 0);
+      return () => clearTimeout(timer);
+    }, []);
+
+    return (
+      <div
+        className={cn(
+          "relative border border-glass-border shadow-glass-sm w-[97px] h-8 flex items-center rounded-glass-sm",
+          className
+        )}
+        role="radiogroup"
+        aria-label="Theme toggle"
+      >
+        <div
+          className={cn(
+            "absolute w-8 h-8 rounded-glass-sm z-0 glass",
+            mounted ? "transition-transform duration-300 cubic-bezier(0.4, 0.0, 0.2, 1)" : "",
+            LENS_POSITIONS[theme as Theme]
+          )}
+        />
+
+        {THEME_OPTIONS.map(({ value, icon: Icon, label }) => (
+          <button
+            key={value}
+            onClick={() => setTheme(value as Theme)}
+            className={cn(
+              "flex z-10 h-8 w-8 rounded-glass-sm transition-colors duration-200 justify-center items-center",
+              theme === value ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+            )}
+            aria-label={label}
+            role="radio"
+            aria-checked={theme === value}
+          >
+            <Icon className="h-4 w-4" />
+          </button>
+        ))}
+      </div>
+    );
+  }`}
+/>
+
+</Steps>
