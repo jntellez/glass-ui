@@ -10,7 +10,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@astrojs/mdx": "^5.0.0",
+    "@astrojs/mdx": "5.0.0",
     "@glass-ui-kit/glass": "workspace:*",
     "@glass-ui-kit/schema": "workspace:*",
     "@iconify-json/lucide": "^1.2.98",
@@ -25,12 +25,12 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
-    "@astrojs/react": "latest",
+    "@astrojs/react": "4.4.2",
     "@glass-ui-kit/tsconfig": "workspace:*",
     "@tailwindcss/vite": "4.0.0-alpha.32",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "astro": "latest",
+    "astro": "5.16.15",
     "react": "^19.0.0",
     "react-dom": "^19.2.3",
     "tailwindcss": "4.0.0-alpha.32",
