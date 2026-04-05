@@ -1,0 +1,205 @@
+---
+title: Manual
+description: Implement dark mode manually in your project without using a library.
+---
+
+import CodeBlock from "@/components/CodeBlock.tsx";
+import Steps from "@/components/Steps.tsx";
+
+## Manual dark mode implementation
+
+If you are not using a framework-specific theme library, you can manage dark mode yourself by storing the selected theme in `localStorage`, resolving the `system` option with `matchMedia`, and toggling classes on `document.documentElement`.
+
+<Steps>
+
+### Configure the inline script
+
+Add the following script to the `<head>` of your main HTML layout. This applies the correct theme before the page renders and helps avoid a flash of the wrong theme.
+
+<CodeBlock
+  client:load
+  filename="src/layouts/root.html"
+  lang="html"
+  showLineNumbers
+  code={`<!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+      <script>
+        (() => {
+          const storedTheme = localStorage.getItem("theme");
+          const theme =
+            storedTheme === "light" || storedTheme === "dark" || storedTheme === "system"
+              ? storedTheme
+              : "system";
+
+          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+
+          const resolvedTheme = theme === "system" ? systemTheme : theme;
+
+          document.documentElement.classList.remove("light", "dark");
+          document.documentElement.classList.add(resolvedTheme);
+        })();
+      </script>
+    </head>
+    <body>
+      <div id="app"></div>
+    </body>
+
+  </html>`}
+/>
+
+### Create a theme helper
+
+Create a small helper to read and apply the current theme from one place.
+
+<CodeBlock
+  client:load
+  filename="src/lib/theme.ts"
+  lang="ts"
+  showLineNumbers
+  code={`export type Theme = "light" | "dark" | "system";
+
+const STORAGE_KEY = "theme";
+
+export function getStoredTheme(): Theme {
+const stored = localStorage.getItem(STORAGE_KEY);
+
+    if (stored === "light" || stored === "dark" || stored === "system") {
+      return stored;
+    }
+
+    return "system";
+
+}
+
+export function applyTheme(theme: Theme) {
+const root = document.documentElement;
+const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+? "dark"
+: "light";
+
+    const resolvedTheme = theme === "system" ? systemTheme : theme;
+
+    root.classList.remove("light", "dark");
+    root.classList.add(resolvedTheme);
+    localStorage.setItem(STORAGE_KEY, theme);
+
+}`}
+/>
+
+### Add a Theme Toggle
+
+You can use a standalone `ThemeToggle` component that updates the root classes directly without requiring a provider or external package.
+
+<CodeBlock
+  client:load
+  filename="src/components/ThemeToggle.tsx"
+  lang="tsx"
+  showLineNumbers
+  expandable
+  code={`import { useEffect, useState } from "react";
+  import { Sun, Monitor, Moon } from "lucide-react";
+  import { cn } from "@/lib/utils";
+  import { applyTheme, getStoredTheme, type Theme } from "@/lib/theme";
+
+const LENS_POSITIONS: Record<Theme, string> = {
+light: "translate-x-0",
+system: "translate-x-full",
+dark: "translate-x-[200%]",
+};
+
+const THEME_OPTIONS = [
+{ value: "light", icon: Sun, label: "Light theme" },
+{ value: "system", icon: Monitor, label: "System theme" },
+{ value: "dark", icon: Moon, label: "Dark theme" },
+] as const;
+
+export default function ThemeToggle({ className }: { className?: string }) {
+const [mounted, setMounted] = useState(false);
+const [theme, setTheme] = useState<Theme>("system");
+
+    useEffect(() => {
+      const stored = getStoredTheme();
+      setTheme(stored);
+
+      const timer = setTimeout(() => setMounted(true), 0);
+      return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(() => {
+      if (!mounted) return;
+
+      applyTheme(theme);
+    }, [theme, mounted]);
+
+    return (
+      <div
+        className={cn(
+          "relative border border-glass-border shadow-glass-sm w-[97px] h-8 flex items-center rounded-glass-sm",
+          className
+        )}
+        role="radiogroup"
+        aria-label="Theme toggle"
+      >
+        <div
+          className={cn(
+            "absolute w-8 h-8 rounded-glass-sm z-0 glass",
+            mounted ? "transition-transform duration-300 cubic-bezier(0.4, 0.0, 0.2, 1)" : "",
+            LENS_POSITIONS[theme]
+          )}
+        />
+
+        {THEME_OPTIONS.map(({ value, icon: Icon, label }) => (
+          <button
+            key={value}
+            onClick={() => setTheme(value)}
+            className={cn(
+              "flex z-10 h-8 w-8 rounded-glass-sm transition-colors duration-200 justify-center items-center",
+              theme === value ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+            )}
+            aria-label={label}
+            role="radio"
+            aria-checked={theme === value}
+          >
+            <Icon className="h-4 w-4" />
+          </button>
+        ))}
+      </div>
+    );
+
+}`}
+/>
+
+### Keep `system` mode in sync
+
+If you support the `system` option, listen for operating system theme changes and re-apply the theme when needed.
+
+<CodeBlock
+  client:load
+  filename="src/components/ThemeToggle.tsx"
+  lang="tsx"
+  showLineNumbers
+  code={`useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const handleChange = () => {
+      if (theme === "system") {
+        applyTheme("system");
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleChange);
+    };
+
+}, [theme]);`}
+/>
+
+</Steps>
