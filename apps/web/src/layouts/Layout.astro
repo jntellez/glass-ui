@@ -1,14 +1,13 @@
 ---
-import "@/styles/global.css";
-import Header from "@/components/Header.astro";
+import "@/styles/global.css"
+import Header from "@/components/Header.astro"
 
 interface Props {
-  title: string;
-  description?: string;
+  title: string
+  description?: string
 }
 
-const { title, description = "Glass UI - A modern React design system." } =
-  Astro.props;
+const { title, description = "Glass UI - A modern React design system." } = Astro.props
 ---
 
 <html lang="en">
@@ -29,29 +28,26 @@ const { title, description = "Glass UI - A modern React design system." } =
     <title>{title}</title>
 
     <script is:inline>
-      const theme = (() => {
-        if (
-          typeof localStorage !== "undefined" &&
-          localStorage.getItem("theme")
-        ) {
-          return localStorage.getItem("theme");
-        }
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          return "dark";
-        }
-        return "light";
-      })();
+      const resolvedTheme = (() => {
+        const storedTheme =
+          typeof localStorage !== "undefined" ? localStorage.getItem("theme") : null
 
-      if (theme === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+        if (storedTheme === "light" || storedTheme === "dark") {
+          return storedTheme
+        }
+
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark"
+        }
+
+        return "light"
+      })()
+
+      document.documentElement.classList.toggle("dark", resolvedTheme === "dark")
+      document.documentElement.style.colorScheme = resolvedTheme
     </script>
   </head>
-  <body
-    class="min-h-screen flex flex-col transition-colors duration-300 antialiased"
-  >
+  <body class="min-h-screen flex flex-col transition-colors duration-300 antialiased">
     <Header />
     <main class="flex-1 flex flex-col w-full px-4 md:px-8">
       <slot />
