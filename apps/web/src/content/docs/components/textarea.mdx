@@ -1,0 +1,76 @@
+---
+title: Textarea
+description: Multiline text field used for comments, notes, and longer form content.
+---
+
+import CommandTabs from "@/components/CommandTabs.tsx"
+import CodeBlock from "@/components/CodeBlock.tsx"
+import ComponentPreview from "@/components/ComponentPreview.tsx"
+
+<ComponentPreview name="textarea-demo" height={360} client:load />
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add textarea"
+  pnpm="pnpm dlx @glass-ui-kit/cli add textarea"
+  yarn="yarn dlx @glass-ui-kit/cli add textarea"
+  bun="bunx @glass-ui-kit/cli add textarea"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock 
+  lang="tsx" 
+  code={`import { Textarea } from "@/components/ui/textarea"
+
+export default function App() {
+return (
+<Textarea placeholder="Share your thoughts" />
+)
+}`}
+/>
+
+## Examples
+
+### Default
+
+The base textarea uses the same glass surface treatment as the rest of the system and defaults to a resizable multiline field.
+
+<ComponentPreview name="textarea-default" height={240} client:load />
+
+### Glass
+
+Add the `glass` class when you want the textarea to pick up a stronger glassmorphism surface.
+
+<ComponentPreview name="textarea-glass" height={240} client:load />
+
+### Disabled
+
+The disabled state follows the native `disabled` attribute and applies reduced opacity plus blocked pointer interaction.
+
+<ComponentPreview name="textarea-disabled" height={240} client:load />
+
+### Form Composition
+
+Compose `Textarea` with native labels and helper text to build accessible form layouts without adding extra props.
+
+<ComponentPreview name="textarea-composition" height={320} client:load />
+
+## Styling & API
+
+`Textarea` accepts standard HTML textarea attributes and keeps styling fully class-driven. It ships with `resize-y`, a minimum height, and a default glass surface unless you override it with your own classes.
+
+<CodeBlock 
+  lang="tsx"
+  code={`<Textarea className="glass" />
+
+<Textarea className="glass glass-soft" />
+<Textarea className="glass glass-strong" />
+
+<Textarea rows={6} placeholder="Notes" />
+<Textarea disabled />
+
+  <Textarea className="border-red-500 focus-visible:ring-red-500" />`} 
+/>

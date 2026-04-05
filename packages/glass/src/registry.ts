@@ -1,4 +1,4 @@
-import type { RegistryIndex } from "@glass-ui-kit/schema";
+import type { RegistryIndex } from "@glass-ui-kit/schema"
 
 /**
  * MASTER REGISTRY INDEX
@@ -40,6 +40,17 @@ export const registry: RegistryIndex = [
     ],
   },
   {
+    name: "textarea",
+    type: "registry:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/textarea.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "badge",
     type: "registry:ui",
     dependencies: ["clsx", "tailwind-merge"],
@@ -50,4 +61,4 @@ export const registry: RegistryIndex = [
       },
     ],
   },
-];
+]

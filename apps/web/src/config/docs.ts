@@ -1,12 +1,12 @@
 export type NavItem = {
-  title: string;
-  href: string;
-};
+  title: string
+  href: string
+}
 
 export type SidebarSection = {
-  title: string;
-  items: NavItem[];
-};
+  title: string
+  items: NavItem[]
+}
 
 export const sidebarNav: SidebarSection[] = [
   {
@@ -25,14 +25,13 @@ export const sidebarNav: SidebarSection[] = [
       { title: "Button", href: "/docs/components/button" },
       { title: "Card", href: "/docs/components/card" },
       { title: "Input", href: "/docs/components/input" },
+      { title: "Textarea", href: "/docs/components/textarea" },
     ],
   },
-];
+]
 
 // Main list
-export const flattenedDocs: NavItem[] = sidebarNav.flatMap(
-  (section) => section.items,
-);
+export const flattenedDocs: NavItem[] = sidebarNav.flatMap((section) => section.items)
 
 // Sublist for installation page
 export const installationDocs: NavItem[] = [
@@ -40,7 +39,7 @@ export const installationDocs: NavItem[] = [
   { title: "Vite", href: "/docs/installation/vite" },
   { title: "Astro", href: "/docs/installation/astro" },
   { title: "Manual", href: "/docs/installation/manual" },
-];
+]
 
 // Sublist for dark mode page
 export const darkModeDocs: NavItem[] = [
@@ -48,4 +47,4 @@ export const darkModeDocs: NavItem[] = [
   { title: "Vite", href: "/docs/dark-mode/vite" },
   { title: "Astro", href: "/docs/dark-mode/astro" },
   { title: "Manual", href: "/docs/dark-mode/manual" },
-];
+]
