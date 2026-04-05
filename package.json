@@ -6,15 +6,23 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "prepare": "husky",
     "clean": "turbo clean && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo build --filter=packages/* && changeset publish"
   },
   "devDependencies": {
-    "turbo": "^2.7.5",
     "@changesets/cli": "^2.29.8",
-    "prettier": "latest"
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "turbo": "^2.7.5",
+    "prettier": "^3.8.1"
+  },
+  "lint-staged": {
+    "*.{js,cjs,mjs,ts,mts,tsx,json,md,mdx,yml,yaml,css,scss,html,astro}": "prettier --write"
   },
   "engines": {
     "node": ">=18"
