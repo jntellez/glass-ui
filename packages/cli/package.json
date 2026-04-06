@@ -1,6 +1,6 @@
 {
   "name": "@glass-ui-kit/cli",
-  "version": "0.2.5",
+  "version": "1.0.0",
   "description": "The official CLI for Glass UI. Add glassmorphism components to your React projects in seconds.",
   "keywords": [
     "glassmorphism",
@@ -20,7 +20,7 @@
     "directory": "packages/cli"
   },
   "license": "MIT",
-  "author": "Glass UI Team",
+  "author": "jntellez (https://jntellez.dev)",
   "type": "module",
   "bin": {
     "glass-ui": "./dist/index.js"
