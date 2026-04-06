@@ -56,6 +56,14 @@ async function writeCache(data: RegistryIndex) {
   }
 }
 
+function getErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof Error && error.message.length > 0) {
+    return error.message
+  }
+
+  return fallback
+}
+
 export async function fetchRegistry(): Promise<RegistryIndex> {
   // 1. Try Cache First
   const cachedRegistry = await readCache()
@@ -70,7 +78,7 @@ export async function fetchRegistry(): Promise<RegistryIndex> {
   try {
     response = await fetch(url)
   } catch (error) {
-    throw new Error("Network error: Unable to connect to registry. Check your internet connection.")
+    throw new Error(getErrorMessage(error, "Network error: Unable to connect to registry."))
   }
 
   if (!response.ok) {
@@ -80,19 +88,17 @@ export async function fetchRegistry(): Promise<RegistryIndex> {
   let data
   try {
     data = await response.json()
-  } catch {
-    throw new Error("Invalid response: Registry returned non-JSON data.")
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "Invalid response: Registry returned non-JSON data."))
   }
 
   // 3. Schema & Version Validation
   const parsed = registryIndexSchema.safeParse(data)
 
   if (!parsed.success) {
-    // If schema fails, it implies a version mismatch or corrupted registry
-    console.error("Debug: Schema validation errors:", parsed.error.flatten())
-    throw new Error(
-      "Incompatible registry version. Your CLI might be outdated. Please try updating @glass-ui-kit/cli.",
-    )
+    const issue = parsed.error.issues[0]
+    const location = issue?.path.length ? issue.path.join(".") : "registry"
+    throw new Error(`${issue?.message ?? "Schema validation failed"}: ${location}`)
   }
 
   // 4. Update Cache

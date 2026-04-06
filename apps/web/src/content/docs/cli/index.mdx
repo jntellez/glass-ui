@@ -9,6 +9,7 @@ import CodeBlock from "@/components/CodeBlock"
 
 - [`init`](#init): create config, utils, base styles, and install required dependencies
 - [`add`](#add): add one, many, or all components from the registry into your project
+- [`list`](#list): inspect available components from the registry
 
 ---
 
@@ -196,6 +197,48 @@ glass-ui add card --cwd ../my-app`}
 
 ---
 
+## `list`
+
+Lists available components from the Glass UI registry.
+
+### Usage
+
+<CodeBlock code={`glass-ui list [options]`} lang="bash" />
+
+### What it does
+
+- fetches the registry
+- validates the registry payload
+- prints available component names in registry order
+- can output the validated registry payload as JSON
+
+### Options
+
+| Option   | Description                                   |
+| -------- | --------------------------------------------- |
+| `--json` | Output the validated registry payload as JSON |
+
+### Resolution rules
+
+- `list` reads from the registry and does not depend on a local project
+- default output prints one component name per line
+- `--json` prints the validated registry payload instead of text output
+
+### Failure behavior
+
+- registry, network, cache, or schema validation failures should exit with a clear error message
+- command-boundary messaging should preserve the underlying error details
+
+### Examples
+
+<CodeBlock
+  code={`glass-ui list
+glass-ui list --json`}
+  lang="bash"
+/>
+
+---
+
 ## Behavior summary
 
 ### `init`
@@ -210,3 +253,9 @@ glass-ui add card --cwd ../my-app`}
 - should preserve existing files unless `--overwrite` is used
 - should support dependency installation independently from file generation
 - should always transform imports using the current project config
+
+### `list`
+
+- should provide a read-only view of the validated registry
+- should support human-readable output by default and JSON for automation
+- should not depend on a local project directory
