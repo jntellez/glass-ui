@@ -1,3 +1,4 @@
+import path from "node:path"
 import { spawn } from "node:child_process"
 import { exists, readFile } from "./filesystem"
 
@@ -14,7 +15,23 @@ export interface Config {
   }
 }
 
+export function resolveProjectRoot(cwdOption: string | undefined, cwd = process.cwd()) {
+  return cwdOption ? path.resolve(cwd, cwdOption) : cwd
+}
+
+export function getLockfilePath(
+  projectRoot = process.cwd(),
+  existsAtPath: typeof exists = exists,
+): string | null {
+  if (existsAtPath("bun.lock", projectRoot)) return "bun.lock"
+  if (existsAtPath("bun.lockb", projectRoot)) return "bun.lockb"
+  if (existsAtPath("pnpm-lock.yaml", projectRoot)) return "pnpm-lock.yaml"
+  if (existsAtPath("yarn.lock", projectRoot)) return "yarn.lock"
+  return null
+}
+
 export async function getPackageManager(projectRoot = process.cwd()): Promise<PackageManager> {
+  if (exists("bun.lock", projectRoot)) return "bun"
   if (exists("bun.lockb", projectRoot)) return "bun"
   if (exists("pnpm-lock.yaml", projectRoot)) return "pnpm"
   if (exists("yarn.lock", projectRoot)) return "yarn"

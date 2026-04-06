@@ -11,6 +11,7 @@ import CodeBlock from "@/components/CodeBlock"
 - [`add`](#add): add one, many, or all components from the registry into your project
 - [`list`](#list): inspect available components from the registry
 - [`info`](#info): inspect one registry component in detail
+- [`doctor`](#doctor): diagnose whether a project is ready to use the CLI
 
 ---
 
@@ -301,6 +302,55 @@ glass-ui info card --json`}
 
 ---
 
+## `doctor`
+
+Diagnoses whether a target project is ready to use the Glass UI CLI.
+
+### Usage
+
+<CodeBlock code={`glass-ui doctor [options]`} lang="bash" />
+
+### What it does
+
+- inspects the target project directory
+- reports whether Glass UI prerequisites are in place
+- helps explain why `init` or `add` may fail
+- can output a structured diagnostic report as JSON
+
+### Options
+
+| Option         | Description                                       |
+| -------------- | ------------------------------------------------- |
+| `--cwd <path>` | Run the command against another project directory |
+| `--json`       | Output the diagnostic report as JSON              |
+
+### Resolution rules
+
+- `--cwd` sets the project root for the command
+- `doctor` should report problems without mutating files
+- `--json` should emit a structured diagnostic object instead of formatted text output
+
+### Proposed checks
+
+- whether `glass.config.json` exists
+- detected framework
+- resolved CSS path
+- configured aliases
+- detected package manager
+- whether the project state looks ready for `add`
+
+### Examples
+
+<CodeBlock
+  code={`glass-ui doctor
+glass-ui doctor --cwd ../my-app
+glass-ui doctor --json
+glass-ui doctor --cwd ../my-app --json`}
+  lang="bash"
+/>
+
+---
+
 ## Behavior summary
 
 ### `init`
@@ -327,3 +377,9 @@ glass-ui info card --json`}
 - should provide a read-only view of one registry component by exact name
 - should support human-readable output by default and JSON for automation
 - should not depend on a local project directory
+
+### `doctor`
+
+- should inspect a local project without modifying files
+- should support human-readable output by default and JSON for automation
+- should help users understand whether the project is ready for `init` and `add`
