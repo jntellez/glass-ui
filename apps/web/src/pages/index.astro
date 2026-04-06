@@ -1,7 +1,7 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import { Badge, Button } from "@glass-ui-kit/glass";
-import ExternalLink from "@/components/ExternalLink";
+import Layout from "@/layouts/Layout.astro"
+import { Badge, Button } from "@glass-ui-kit/glass"
+import ExternalLink from "@/components/ExternalLink"
 ---
 
 <Layout title="Glass UI - Modern Component Library">
@@ -12,8 +12,7 @@ import ExternalLink from "@/components/ExternalLink";
     >
       <a href="/docs/getting-started/cli" class="mb-3">
         <Badge className="glass glass-soft px-2.5 py-1">
-          <span
-            class="flex h-2 w-2 rounded-full bg-zinc-900 dark:bg-zinc-100 mr-2 animate-pulse"
+          <span class="flex h-2 w-2 rounded-full bg-zinc-900 dark:bg-zinc-100 mr-2 animate-pulse"
           ></span>
           Introducing glass-ui/cli
         </Badge>
@@ -30,16 +29,11 @@ import ExternalLink from "@/components/ExternalLink";
         </span>
       </h1>
 
-      <p
-        class="mt-6 max-w-2xl text-md text-muted-foreground sm:text-lg text-balance"
-      >
-        A beautiful, accessible, and customizable design system engineered for
-        the modern web.
+      <p class="mt-6 max-w-2xl text-md text-muted-foreground sm:text-lg text-balance">
+        A beautiful, accessible, and customizable design system engineered for the modern web.
       </p>
 
-      <div
-        class="mt-8 flex items-center justify-center gap-4 w-full sm:w-auto z-10"
-      >
+      <div class="mt-8 flex items-center justify-center gap-4 w-full sm:w-auto z-10">
         <a href="/docs/installation">
           <Button className="glass glass-strong">Get started</Button>
         </a>
@@ -53,10 +47,9 @@ import ExternalLink from "@/components/ExternalLink";
     {/* Footer */}
     <footer class="p-4">
       <p class="text-sm text-muted-foreground text-center">
-        Built by <ExternalLink href="https://jntellez.dev"
-          >jntellez</ExternalLink
-        >. The source code is available on <ExternalLink
-          href="https://github.com/jntellez/glass-ui">GitHub</ExternalLink
+        Built by <ExternalLink href="https://jntellez.dev">jntellez</ExternalLink>. The source code
+        is available on <ExternalLink href="https://github.com/jntellez/glass-ui"
+          >GitHub</ExternalLink
         >.
       </p>
     </footer>

@@ -1,13 +1,13 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import Sidebar from "@/components/Sidebar.astro";
+import Layout from "@/layouts/Layout.astro"
+import Sidebar from "@/components/Sidebar.astro"
 
 export interface Props {
-  title: string;
-  description?: string;
+  title: string
+  description?: string
 }
 
-const { title, description } = Astro.props;
+const { title, description } = Astro.props
 ---
 
 <Layout title={title} description={description}>
@@ -16,9 +16,7 @@ const { title, description } = Astro.props;
   >
     <Sidebar />
 
-    <main
-      class="relative pt-6 lg:pt-8 flex min-h-[calc(100vh-57px)] justify-center"
-    >
+    <main class="relative pt-6 lg:pt-8 flex min-h-[calc(100vh-57px)] justify-center">
       <div class="flex flex-col justify-between w-full max-w-2xl">
         <slot />
       </div>

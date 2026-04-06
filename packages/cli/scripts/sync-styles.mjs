@@ -1,28 +1,25 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import fs from "fs"
+import path from "path"
+import { fileURLToPath } from "url"
 
 // Set up base paths
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // Paths to your CSS files
-const tokensPath = path.resolve(__dirname, "../../glass/src/css/tokens.css");
-const indexPath = path.resolve(__dirname, "../../glass/src/css/index.css");
-const targetPath = path.resolve(__dirname, "../src/templates/styles.ts");
+const tokensPath = path.resolve(__dirname, "../../glass/src/css/tokens.css")
+const indexPath = path.resolve(__dirname, "../../glass/src/css/index.css")
+const targetPath = path.resolve(__dirname, "../src/templates/styles.ts")
 
-console.log("🔄 Syncing CSS to CLI...");
+console.log("🔄 Syncing CSS to CLI...")
 
 try {
   // 1. Read files
-  const tokensCode = fs.readFileSync(tokensPath, "utf-8");
-  const indexCode = fs.readFileSync(indexPath, "utf-8");
+  const tokensCode = fs.readFileSync(tokensPath, "utf-8")
+  const indexCode = fs.readFileSync(indexPath, "utf-8")
 
   // 2. Clean up the import statement (removes @import './tokens.css')
-  const cleanIndexCode = indexCode.replace(
-    /@import\s+['"]\.\/tokens\.css['"];?/g,
-    "",
-  );
+  const cleanIndexCode = indexCode.replace(/@import\s+['"]\.\/tokens\.css['"];?/g, "")
 
   // 3. Declare the @theme block for Tailwind v4
   const tailwindThemeBlock = `
@@ -40,7 +37,7 @@ try {
   --radius-glass-md: var(--glass-radius-md);
   --radius-glass-lg: var(--glass-radius-lg);
   --radius-glass-xl: var(--glass-radius-xl);
-}`;
+}`
 
   // 3.5. Extra global utilities (Password reset and Gradient background)
   const globalUtilities = `
@@ -69,23 +66,23 @@ body {
   background-attachment: fixed;
   color: var(--foreground);
 }
-`;
+`
 
   // 4. Merge everything in the correct order
-  let combinedCSS = `${tokensCode}\n${tailwindThemeBlock}\n${globalUtilities}\n${cleanIndexCode}`;
+  let combinedCSS = `${tokensCode}\n${tailwindThemeBlock}\n${globalUtilities}\n${cleanIndexCode}`
 
   // Clean up whitespace and ensure consistent formatting
   combinedCSS = combinedCSS
     .replace(/\r\n/g, "\n")
     .replace(/^[ \t]+$/gm, "")
     .replace(/\n{3,}/g, "\n\n")
-    .trim();
+    .trim()
 
   // Protect special characters before injecting into TypeScript
   const safeCSS = combinedCSS
     .replace(/\\/g, "\\\\") // Protect backslashes (e.g., .hover\:glass)
     .replace(/`/g, "\\`") // Protect backticks
-    .replace(/\$/g, "\\$"); // Protect dollar signs
+    .replace(/\$/g, "\\$") // Protect dollar signs
 
   // 5. Create the exportable content using safeCSS
   const tsContent = `// AUTO-GENERATED FILE. DO NOT EDIT MANUALLY.
@@ -94,14 +91,12 @@ body {
 export const GLASS_BASE_STYLES = \`
 ${safeCSS}
 \`;
-`;
+`
 
   // 6. Overwrite the file
-  fs.writeFileSync(targetPath, tsContent, "utf-8");
-  console.log(
-    "✅ styles.ts successfully updated with gradient background and utilities.",
-  );
+  fs.writeFileSync(targetPath, tsContent, "utf-8")
+  console.log("✅ styles.ts successfully updated with gradient background and utilities.")
 } catch (error) {
-  console.error("❌ Error syncing styles:", error.message);
-  process.exit(1);
+  console.error("❌ Error syncing styles:", error.message)
+  process.exit(1)
 }

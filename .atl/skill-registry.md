@@ -1,127 +1,107 @@
 # Skill Registry
 
-**Delegator use only.** Resolve project skills here, then inject the matching compact rules directly into sub-agent prompts. Sub-agents should not read this file or individual `SKILL.md` files on their own.
+**Delegator use only.** Any agent that launches sub-agents reads this registry to resolve compact rules, then injects them directly into sub-agent prompts. Sub-agents do NOT read this registry or individual `SKILL.md` files.
 
-## Resolution Order
-
-1. Match by touched paths first.
-2. Then match by task intent.
-3. If multiple skills match, inject all relevant skills in this priority order:
-   1. `component-creation`
-   2. `component-docs`
-   3. `cli-scaffold`
-4. If a task spans component + docs, inject both skills.
-5. If a task spans component + CLI registry/scaffold flow, inject `component-creation` and `cli-scaffold`.
+See `_shared/skill-resolver.md` for the full resolution protocol.
 
 ## User Skills
 
-| Skill                | Primary intent                                                                         | Path                                        |
-| -------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------- |
-| `component-creation` | Create or update reusable glass UI components in `packages/glass`                      | `.agent/skills/component-creation/SKILL.md` |
-| `component-docs`     | Create or update component docs, examples, and previews in `apps/web`                  | `.agent/skills/component-docs/SKILL.md`     |
-| `cli-scaffold`       | Change CLI scaffold, registry fetch, install, or generation behavior in `packages/cli` | `.agent/skills/cli-scaffold/SKILL.md`       |
-
-## Path Routing
-
-| Path pattern                                 | Use this skill       | Notes                                              |
-| -------------------------------------------- | -------------------- | -------------------------------------------------- |
-| `packages/glass/src/ui/*.tsx`                | `component-creation` | Primary component source files                     |
-| `packages/glass/src/ui/index.ts`             | `component-creation` | Required export surface                            |
-| `packages/glass/src/registry.ts`             | `component-creation` | Required registry integration                      |
-| `packages/glass/src/css/tokens.css`          | `component-creation` | Design token source of truth                       |
-| `packages/glass/src/css/index.css`           | `component-creation` | Shared reusable utility classes                    |
-| `apps/web/src/content/docs/components/*.mdx` | `component-docs`     | Component documentation pages                      |
-| `apps/web/src/examples/<component>/*.tsx`    | `component-docs`     | Runnable examples                                  |
-| `apps/web/src/examples/<component>/index.ts` | `component-docs`     | Per-component example registration                 |
-| `apps/web/src/examples/index.ts`             | `component-docs`     | Shared example export map                          |
-| `apps/web/src/config/docs.ts`                | `component-docs`     | Docs sidebar and navigation discoverability        |
-| `packages/cli/src/commands/*.ts`             | `cli-scaffold`       | `init` / `add` command behavior                    |
-| `packages/cli/src/utils/*.ts`                | `cli-scaffold`       | Registry, filesystem, path, alias, transform logic |
-| `packages/cli/src/templates/*.ts`            | `cli-scaffold`       | Generated template content                         |
-| `packages/cli/README.md`                     | `cli-scaffold`       | CLI-facing docs when behavior changes              |
-
-## Intent Routing
-
-| Intent                                                                            | Skill                |
-| --------------------------------------------------------------------------------- | -------------------- |
-| "create a new component" / "update a component API" / "add component to registry" | `component-creation` |
-| "document this component" / "add examples" / "write component docs"               | `component-docs`     |
-| "change add/init command" / "fix generated imports" / "update scaffold behavior"  | `cli-scaffold`       |
+| Trigger | Skill | Path |
+|---------|-------|------|
+| creating or editing a component in `packages/glass`, updating exports, or touching the component registry | `component-creation` | `/mnt/c/Users/juant/ws/glass-ui/.agent/skills/component-creation/SKILL.md` |
+| creating or updating docs for a component, examples, previews, or component MDX pages in `apps/web` | `component-docs` | `/mnt/c/Users/juant/ws/glass-ui/.agent/skills/component-docs/SKILL.md` |
+| changing CLI scaffold logic, registry fetching, file generation, or install behavior in `packages/cli` | `cli-scaffold` | `/mnt/c/Users/juant/ws/glass-ui/.agent/skills/cli-scaffold/SKILL.md` |
+| when writing Go tests, using teatest, or adding test coverage | `go-testing` | `/home/jntellez/.config/opencode/skills/go-testing/SKILL.md` |
+| when creating a pull request, opening a PR, or preparing changes for review | `branch-pr` | `/home/jntellez/.config/opencode/skills/branch-pr/SKILL.md` |
+| when creating a GitHub issue, reporting a bug, or requesting a feature | `issue-creation` | `/home/jntellez/.config/opencode/skills/issue-creation/SKILL.md` |
+| when user says "judgment day", "judgment-day", "review adversarial", "dual review", "doble review", "juzgar", "que lo juzguen" | `judgment-day` | `/home/jntellez/.config/opencode/skills/judgment-day/SKILL.md` |
+| when user asks to create a new skill, add agent instructions, or document patterns for AI | `skill-creator` | `/home/jntellez/.config/opencode/skills/skill-creator/SKILL.md` |
 
 ## Compact Rules
 
-Pre-digested rules to inject as `## Project Standards (auto-resolved)`.
+Pre-digested rules per skill. Delegators copy matching blocks into sub-agent prompts as `## Project Standards (auto-resolved)`.
 
 ### component-creation
-
-- **Must** create new components inside `packages/glass/src/ui`.
-- **Must** match the glassmorphism design language of the system.
-- **Must** prefer tokens from `packages/glass/src/css/tokens.css` over ad hoc visual values.
-- **Must** add reusable shared styles to `packages/glass/src/css/index.css` when styling would otherwise be duplicated.
-- **Must** reuse `cn` from `packages/glass/src/lib/utils` for class merging.
-- **Must** preserve semantic HTML, accessibility defaults, and keyboard-safe behavior for interactive UI.
-- **Must** export new components from `packages/glass/src/ui/index.ts`.
-- **Must** register new components in `packages/glass/src/registry.ts`.
-- **Prefer** minimal, class-driven, copy-paste-friendly APIs.
-- **Never** introduce repo-only abstractions or complex variant systems unless explicitly requested.
-
-#### component-creation checklist
-
-- Component file created/updated in `packages/glass/src/ui`
-- Export updated in `packages/glass/src/ui/index.ts`
-- Registry entry updated in `packages/glass/src/registry.ts`
-- Tokens/utilities reviewed in `src/css/tokens.css` and `src/css/index.css`
-- Follow-up docs/examples called out if not included
+- Build or update components under `packages/glass/src/ui` using the repo’s React + TypeScript patterns.
+- Keep components copy-paste friendly; avoid repo-only abstractions unless reuse clearly demands them.
+- Prefer existing values from `packages/glass/src/css/tokens.css` before adding raw visual values.
+- Add shared styling primitives to `packages/glass/src/css/index.css` instead of duplicating class strings.
+- Reuse `cn` from `packages/glass/src/lib/utils` for class merging.
+- Preserve semantic HTML, accessibility defaults, and keyboard behavior for interactive elements.
+- Keep APIs stable, minimal, and composable; prefer class-based composition over complex variants unless requested.
+- Export new components from `packages/glass/src/ui/index.ts` and register them in `packages/glass/src/registry.ts`.
 
 ### component-docs
-
-- **Must** create component docs in `apps/web/src/content/docs/components/<component>.mdx`.
-- **Must** follow the existing flow: frontmatter, imports, top preview, installation, usage, examples, styling/API.
-- **Must** keep installation commands aligned with the current CLI add command format.
-- **Must** use copy-paste-friendly usage snippets importing from `@/components/ui/<component>`.
-- **Must** place runnable examples under `apps/web/src/examples/<component>/` using `<component>-<example>.tsx` naming.
-- **Must** register examples in `apps/web/src/examples/<component>/index.ts` with runtime and `?raw` imports.
-- **Must** export new example groups from `apps/web/src/examples/index.ts` when global preview lookup needs them.
-- **Must** update `apps/web/src/config/docs.ts` when a new docs page should be exposed in navigation.
-- **Prefer** real previews and examples over long prose.
-- **Prefer** explanations in terms of classes, composition, and native props.
-- **Never** document a brand-new component as complete if it is not yet exported/registered in `packages/glass`.
-
-#### component-docs checklist
-
-- MDX page created/updated in `apps/web/src/content/docs/components`
-- Main preview uses `<component>-demo` when appropriate
-- Example files added/updated in `apps/web/src/examples/<component>`
-- Per-component example index updated
-- Shared `apps/web/src/examples/index.ts` updated if needed
-- `apps/web/src/config/docs.ts` updated if navigation should expose the page
-- Any component/registry dependency called out if docs landed first
+- Write component docs in `apps/web/src/content/docs/components/<component>.mdx`.
+- Follow the existing structure: frontmatter, imports, preview, installation, usage, examples, styling/API.
+- Use concise product-language frontmatter and real preview/examples over long prose.
+- Keep install snippets aligned with the CLI add command across npm/pnpm/yarn/bun.
+- Keep usage snippets copy-paste friendly and import from `@/components/ui/<component>`.
+- Place runnable examples in `apps/web/src/examples/<component>/` with `<component>-<example>.tsx` naming.
+- Register examples in the per-component index with runtime and `?raw` imports.
+- Update `apps/web/src/examples/index.ts` and `apps/web/src/config/docs.ts` when new pages/examples must be discoverable.
 
 ### cli-scaffold
+- Keep CLI behavior predictable and safe by default; avoid destructive overwrites unless explicitly requested.
+- Prefer small changes in `packages/cli/src/commands` and `packages/cli/src/utils` over broad refactors.
+- Keep `packages/cli/src/commands/*.ts` as thin command boundaries and move non-Commander logic into focused helpers.
+- For `add`, prefer the domain layout under `packages/cli/src/utils/add/` and extend existing helpers instead of regrowing `commands/add.ts`.
+- Preserve existing framework-aware path resolution for `src`, Next.js, Remix, and root-level app layouts unless the task changes it.
+- Treat `glass.config.json` as the source of truth for aliases and generated target paths.
+- When scaffold output changes, verify import rewriting in `packages/cli/src/utils/transformers.ts` still matches.
+- Keep registry consumption compatible with the published shape and preserve clear cache/network/schema error handling.
+- Validate CLI inputs and registry selections before writes when a command can affect multiple files or components.
+- Preserve current ordering behavior when refactoring `add`, including requested component order, dependency de-duplication order, and file write planning.
+- Keep filesystem writes explicit and understandable for user projects.
+- Prefer package-local tests in `packages/cli` for selection, path resolution, dependency aggregation, and command-boundary error propagation.
+- Keep testing setup local to `packages/cli` unless multiple workspaces genuinely need shared config.
+- Call out related docs, templates, or registry follow-up when scaffold behavior changes.
 
-- **Must** keep CLI behavior predictable and safe by default.
-- **Must** respect `glass.config.json` as the source of truth for aliases and generated target paths.
-- **Must** preserve framework-aware path resolution for `src`, Next.js, Remix, and root-level layouts unless the task explicitly changes it.
-- **Must** keep import rewriting aligned with `packages/cli/src/utils/transformers.ts` behavior.
-- **Must** keep registry fetching compatible with the published schema and retain clear cache/network/schema failure messaging.
-- **Must** keep filesystem writes explicit and understandable.
-- **Prefer** small command-level changes over broad refactors.
-- **Prefer** keeping `init` and `add` aligned with current Glass UI setup expectations for CSS, utils, and component placement.
-- **Never** introduce destructive overwrites or hidden side effects without explicit approval.
+### go-testing
+- Prefer table-driven tests for pure or multi-case logic.
+- Test Bubbletea state transitions by calling `Model.Update()` directly.
+- Use `teatest.NewTestModel()` for interactive TUI flows.
+- Use golden files for stable rendered output checks.
+- Test success and error paths explicitly.
+- Use `t.TempDir()` for file-system side effects.
+- Mock external commands behind interfaces unless a real integration test is intentional.
 
-#### cli-scaffold checklist
+### branch-pr
+- Every PR must link an approved issue; blank PRs without linkage are invalid.
+- Add exactly one `type:*` label per PR.
+- Use branch names matching `type/description` in lowercase.
+- Use conventional commits with allowed types like `feat`, `fix`, `docs`, `refactor`, `chore`, `test`.
+- Follow the repository PR template including summary, changes table, and test plan.
+- Run required checks before merge and avoid skipping validation steps.
 
-- `glass.config.json` contract preserved
-- Framework path resolution reviewed
-- Import transformation reviewed
-- Registry/cache/schema behavior reviewed
-- User-facing errors still actionable
-- Docs/templates follow-up called out if behavior changed
+### issue-creation
+- Always search for duplicates before creating a new issue.
+- Use the repository issue templates; blank issues are not allowed.
+- New issues begin with `status:needs-review` and need maintainer approval before PR work.
+- Route questions to Discussions instead of Issues.
+- Fill all required fields with concrete reproduction steps or user-facing problem statements.
+- Use `fix(...)` titles for bugs and `feat(...)` titles for feature requests.
+
+### judgment-day
+- Resolve project skills from the registry before launching judges.
+- Use two independent blind reviewers in parallel on the same target.
+- Synthesize results into confirmed, suspect, and contradictory findings.
+- Classify warnings as real vs theoretical based on normal user reachability.
+- Fix confirmed issues surgically, then re-judge when required.
+- After two fix iterations, escalate to the user before continuing.
+
+### skill-creator
+- Create a skill only for reusable patterns or workflows, not one-off tasks.
+- Put each skill in `skills/{skill-name}/SKILL.md` with optional `assets/` and `references/`.
+- Frontmatter must include `name`, `description` with trigger text, `license`, and metadata.
+- Focus the body on critical patterns, minimal examples, and practical commands.
+- Prefer references to local docs instead of duplicating long explanations.
+- Register new skills in the project’s agent conventions after creation.
 
 ## Project Conventions
 
-| File        | Path        | Notes                                        |
-| ----------- | ----------- | -------------------------------------------- |
-| `AGENTS.md` | `AGENTS.md` | Primary project convention file for OpenCode |
+| File | Path | Notes |
+|------|------|-------|
+| `AGENTS.md` | `/mnt/c/Users/juant/ws/glass-ui/AGENTS.md` | Primary project convention file for OpenCode |
 
-Read the convention files listed above for project-specific patterns and rules.
+Read the convention files listed above for project-specific patterns and rules. All referenced paths have been extracted — no need to read index files to discover more.

@@ -3,12 +3,11 @@ import { cn } from "../lib/utils"
 
 const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, type, ...props }, ref) => {
+    const hasCustomSurface =
+      typeof className === "string" && (className.includes("glass") || className.includes("bg-"))
 
-    const hasCustomSurface = typeof className === 'string' &&
-      (className.includes("glass") || className.includes("bg-"));
-
-    const hasSizeClass = typeof className === 'string' &&
-      /(^|\s)(input-sm|input-md|input-lg)(\s|$)/.test(className);
+    const hasSizeClass =
+      typeof className === "string" && /(^|\s)(input-sm|input-md|input-lg)(\s|$)/.test(className)
 
     return (
       <input
@@ -23,19 +22,15 @@ const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
 
           !hasSizeClass && "input-md",
 
-          !hasCustomSurface && [
-            "bg-transparent",
-            "border border-glass-border",
-            "shadow-glass-sm",
-          ],
+          !hasCustomSurface && ["bg-transparent", "border border-glass-border", "shadow-glass-sm"],
 
-          className
+          className,
         )}
         ref={ref}
         {...props}
       />
     )
-  }
+  },
 )
 Input.displayName = "Input"
 

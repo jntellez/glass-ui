@@ -1,6 +1,6 @@
 {
   "name": "@glass-ui-kit/cli",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "The official CLI for Glass UI. Add glassmorphism components to your React projects in seconds.",
   "keywords": [
     "glassmorphism",
@@ -37,6 +37,7 @@
     "build": "pnpm run sync && tsup src/index.ts --format esm --clean",
     "dev": "pnpm run sync && bun run ./src/index.ts",
     "lint": "eslint src",
+    "test": "vitest run",
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
@@ -50,6 +51,7 @@
     "@glass-ui-kit/schema": "workspace:*",
     "@types/node": "^20.11.0",
     "bun-types": "latest",
+    "vitest": "^3.2.4",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   },

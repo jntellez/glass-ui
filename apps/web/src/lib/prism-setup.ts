@@ -1,9 +1,9 @@
-import { Prism } from "prism-react-renderer";
+import { Prism } from "prism-react-renderer"
 
 if (typeof global !== "undefined") {
-  (global as any).Prism = Prism;
+  ;(global as any).Prism = Prism
 } else if (typeof window !== "undefined") {
-  (window as any).Prism = Prism;
+  ;(window as any).Prism = Prism
 }
 
 Prism.languages.astro = {
@@ -20,6 +20,6 @@ Prism.languages.astro = {
     },
   },
   ...Prism.languages.tsx,
-};
+}
 
-Prism.languages.astrojs = Prism.languages.astro;
+Prism.languages.astrojs = Prism.languages.astro

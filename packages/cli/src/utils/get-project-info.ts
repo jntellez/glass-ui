@@ -1,33 +1,33 @@
-import { spawn } from "node:child_process";
-import { exists, readFile } from "./filesystem";
+import { spawn } from "node:child_process"
+import { exists, readFile } from "./filesystem"
 
-export type Framework = "next" | "vite" | "astro" | "remix" | "unknown";
-export type PackageManager = "npm" | "pnpm" | "bun" | "yarn";
+export type Framework = "react" | "next" | "vite" | "astro" | "remix" | "unknown"
+export type PackageManager = "npm" | "pnpm" | "bun" | "yarn"
 
 export interface Config {
-  framework: Framework;
-  style: string;
-  css: string;
+  framework: Framework
+  style: string
+  css: string
   aliases: {
-    components: string;
-    utils: string;
-  };
+    components: string
+    utils: string
+  }
 }
 
-export async function getPackageManager(): Promise<PackageManager> {
-  if (exists("bun.lockb")) return "bun";
-  if (exists("pnpm-lock.yaml")) return "pnpm";
-  if (exists("yarn.lock")) return "yarn";
-  return "npm";
+export async function getPackageManager(projectRoot = process.cwd()): Promise<PackageManager> {
+  if (exists("bun.lockb", projectRoot)) return "bun"
+  if (exists("pnpm-lock.yaml", projectRoot)) return "pnpm"
+  if (exists("yarn.lock", projectRoot)) return "yarn"
+  return "npm"
 }
 
-export async function getFramework(): Promise<Framework> {
-  if (!exists("package.json")) return "unknown";
+export async function getFramework(projectRoot = process.cwd()): Promise<Framework> {
+  if (!exists("package.json", projectRoot)) return "unknown"
 
   try {
-    const content = await readFile("package.json");
-    const pkg = JSON.parse(content);
-    const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+    const content = await readFile("package.json", projectRoot)
+    const pkg = JSON.parse(content)
+    const deps = { ...pkg.dependencies, ...pkg.devDependencies }
 
     if (
       deps["@remix-run/react"] ||
@@ -35,51 +35,52 @@ export async function getFramework(): Promise<Framework> {
       deps["@react-router/dev"] ||
       deps["@react-router/node"]
     ) {
-      return "remix";
+      return "remix"
     }
-    if (deps["next"]) return "next";
-    if (deps["astro"]) return "astro";
-    if (deps["vite"]) return "vite";
+    if (deps["next"]) return "next"
+    if (deps["astro"]) return "astro"
+    if (deps["vite"]) return "vite"
   } catch (error) {
-    return "unknown";
+    return "unknown"
   }
-  return "unknown";
+  return "unknown"
 }
 
-export function getCssPath(framework: Framework): string | null {
+export function getCssPath(framework: Framework, projectRoot = process.cwd()): string | null {
   const paths: Record<Framework, string[]> = {
+    react: ["src/index.css", "src/main.css", "src/style.css", "index.css"],
     next: ["app/globals.css", "src/app/globals.css", "styles/globals.css"],
     vite: ["src/index.css", "src/main.css", "src/style.css"],
     astro: ["src/styles/global.css", "src/global.css"],
-    remix: [
-      "app/app.css",
-      "app/tailwind.css",
-      "app/globals.css",
-      "app/styles/tailwind.css",
-    ],
+    remix: ["app/app.css", "app/tailwind.css", "app/globals.css", "app/styles/tailwind.css"],
     unknown: ["src/index.css", "styles.css"],
-  };
+  }
 
   for (const p of paths[framework] || []) {
-    if (exists(p)) return p;
+    if (exists(p, projectRoot)) return p
   }
-  return paths[framework]?.[0] || null;
+  return paths[framework]?.[0] || null
 }
 
-export async function installDependencies(deps: string[], pm: PackageManager) {
-  const installCmd = pm === "npm" ? "install" : "add";
-  console.log(`Running ${pm} ${installCmd}...`);
+export async function installDependencies(
+  deps: string[],
+  pm: PackageManager,
+  projectRoot = process.cwd(),
+) {
+  const installCmd = pm === "npm" ? "install" : "add"
+  console.log(`Running ${pm} ${installCmd}...`)
   return new Promise<void>((resolve, reject) => {
     const child = spawn(pm, [installCmd, ...deps], {
+      cwd: projectRoot,
       stdio: "inherit",
       shell: true,
-    });
+    })
     child.on("close", (code) => {
       if (code !== 0) {
-        reject(new Error(`Failed to install dependencies. Code: ${code}`));
-        return;
+        reject(new Error(`Failed to install dependencies. Code: ${code}`))
+        return
       }
-      resolve();
-    });
-  });
+      resolve()
+    })
+  })
 }

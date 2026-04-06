@@ -1,8 +1,8 @@
 ---
-import { Button } from "@glass-ui-kit/glass";
-import { sidebarNav } from "@/config/docs";
+import { Button } from "@glass-ui-kit/glass"
+import { sidebarNav } from "@/config/docs"
 
-const pathname = Astro.url.pathname;
+const pathname = Astro.url.pathname
 ---
 
 <aside
@@ -16,16 +16,11 @@ const pathname = Astro.url.pathname;
 
           <div class="flex flex-col gap-1 text-sm">
             {group.items.map((item) => {
-              const normalizedPath = pathname.endsWith("/")
-                ? pathname.slice(0, -1)
-                : pathname;
-              const normalizedHref = item.href.endsWith("/")
-                ? item.href.slice(0, -1)
-                : item.href;
+              const normalizedPath = pathname.endsWith("/") ? pathname.slice(0, -1) : pathname
+              const normalizedHref = item.href.endsWith("/") ? item.href.slice(0, -1) : item.href
 
               const isActive =
-                normalizedPath === normalizedHref ||
-                normalizedPath.startsWith(normalizedHref + "/");
+                normalizedPath === normalizedHref || normalizedPath.startsWith(normalizedHref + "/")
 
               return (
                 <a href={item.href}>
@@ -35,7 +30,7 @@ const pathname = Astro.url.pathname;
                     {item.title}
                   </Button>
                 </a>
-              );
+              )
             })}
           </div>
         </div>

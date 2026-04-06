@@ -1,17 +1,11 @@
 ---
-import {
-  flattenedDocs,
-  installationDocs,
-  darkModeDocs,
-  sidebarNav,
-} from "@/config/docs";
-import { Button } from "@glass-ui-kit/glass";
-import { Icon } from "astro-icon/components";
+import { flattenedDocs, installationDocs, darkModeDocs, sidebarNav } from "@/config/docs"
+import { Button } from "@glass-ui-kit/glass"
+import { Icon } from "astro-icon/components"
 
-const currentPath = Astro.url.pathname.replace(/\/$/, "");
+const currentPath = Astro.url.pathname.replace(/\/$/, "")
 
-const componentDocs =
-  sidebarNav.find((sec) => sec.title === "Components")?.items || [];
+const componentDocs = sidebarNav.find((sec) => sec.title === "Components")?.items || []
 
 const isolatedGroups = [
   {
@@ -29,31 +23,28 @@ const isolatedGroups = [
     items: componentDocs,
     parent: { title: "Components", href: "/docs/components" },
   },
-];
+]
 
 const activeGroup = isolatedGroups.find(
   (group) =>
-    currentPath.startsWith(group.prefix) &&
-    group.items.some((item) => item.href === currentPath),
-);
+    currentPath.startsWith(group.prefix) && group.items.some((item) => item.href === currentPath),
+)
 
-const activeDocsList = activeGroup ? activeGroup.items : flattenedDocs;
+const activeDocsList = activeGroup ? activeGroup.items : flattenedDocs
 
-const currentIndex = activeDocsList.findIndex(
-  (item) => item.href === currentPath,
-);
+const currentIndex = activeDocsList.findIndex((item) => item.href === currentPath)
 
 const prev =
   currentIndex > 0
     ? activeDocsList[currentIndex - 1]
     : activeGroup && currentIndex === 0
       ? activeGroup.parent
-      : null;
+      : null
 
 const next =
   currentIndex !== -1 && currentIndex < activeDocsList.length - 1
     ? activeDocsList[currentIndex + 1]
-    : null;
+    : null
 ---
 
 <div class="flex flex-row items-center justify-between mt-14 mb-8">

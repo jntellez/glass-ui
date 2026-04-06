@@ -1,26 +1,26 @@
-import InputDemo from "./input-demo";
-import inputDemoCode from "./input-demo.tsx?raw";
+import InputDemo from "./input-demo"
+import inputDemoCode from "./input-demo.tsx?raw"
 
-import InputDefault from "./input-default";
-import inputDefaultCode from "./input-default.tsx?raw";
+import InputDefault from "./input-default"
+import inputDefaultCode from "./input-default.tsx?raw"
 
-import InputGlass from "./input-glass";
-import inputGlassCode from "./input-glass.tsx?raw";
+import InputGlass from "./input-glass"
+import inputGlassCode from "./input-glass.tsx?raw"
 
-import InputSizes from "./input-sizes";
-import inputSizesCode from "./input-sizes.tsx?raw";
+import InputSizes from "./input-sizes"
+import inputSizesCode from "./input-sizes.tsx?raw"
 
-import InputError from "./input-error";
-import inputErrorCode from "./input-error.tsx?raw";
+import InputError from "./input-error"
+import inputErrorCode from "./input-error.tsx?raw"
 
-import InputDisabled from "./input-disabled";
-import inputDisabledCode from "./input-disabled.tsx?raw";
+import InputDisabled from "./input-disabled"
+import inputDisabledCode from "./input-disabled.tsx?raw"
 
-import InputComposition from "./input-composition";
-import inputCompositionCode from "./input-composition.tsx?raw";
+import InputComposition from "./input-composition"
+import inputCompositionCode from "./input-composition.tsx?raw"
 
-import InputPassword from "./input-password";
-import inputPasswordCode from "./input-password.tsx?raw";
+import InputPassword from "./input-password"
+import inputPasswordCode from "./input-password.tsx?raw"
 
 export const inputExamples = {
   "input-demo": {
@@ -55,4 +55,4 @@ export const inputExamples = {
     component: InputPassword,
     code: inputPasswordCode,
   },
-} as const;
+} as const

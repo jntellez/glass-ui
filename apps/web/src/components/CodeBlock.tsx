@@ -1,33 +1,33 @@
-import { useState, useMemo } from "react";
-import { Highlight, themes } from "prism-react-renderer";
-import CopyButton from "./CopyButton";
-import { cn } from "../lib/utils";
-import { Card, Button } from "@glass-ui-kit/glass";
-import "@/lib/prism-setup";
+import { useState, useMemo } from "react"
+import { Highlight, themes } from "prism-react-renderer"
+import CopyButton from "./CopyButton"
+import { cn } from "../lib/utils"
+import { Card, Button } from "@glass-ui-kit/glass"
+import "@/lib/prism-setup"
 
 interface ReactCodeBlockProps {
-  code: string;
-  lang?: string;
-  filename?: string;
-  showLineNumbers?: boolean;
-  highlightLines?: string;
-  expandable?: boolean;
-  className?: string;
+  code: string
+  lang?: string
+  filename?: string
+  showLineNumbers?: boolean
+  highlightLines?: string
+  expandable?: boolean
+  className?: string
 }
 
 const parseHighlightLines = (rawStr: string) => {
-  if (!rawStr) return new Set<number>();
-  const cleanStr = rawStr.replace(/[{}]/g, "");
+  if (!rawStr) return new Set<number>()
+  const cleanStr = rawStr.replace(/[{}]/g, "")
   const lines = cleanStr.split(",").flatMap((part) => {
-    const trimmed = part.trim();
+    const trimmed = part.trim()
     if (trimmed.includes("-")) {
-      const [start, end] = trimmed.split("-").map(Number);
-      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+      const [start, end] = trimmed.split("-").map(Number)
+      return Array.from({ length: end - start + 1 }, (_, i) => start + i)
     }
-    return Number(trimmed);
-  });
-  return new Set(lines.filter((n) => !isNaN(n) && n > 0));
-};
+    return Number(trimmed)
+  })
+  return new Set(lines.filter((n) => !isNaN(n) && n > 0))
+}
 
 export default function CodeBlock({
   code,
@@ -36,11 +36,10 @@ export default function CodeBlock({
   showLineNumbers = false,
   highlightLines = "",
   expandable = false,
-  className
+  className,
 }: ReactCodeBlockProps) {
-
-  const highlightedSet = useMemo(() => parseHighlightLines(highlightLines), [highlightLines]);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const highlightedSet = useMemo(() => parseHighlightLines(highlightLines), [highlightLines])
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const renderCode = (theme: any, isDark: boolean) => (
     <Highlight theme={theme} code={code.trim()} language={lang as any}>
@@ -48,14 +47,14 @@ export default function CodeBlock({
         <div
           className={cn(
             "relative flex text-sm font-mono not-prose w-full",
-            isDark ? "hidden dark:flex" : "flex dark:hidden"
+            isDark ? "hidden dark:flex" : "flex dark:hidden",
           )}
           style={{ ...style, backgroundColor: "transparent" }}
         >
           {showLineNumbers && (
             <div className="absolute top-0 left-0 bottom-0 w-12 flex flex-col pt-4 pb-4 select-none pointer-events-none z-0">
               {tokens.map((_, i) => {
-                const isHighlighted = highlightedSet.has(i + 1);
+                const isHighlighted = highlightedSet.has(i + 1)
                 return (
                   <span
                     key={`line-${i}`}
@@ -63,7 +62,7 @@ export default function CodeBlock({
                       "block h-[25px] leading-[25px] text-right pr-4 transition-colors duration-200",
                       isHighlighted
                         ? "bg-muted-foreground/7 border-l-2 border-muted-foreground/40 text-foreground opacity-100 font-bold"
-                        : "text-muted-foreground border-l-2 border-transparent"
+                        : "text-muted-foreground border-l-2 border-transparent",
                     )}
                   >
                     {i + 1}
@@ -76,17 +75,21 @@ export default function CodeBlock({
           <div
             className={cn(
               "flex-1 overflow-x-auto pt-4 pb-4 editor-scrollbar no-scrollbar z-10",
-              showLineNumbers ? "pl-12" : "pl-0"
+              showLineNumbers ? "pl-12" : "pl-0",
             )}
             style={{
-              maskImage: showLineNumbers ? 'linear-gradient(to right, transparent 48px, black 48px)' : 'none',
-              WebkitMaskImage: showLineNumbers ? 'linear-gradient(to right, transparent 48px, black 48px)' : 'none'
+              maskImage: showLineNumbers
+                ? "linear-gradient(to right, transparent 48px, black 48px)"
+                : "none",
+              WebkitMaskImage: showLineNumbers
+                ? "linear-gradient(to right, transparent 48px, black 48px)"
+                : "none",
             }}
           >
             <pre className="bg-transparent! p-0! m-0! min-w-full w-fit">
               <code className="block">
                 {tokens.map((line, i) => {
-                  const isHighlighted = highlightedSet.has(i + 1);
+                  const isHighlighted = highlightedSet.has(i + 1)
                   const { key: lineKey, ...lineProps } = getLineProps({
                     line,
                     key: i,
@@ -94,9 +97,9 @@ export default function CodeBlock({
                       "block h-[25px] leading-[25px] pr-4 transition-colors duration-200",
                       !showLineNumbers && "pl-4",
                       isHighlighted && "bg-muted-foreground/7",
-                      isHighlighted && !showLineNumbers && "border-l-2 border-muted-foreground/40"
+                      isHighlighted && !showLineNumbers && "border-l-2 border-muted-foreground/40",
                     ),
-                  });
+                  })
 
                   return (
                     <div key={i} {...lineProps}>
@@ -104,11 +107,11 @@ export default function CodeBlock({
                         const { key: tokenKey, ...tokenProps } = getTokenProps({
                           token,
                           key,
-                        });
-                        return <span key={key} {...tokenProps} />;
+                        })
+                        return <span key={key} {...tokenProps} />
                       })}
                     </div>
-                  );
+                  )
                 })}
               </code>
             </pre>
@@ -116,11 +119,10 @@ export default function CodeBlock({
         </div>
       )}
     </Highlight>
-  );
+  )
 
   return (
     <Card className={cn("relative p-0 flex flex-col my-6 overflow-hidden", className)}>
-
       {expandable && (
         <Button
           onClick={() => setIsExpanded(!isExpanded)}
@@ -142,11 +144,17 @@ export default function CodeBlock({
       <div
         className={cn(
           "flex-1 w-full editor-scrollbar no-scrollbar",
-          expandable && !isExpanded ? "max-h-[320px] overflow-hidden" : "overflow-y-auto min-h-0"
+          expandable && !isExpanded ? "max-h-[320px] overflow-hidden" : "overflow-y-auto min-h-0",
         )}
         style={{
-          maskImage: expandable && !isExpanded ? 'linear-gradient(to bottom, black calc(100% - 150px), transparent 100%)' : 'none',
-          WebkitMaskImage: expandable && !isExpanded ? 'linear-gradient(to bottom, black calc(100% - 150px), transparent 100%)' : 'none'
+          maskImage:
+            expandable && !isExpanded
+              ? "linear-gradient(to bottom, black calc(100% - 150px), transparent 100%)"
+              : "none",
+          WebkitMaskImage:
+            expandable && !isExpanded
+              ? "linear-gradient(to bottom, black calc(100% - 150px), transparent 100%)"
+              : "none",
         }}
       >
         {renderCode(themes.github, false)}
@@ -159,7 +167,7 @@ export default function CodeBlock({
             "flex justify-center w-full z-20 shrink-0",
             !isExpanded
               ? "absolute bottom-4 left-0 pointer-events-none"
-              : "py-3 border-t border-glass-border bg-transparent"
+              : "py-3 border-t border-glass-border bg-transparent",
           )}
         >
           <Button
@@ -171,5 +179,5 @@ export default function CodeBlock({
         </div>
       )}
     </Card>
-  );
+  )
 }

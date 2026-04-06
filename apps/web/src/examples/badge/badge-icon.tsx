@@ -1,5 +1,5 @@
-import { Badge } from "@glass-ui-kit/glass";
-import { Clock } from "lucide-react";
+import { Badge } from "@glass-ui-kit/glass"
+import { Clock } from "lucide-react"
 
 export default function BadgeIcon() {
   return (
@@ -9,5 +9,5 @@ export default function BadgeIcon() {
         Pending
       </Badge>
     </div>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { Badge } from "@glass-ui-kit/glass";
+import { Badge } from "@glass-ui-kit/glass"
 
 export default function BadgeWeights() {
   return (
@@ -8,5 +8,5 @@ export default function BadgeWeights() {
       <Badge className="glass glass-soft">Soft</Badge>
       <Badge>Default</Badge>
     </div>
-  );
+  )
 }

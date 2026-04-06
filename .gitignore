@@ -23,6 +23,7 @@ out
 
 # TurboRepo (Cache)
 .turbo
+.atl
 
 # TypeScript
 *.tsbuildinfo

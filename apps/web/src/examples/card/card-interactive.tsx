@@ -19,10 +19,8 @@ export default function CardInteractive() {
         <Badge className="glass bg-blue-50/50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300">
           TypeScript
         </Badge>
-        <Badge>
-          Updated 2h ago
-        </Badge>
+        <Badge>Updated 2h ago</Badge>
       </div>
-    </Card >
+    </Card>
   )
 }

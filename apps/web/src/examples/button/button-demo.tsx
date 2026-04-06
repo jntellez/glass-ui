@@ -1,5 +1,5 @@
-import { Button } from "@glass-ui-kit/glass";
-import { Layers } from "lucide-react";
+import { Button } from "@glass-ui-kit/glass"
+import { Layers } from "lucide-react"
 
 export default function ButtonDemo() {
   return (
@@ -10,5 +10,5 @@ export default function ButtonDemo() {
         <Layers className="w-4 h-4" />
       </Button>
     </div>
-  );
+  )
 }

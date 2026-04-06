@@ -1,11 +1,11 @@
-import { z } from "zod";
+import { z } from "zod"
 
 export const registryTypeSchema = z.enum([
   "registry:ui",
   "registry:lib",
   "registry:hook",
   "registry:theme",
-]);
+])
 
 export const registryItemSchema = z.object({
   name: z.string(),
@@ -26,10 +26,10 @@ export const registryItemSchema = z.object({
       requiresBlur: z.boolean().default(true),
     })
     .optional(),
-});
+})
 
-export const registryIndexSchema = z.array(registryItemSchema);
+export const registryIndexSchema = z.array(registryItemSchema)
 
-export type RegistryItem = z.infer<typeof registryItemSchema>;
-export type RegistryIndex = z.infer<typeof registryIndexSchema>;
-export type RegistryType = z.infer<typeof registryTypeSchema>;
+export type RegistryItem = z.infer<typeof registryItemSchema>
+export type RegistryIndex = z.infer<typeof registryIndexSchema>
+export type RegistryType = z.infer<typeof registryTypeSchema>

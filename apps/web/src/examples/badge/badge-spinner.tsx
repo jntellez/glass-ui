@@ -1,5 +1,5 @@
-import { Badge } from "@glass-ui-kit/glass";
-import { LoaderCircle } from "lucide-react";
+import { Badge } from "@glass-ui-kit/glass"
+import { LoaderCircle } from "lucide-react"
 
 export default function BadgeSpinner() {
   return (
@@ -9,5 +9,5 @@ export default function BadgeSpinner() {
         Sending
       </Badge>
     </div>
-  );
+  )
 }

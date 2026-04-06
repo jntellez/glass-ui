@@ -1,4 +1,212 @@
 ---
 title: CLI
-description: How to use the Glass UI CLI to initialize your project.
+description: Reference for the Glass UI CLI commands and options.
 ---
+
+import CodeBlock from "@/components/CodeBlock"
+
+## Commands
+
+- [`init`](#init): create config, utils, base styles, and install required dependencies
+- [`add`](#add): add one, many, or all components from the registry into your project
+
+---
+
+## `init`
+
+Initializes Glass UI in an existing project.
+
+### Usage
+
+<CodeBlock code={`glass-ui init [options]`} lang="bash" />
+
+### What it does
+
+- creates or updates `glass.config.json`
+- creates the shared utils file used by generated components
+- writes Glass UI base styles into the target CSS file
+- installs required dependencies unless disabled
+
+### Options
+
+| Option                 | Description                                           |
+| ---------------------- | ----------------------------------------------------- |
+| `--css <path>`         | Use a custom CSS file instead of autodetecting one    |
+| `--components <alias>` | Set the components alias saved in `glass.config.json` |
+| `--utils <alias>`      | Set the utils alias saved in `glass.config.json`      |
+| `--framework <name>`   | Force the framework instead of autodetecting it       |
+| `--no-install`         | Skip dependency installation                          |
+| `--force`              | Overwrite generated files if they already exist       |
+| `--cwd <path>`         | Run the command against another project directory     |
+
+### Supported framework values
+
+- `react`
+- `vite`
+- `next`
+- `remix`
+
+### Resolution rules
+
+- `--cwd` sets the project root for the command
+- `--framework` takes priority over autodetection
+- `--css` takes priority over the default CSS path for the detected framework
+- `--components` and `--utils` take priority over default aliases
+
+### Default aliases
+
+For `react`, `vite`, and `next`:
+
+<CodeBlock
+  code={`{
+  "components": "@/components/ui",
+  "utils": "@/lib/utils"
+}`}
+  lang="json"
+/>
+
+For `remix`:
+
+<CodeBlock
+  code={`{
+  "components": "~/components/ui",
+  "utils": "~/lib/utils"
+}`}
+  lang="json"
+/>
+
+### File overwrite behavior
+
+Without `--force`:
+
+- existing generated files must not be overwritten
+- the CLI should report which files were skipped
+
+With `--force`:
+
+- `glass.config.json` can be overwritten
+- the generated utils file can be overwritten
+- the target CSS file can be overwritten
+
+### Examples
+
+<CodeBlock
+  code={`glass-ui init
+glass-ui init --framework next
+glass-ui init --css src/app/globals.css --no-install
+glass-ui init --components "@/components/ui" --utils "@/lib/utils"
+glass-ui init --cwd ../my-app
+glass-ui init --force`}
+  lang="bash"
+/>
+
+---
+
+## `add`
+
+Adds one, many, or all components from the Glass UI registry into your project.
+
+### Usage
+
+<CodeBlock
+  code={`glass-ui add <components...> [options]
+glass-ui add --all [options]`}
+  lang="bash"
+/>
+
+### What it does
+
+- reads `glass.config.json`
+- fetches selected components from the registry
+- transforms imports to match the current project config
+- writes component files into the target directory
+- installs component dependencies unless disabled
+
+### Arguments
+
+| Argument          | Description                        |
+| ----------------- | ---------------------------------- |
+| `<components...>` | One or more component names to add |
+
+Examples:
+
+<CodeBlock
+  code={`glass-ui add card
+glass-ui add card modal button`}
+  lang="bash"
+/>
+
+### Options
+
+| Option         | Description                                                              |
+| -------------- | ------------------------------------------------------------------------ |
+| `--overwrite`  | Replace existing component files                                         |
+| `--no-install` | Skip dependency installation                                             |
+| `--deps-only`  | Install dependencies without writing component files                     |
+| `--path <dir>` | Use a custom output directory instead of the configured components alias |
+| `--all`        | Add all available components from the registry                           |
+| `--cwd <path>` | Run the command against another project directory                        |
+
+### Resolution rules
+
+- `--cwd` sets the project root for the command
+- `glass.config.json` must exist before running `add`
+- `--path` takes priority over the configured components alias when resolving the output directory
+- `--all` selects all registry components
+- when `--all` is not present, the CLI uses the component names passed in `<components...>`
+
+### File overwrite behavior
+
+Without `--overwrite`:
+
+- existing files must not be overwritten
+- the CLI should report which files were skipped because they already exist
+
+With `--overwrite`:
+
+- existing component files can be replaced
+
+### Dependency installation behavior
+
+- dependencies from all selected components should be deduplicated before install
+- dependencies should be installed only once per command
+- `--no-install` skips installation entirely
+- `--deps-only` installs dependencies and skips file generation
+
+### Invalid combinations
+
+The CLI should fail with a clear error message in these cases:
+
+- `glass-ui add card --deps-only --no-install`
+- `glass-ui add card --all`
+
+### Examples
+
+<CodeBlock
+  code={`glass-ui add card
+glass-ui add card modal button
+glass-ui add --all
+glass-ui add card --overwrite
+glass-ui add card --path src/components/custom
+glass-ui add card --no-install
+glass-ui add card --deps-only
+glass-ui add card --cwd ../my-app`}
+  lang="bash"
+/>
+
+---
+
+## Behavior summary
+
+### `init`
+
+- should be safe by default
+- should only overwrite generated files when `--force` is used
+- should allow explicit control over framework, aliases, CSS path, and working directory
+
+### `add`
+
+- should support one component, many components, or every component in the registry
+- should preserve existing files unless `--overwrite` is used
+- should support dependency installation independently from file generation
+- should always transform imports using the current project config

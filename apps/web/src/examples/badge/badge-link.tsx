@@ -1,5 +1,5 @@
-import { Badge } from "@glass-ui-kit/glass";
-import { ArrowUpRight } from "lucide-react";
+import { Badge } from "@glass-ui-kit/glass"
+import { ArrowUpRight } from "lucide-react"
 
 export default function BadgeLink() {
   return (
@@ -11,5 +11,5 @@ export default function BadgeLink() {
         </Badge>
       </a>
     </div>
-  );
+  )
 }

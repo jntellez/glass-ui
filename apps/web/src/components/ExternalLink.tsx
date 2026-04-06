@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils";
-import React from "react";
+import { cn } from "@/lib/utils"
+import React from "react"
 
 interface ExternalLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-  href: string;
-  children: React.ReactNode;
+  href: string
+  children: React.ReactNode
 }
 
 export default function ExternalLink({ href, children, className, ...props }: ExternalLinkProps) {
@@ -14,11 +14,11 @@ export default function ExternalLink({ href, children, className, ...props }: Ex
       rel="noopener noreferrer"
       className={cn(
         "font-medium text-foreground no-underline underline-offset-2 hover:underline",
-        className
+        className,
       )}
       {...props}
     >
       {children}
     </a>
-  );
+  )
 }

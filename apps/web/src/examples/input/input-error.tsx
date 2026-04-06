@@ -13,9 +13,7 @@ export default function InputError() {
         placeholder="you@example.com"
         className="glass border-red-500/50 dark:border-red-500/80 focus-visible:ring-red-500/50"
       />
-      <p className="text-[11px] font-medium text-red-500">
-        Please enter a valid email address.
-      </p>
+      <p className="text-[11px] font-medium text-red-500">Please enter a valid email address.</p>
     </div>
   )
 }

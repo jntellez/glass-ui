@@ -11,9 +11,7 @@ export default function CardStrong() {
       <p className="text-sm text-muted-foreground mb-6">
         Upgrade to the Pro plan to access advanced metrics, custom reporting, and priority support.
       </p>
-      <Button className="glass glass-strong w-full">
-        Upgrade Now
-      </Button>
+      <Button className="glass glass-strong w-full">Upgrade Now</Button>
     </Card>
   )
 }

@@ -1,4 +1,4 @@
-import { Badge } from "@glass-ui-kit/glass";
+import { Badge } from "@glass-ui-kit/glass"
 
 export default function BadgeDemo() {
   return (
@@ -7,5 +7,5 @@ export default function BadgeDemo() {
       <Badge className="glass">Glass</Badge>
       <Badge className="glass glass-soft">Soft</Badge>
     </div>
-  );
+  )
 }

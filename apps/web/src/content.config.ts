@@ -1,5 +1,5 @@
-import { z, defineCollection } from "astro:content";
-import { glob } from "astro/loaders";
+import { z, defineCollection } from "astro:content"
+import { glob } from "astro/loaders"
 
 const docsCollection = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/docs" }),
@@ -7,8 +7,8 @@ const docsCollection = defineCollection({
     title: z.string(),
     description: z.string().optional(),
   }),
-});
+})
 
 export const collections = {
   docs: docsCollection,
-};
+}

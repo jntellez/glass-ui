@@ -1,4 +1,4 @@
-import { Badge } from "@glass-ui-kit/glass";
+import { Badge } from "@glass-ui-kit/glass"
 
 export default function BadgeCustomColors() {
   return (
@@ -19,5 +19,5 @@ export default function BadgeCustomColors() {
         Purple
       </Badge>
     </div>
-  );
+  )
 }

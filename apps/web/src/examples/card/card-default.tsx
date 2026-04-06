@@ -9,9 +9,7 @@ export default function CardDefault() {
         <Users className="h-4 w-4 text-muted-foreground" />
       </div>
       <div className="text-2xl font-bold">12 Active Users</div>
-      <p className="text-xs text-muted-foreground mt-1">
-        +2 joined in the last 7 days
-      </p>
+      <p className="text-xs text-muted-foreground mt-1">+2 joined in the last 7 days</p>
     </Card>
   )
 }

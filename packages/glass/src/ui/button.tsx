@@ -3,12 +3,11 @@ import { cn } from "../lib/utils"
 
 const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
   ({ className, ...props }, ref) => {
+    const hasCustomSurface =
+      typeof className === "string" && (className.includes("glass") || className.includes("bg-"))
 
-    const hasCustomSurface = typeof className === 'string' &&
-      (className.includes("glass") || className.includes("bg-"));
-
-    const hasSizeOrIconClass = typeof className === 'string' &&
-      /(^|\s)(btn-sm|btn-md|btn-lg|btn-icon)(\s|$)/.test(className);
+    const hasSizeOrIconClass =
+      typeof className === "string" && /(^|\s)(btn-sm|btn-md|btn-lg|btn-icon)(\s|$)/.test(className)
 
     return (
       <button
@@ -21,26 +20,17 @@ const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HT
 
           !hasSizeOrIconClass && "btn-md",
 
-          !hasCustomSurface && [
-            "border border-glass-border",
-            "shadow-glass-sm",
-          ],
+          !hasCustomSurface && ["border border-glass-border", "shadow-glass-sm"],
           "hover:scale-98 hover:shadow-glass-sm",
-          !hasCustomSurface && [
-            "hover:bg-glass-bg/80",
-            "hover:border-glass-border/80"
-          ],
+          !hasCustomSurface && ["hover:bg-glass-bg/80", "hover:border-glass-border/80"],
           "active:scale-95 active:duration-100",
-          !hasCustomSurface && [
-            "active:bg-glass-bg/60",
-            "active:border-glass-border/60"
-          ],
-          className
+          !hasCustomSurface && ["active:bg-glass-bg/60", "active:border-glass-border/60"],
+          className,
         )}
         {...props}
       />
     )
-  }
+  },
 )
 Button.displayName = "Button"
 

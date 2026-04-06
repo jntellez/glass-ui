@@ -1,4 +1,4 @@
-import { Button } from "@glass-ui-kit/glass";
+import { Button } from "@glass-ui-kit/glass"
 
 export default function ButtonCombinations() {
   return (
@@ -8,5 +8,5 @@ export default function ButtonCombinations() {
       <Button className="glass glass-soft">Tertiary</Button>
       <Button>Default</Button>
     </div>
-  );
+  )
 }

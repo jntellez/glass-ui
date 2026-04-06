@@ -1,24 +1,20 @@
-import path from "node:path";
-import os from "node:os";
-import fs from "node:fs/promises";
-import {
-  registryIndexSchema,
-  type RegistryIndex,
-  type RegistryItem,
-} from "@glass-ui-kit/schema";
+import path from "node:path"
+import os from "node:os"
+import fs from "node:fs/promises"
+import { registryIndexSchema, type RegistryIndex, type RegistryItem } from "@glass-ui-kit/schema"
 
-const DEFAULT_REGISTRY_URL = "https://ui-glass.vercel.app/registry.json";
-const CACHE_DIR = path.join(os.homedir(), ".glass-ui");
-const CACHE_FILE = path.join(CACHE_DIR, "registry.json");
-const CACHE_TTL = 1000 * 60 * 60 * 24; // 24 Hours
+const DEFAULT_REGISTRY_URL = "https://ui-glass.vercel.app/registry.json"
+const CACHE_DIR = path.join(os.homedir(), ".glass-ui")
+const CACHE_FILE = path.join(CACHE_DIR, "registry.json")
+const CACHE_TTL = 1000 * 60 * 60 * 24 // 24 Hours
 
 interface CacheData {
-  lastUpdated: number;
-  data: RegistryIndex;
+  lastUpdated: number
+  data: RegistryIndex
 }
 
 function getRegistryUrl(): string {
-  return process.env.GLASS_UI_REGISTRY_URL || DEFAULT_REGISTRY_URL;
+  return process.env.GLASS_UI_REGISTRY_URL || DEFAULT_REGISTRY_URL
 }
 
 async function readCache(): Promise<RegistryIndex | null> {
@@ -26,34 +22,34 @@ async function readCache(): Promise<RegistryIndex | null> {
     const fileExists = await fs
       .stat(CACHE_FILE)
       .then(() => true)
-      .catch(() => false);
-    if (!fileExists) return null;
+      .catch(() => false)
+    if (!fileExists) return null
 
-    const raw = await fs.readFile(CACHE_FILE, "utf-8");
-    const cache: CacheData = JSON.parse(raw);
+    const raw = await fs.readFile(CACHE_FILE, "utf-8")
+    const cache: CacheData = JSON.parse(raw)
 
-    const now = Date.now();
+    const now = Date.now()
     if (now - cache.lastUpdated > CACHE_TTL) {
-      return null; // Expired
+      return null // Expired
     }
 
-    return cache.data;
+    return cache.data
   } catch {
-    return null; // Corrupt cache or read error, treat as miss
+    return null // Corrupt cache or read error, treat as miss
   }
 }
 
 async function writeCache(data: RegistryIndex) {
   try {
     // Ensure directory exists
-    await fs.mkdir(CACHE_DIR, { recursive: true });
+    await fs.mkdir(CACHE_DIR, { recursive: true })
 
     const cache: CacheData = {
       lastUpdated: Date.now(),
       data,
-    };
+    }
 
-    await fs.writeFile(CACHE_FILE, JSON.stringify(cache), "utf-8");
+    await fs.writeFile(CACHE_FILE, JSON.stringify(cache), "utf-8")
   } catch {
     // Silently fail on write errors (e.g., read-only filesystem)
     // We don't want to block the user if we can't cache.
@@ -62,56 +58,70 @@ async function writeCache(data: RegistryIndex) {
 
 export async function fetchRegistry(): Promise<RegistryIndex> {
   // 1. Try Cache First
-  const cachedRegistry = await readCache();
+  const cachedRegistry = await readCache()
   if (cachedRegistry) {
-    return cachedRegistry;
+    return cachedRegistry
   }
 
   // 2. Network Fetch
-  const url = getRegistryUrl();
-  let response;
+  const url = getRegistryUrl()
+  let response
 
   try {
-    response = await fetch(url);
+    response = await fetch(url)
   } catch (error) {
-    throw new Error(
-      "Network error: Unable to connect to registry. Check your internet connection.",
-    );
+    throw new Error("Network error: Unable to connect to registry. Check your internet connection.")
   }
 
   if (!response.ok) {
-    throw new Error(
-      `Registry unavailable. URL: ${url} (Status: ${response.status})`,
-    );
+    throw new Error(`Registry unavailable. URL: ${url} (Status: ${response.status})`)
   }
 
-  let data;
+  let data
   try {
-    data = await response.json();
+    data = await response.json()
   } catch {
-    throw new Error("Invalid response: Registry returned non-JSON data.");
+    throw new Error("Invalid response: Registry returned non-JSON data.")
   }
 
   // 3. Schema & Version Validation
-  const parsed = registryIndexSchema.safeParse(data);
+  const parsed = registryIndexSchema.safeParse(data)
 
   if (!parsed.success) {
     // If schema fails, it implies a version mismatch or corrupted registry
-    console.error("Debug: Schema validation errors:", parsed.error.flatten());
+    console.error("Debug: Schema validation errors:", parsed.error.flatten())
     throw new Error(
       "Incompatible registry version. Your CLI might be outdated. Please try updating @glass-ui-kit/cli.",
-    );
+    )
   }
 
   // 4. Update Cache
-  await writeCache(parsed.data);
+  await writeCache(parsed.data)
 
-  return parsed.data;
+  return parsed.data
 }
 
-export function getItem(
+export function getItem(registry: RegistryIndex, name: string): RegistryItem | undefined {
+  return registry.find((item) => item.name === name)
+}
+
+export function getItems(
   registry: RegistryIndex,
-  name: string,
-): RegistryItem | undefined {
-  return registry.find((item) => item.name === name);
+  names: string[],
+): { items: RegistryItem[]; missing: string[] } {
+  const items: RegistryItem[] = []
+  const missing: string[] = []
+
+  for (const name of names) {
+    const item = getItem(registry, name)
+
+    if (item) {
+      items.push(item)
+      continue
+    }
+
+    missing.push(name)
+  }
+
+  return { items, missing }
 }
