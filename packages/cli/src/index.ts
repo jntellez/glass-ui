@@ -3,6 +3,7 @@ import { Command } from "commander"
 import { init } from "./commands/init"
 import { add } from "./commands/add"
 import { list } from "./commands/list"
+import { info } from "./commands/info"
 
 // Definición de metadatos del CLI
 const program = new Command()
@@ -16,6 +17,7 @@ program
 program.addCommand(init)
 program.addCommand(add)
 program.addCommand(list)
+program.addCommand(info)
 
 // Parseo de argumentos
 program.parse(process.argv)

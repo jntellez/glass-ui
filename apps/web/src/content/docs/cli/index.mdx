@@ -10,6 +10,7 @@ import CodeBlock from "@/components/CodeBlock"
 - [`init`](#init): create config, utils, base styles, and install required dependencies
 - [`add`](#add): add one, many, or all components from the registry into your project
 - [`list`](#list): inspect available components from the registry
+- [`info`](#info): inspect one registry component in detail
 
 ---
 
@@ -239,6 +240,67 @@ glass-ui list --json`}
 
 ---
 
+## `info`
+
+Shows detailed information for a single component from the Glass UI registry.
+
+### Usage
+
+<CodeBlock code={`glass-ui info <component> [options]`} lang="bash" />
+
+### What it does
+
+- fetches the registry
+- resolves one component by exact name
+- prints component metadata before you run `add`
+- can output the validated registry item as JSON
+
+### Arguments
+
+| Argument      | Description                                  |
+| ------------- | -------------------------------------------- |
+| `<component>` | The exact registry component name to inspect |
+
+### Options
+
+| Option   | Description                                |
+| -------- | ------------------------------------------ |
+| `--json` | Output the validated registry item as JSON |
+
+### Resolution rules
+
+- `info` reads from the registry and does not depend on a local project
+- component lookup should use an exact registry name match
+- `--json` should print the raw validated registry item instead of formatted text output
+
+### Default output
+
+The human-readable output should include, at minimum:
+
+- component name
+- registry type
+- files
+- dependencies
+- devDependencies
+- registryDependencies
+- `meta.requiresBlur` when present
+
+### Failure behavior
+
+- missing components should fail with a clear not-found message
+- registry, network, cache, or schema validation failures should exit with a clear error message
+- command-boundary messaging should preserve the underlying error details
+
+### Examples
+
+<CodeBlock
+  code={`glass-ui info card
+glass-ui info card --json`}
+  lang="bash"
+/>
+
+---
+
 ## Behavior summary
 
 ### `init`
@@ -257,5 +319,11 @@ glass-ui list --json`}
 ### `list`
 
 - should provide a read-only view of the validated registry
+- should support human-readable output by default and JSON for automation
+- should not depend on a local project directory
+
+### `info`
+
+- should provide a read-only view of one registry component by exact name
 - should support human-readable output by default and JSON for automation
 - should not depend on a local project directory
