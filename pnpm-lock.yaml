@@ -77,6 +77,15 @@ importers:
       "@tailwindcss/vite":
         specifier: 4.0.0-alpha.32
         version: 4.0.0-alpha.32(@babel/core@7.29.0)(postcss-load-config@6.0.1(jiti@2.6.1)(postcss@8.5.8)(yaml@2.8.3))(postcss@8.5.8)(svelte@5.55.1)(typescript@5.9.3)(vite@7.3.1(@types/node@20.19.39)(jiti@2.6.1)(lightningcss@1.32.0)(yaml@2.8.3))
+      "@testing-library/jest-dom":
+        specifier: ^6.9.1
+        version: 6.9.1
+      "@testing-library/react":
+        specifier: ^16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      "@testing-library/user-event":
+        specifier: ^14.6.1
+        version: 14.6.1(@testing-library/dom@10.4.1)
       "@types/react":
         specifier: ^19.0.0
         version: 19.2.14
@@ -86,6 +95,9 @@ importers:
       astro:
         specifier: 5.16.15
         version: 5.16.15(@types/node@20.19.39)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
+      jsdom:
+        specifier: ^29.0.2
+        version: 29.0.2
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -98,6 +110,9 @@ importers:
       typescript:
         specifier: ^5.3.3
         version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/debug@4.1.13)(@types/node@20.19.39)(jiti@2.6.1)(jsdom@29.0.2)(lightningcss@1.32.0)(yaml@2.8.3)
 
   packages/cli:
     dependencies:
