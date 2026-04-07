@@ -1,189 +1,102 @@
 ---
 title: CLI
-description: Reference for the Glass UI CLI commands and options.
+description: Use the CLI to initialize your project, inspect the registry, and add components.
 ---
 
 import CodeBlock from "@/components/docs/CodeBlock"
+import CommandTabs from "@/components/docs/CommandTabs"
+
+## Usage
+
+<CodeBlock
+  code={`glass-ui [command] [options]
+npx @glass-ui-kit/cli@latest [command] [options]`}
+  lang="bash"
+/>
 
 ## Commands
 
-- [`init`](#init): create config, utils, base styles, and install required dependencies
-- [`add`](#add): add one, many, or all components from the registry into your project
-- [`list`](#list): inspect available components from the registry
-- [`info`](#info): inspect one registry component in detail
-- [`doctor`](#doctor): diagnose whether a project is ready to use the CLI
+- `init` set up Glass UI in an existing project
+- `add` copy components from the registry into your app
+- `list` list all available registry components
+- `info` inspect one component before adding it
+- `doctor` diagnose local setup issues
 
----
+## init
 
-## `init`
+Initialize Glass UI in an existing project.
 
-Initializes Glass UI in an existing project.
-
-### Usage
+<CommandTabs
+  npm="npx @glass-ui-kit/cli@latest init"
+  pnpm="pnpm dlx @glass-ui-kit/cli@latest init"
+  yarn="yarn dlx @glass-ui-kit/cli@latest init"
+  bun="bunx @glass-ui-kit/cli@latest init"
+  client:load
+/>
 
 <CodeBlock code={`glass-ui init [options]`} lang="bash" />
 
-### What it does
-
-- creates or updates `glass.config.json`
-- creates the shared utils file used by generated components
-- writes Glass UI base styles into the target CSS file
-- installs required dependencies unless disabled
-
-### Options
+**Options**
 
 | Option                 | Description                                           |
 | ---------------------- | ----------------------------------------------------- |
+| `-y`, `--yes`          | Skip the confirmation prompt                          |
+| `--cwd <path>`         | Run the command against another project directory     |
 | `--css <path>`         | Use a custom CSS file instead of autodetecting one    |
 | `--components <alias>` | Set the components alias saved in `glass.config.json` |
 | `--utils <alias>`      | Set the utils alias saved in `glass.config.json`      |
 | `--framework <name>`   | Force the framework instead of autodetecting it       |
-| `--no-install`         | Skip dependency installation                          |
 | `--force`              | Overwrite generated files if they already exist       |
-| `--cwd <path>`         | Run the command against another project directory     |
+| `--no-install`         | Skip dependency installation                          |
 
-### Supported framework values
+**Notes**
 
-- `react`
-- `vite`
-- `next`
-- `remix`
-
-### Resolution rules
-
-- `--cwd` sets the project root for the command
-- `--framework` takes priority over autodetection
-- `--css` takes priority over the default CSS path for the detected framework
-- `--components` and `--utils` take priority over default aliases
-
-### Default aliases
-
-For `react`, `vite`, and `next`:
-
-<CodeBlock
-  code={`{
-  "components": "@/components/ui",
-  "utils": "@/lib/utils"
-}`}
-  lang="json"
-/>
-
-For `remix`:
-
-<CodeBlock
-  code={`{
-  "components": "~/components/ui",
-  "utils": "~/lib/utils"
-}`}
-  lang="json"
-/>
-
-### File overwrite behavior
-
-Without `--force`:
-
-- existing generated files must not be overwritten
-- the CLI should report which files were skipped
-
-With `--force`:
-
-- `glass.config.json` can be overwritten
-- the generated utils file can be overwritten
-- the target CSS file can be overwritten
-
-### Examples
+- Writes or updates `glass.config.json`, shared utils, and base styles.
+- `--framework` overrides autodetection.
+- Use `--force` only when you want generated files rewritten.
 
 <CodeBlock
   code={`glass-ui init
 glass-ui init --framework next
 glass-ui init --css src/app/globals.css --no-install
-glass-ui init --components "@/components/ui" --utils "@/lib/utils"
-glass-ui init --cwd ../my-app
-glass-ui init --force`}
+glass-ui init -y --components "@/components/ui" --utils "@/lib/utils"`}
   lang="bash"
 />
 
----
+## add
 
-## `add`
+Add one, many, or all registry components to your project.
 
-Adds one, many, or all components from the Glass UI registry into your project.
-
-### Usage
+<CommandTabs
+  npm="npx @glass-ui-kit/cli@latest add card"
+  pnpm="pnpm dlx @glass-ui-kit/cli@latest add card"
+  yarn="yarn dlx @glass-ui-kit/cli@latest add card"
+  bun="bunx @glass-ui-kit/cli@latest add card"
+  client:load
+/>
 
 <CodeBlock
-  code={`glass-ui add <components...> [options]
+  code={`glass-ui add [components...] [options]
 glass-ui add --all [options]`}
   lang="bash"
 />
 
-### What it does
+**Options**
 
-- reads `glass.config.json`
-- fetches selected components from the registry
-- transforms imports to match the current project config
-- writes component files into the target directory
-- installs component dependencies unless disabled
+| Option         | Description                                          |
+| -------------- | ---------------------------------------------------- |
+| `--all`        | Add all available components                         |
+| `--overwrite`  | Replace existing component files                     |
+| `--path <dir>` | Use a custom output directory                        |
+| `--no-install` | Skip dependency installation                         |
+| `--deps-only`  | Install dependencies without writing component files |
+| `--cwd <path>` | Run the command against another project directory    |
 
-### Arguments
+**Notes**
 
-| Argument          | Description                        |
-| ----------------- | ---------------------------------- |
-| `<components...>` | One or more component names to add |
-
-Examples:
-
-<CodeBlock
-  code={`glass-ui add card
-glass-ui add card modal button`}
-  lang="bash"
-/>
-
-### Options
-
-| Option         | Description                                                              |
-| -------------- | ------------------------------------------------------------------------ |
-| `--overwrite`  | Replace existing component files                                         |
-| `--no-install` | Skip dependency installation                                             |
-| `--deps-only`  | Install dependencies without writing component files                     |
-| `--path <dir>` | Use a custom output directory instead of the configured components alias |
-| `--all`        | Add all available components from the registry                           |
-| `--cwd <path>` | Run the command against another project directory                        |
-
-### Resolution rules
-
-- `--cwd` sets the project root for the command
-- `glass.config.json` must exist before running `add`
-- `--path` takes priority over the configured components alias when resolving the output directory
-- `--all` selects all registry components
-- when `--all` is not present, the CLI uses the component names passed in `<components...>`
-
-### File overwrite behavior
-
-Without `--overwrite`:
-
-- existing files must not be overwritten
-- the CLI should report which files were skipped because they already exist
-
-With `--overwrite`:
-
-- existing component files can be replaced
-
-### Dependency installation behavior
-
-- dependencies from all selected components should be deduplicated before install
-- dependencies should be installed only once per command
-- `--no-install` skips installation entirely
-- `--deps-only` installs dependencies and skips file generation
-
-### Invalid combinations
-
-The CLI should fail with a clear error message in these cases:
-
-- `glass-ui add card --deps-only --no-install`
-- `glass-ui add card --all`
-
-### Examples
+- Run `init` first so `glass.config.json` exists.
+- `--path` overrides the configured components alias for this run.
+- Invalid combinations include passing names with `--all`, or `--deps-only` with `--no-install`.
 
 <CodeBlock
   code={`glass-ui add card
@@ -191,47 +104,34 @@ glass-ui add card modal button
 glass-ui add --all
 glass-ui add card --overwrite
 glass-ui add card --path src/components/custom
-glass-ui add card --no-install
-glass-ui add card --deps-only
-glass-ui add card --cwd ../my-app`}
+glass-ui add card --deps-only`}
   lang="bash"
 />
 
----
+## list
 
-## `list`
+List available Glass UI registry components.
 
-Lists available components from the Glass UI registry.
-
-### Usage
+<CommandTabs
+  npm="npx @glass-ui-kit/cli@latest list"
+  pnpm="pnpm dlx @glass-ui-kit/cli@latest list"
+  yarn="yarn dlx @glass-ui-kit/cli@latest list"
+  bun="bunx @glass-ui-kit/cli@latest list"
+  client:load
+/>
 
 <CodeBlock code={`glass-ui list [options]`} lang="bash" />
 
-### What it does
-
-- fetches the registry
-- validates the registry payload
-- prints available component names in registry order
-- can output the validated registry payload as JSON
-
-### Options
+**Options**
 
 | Option   | Description                                   |
 | -------- | --------------------------------------------- |
 | `--json` | Output the validated registry payload as JSON |
 
-### Resolution rules
+**Notes**
 
-- `list` reads from the registry and does not depend on a local project
-- default output prints one component name per line
-- `--json` prints the validated registry payload instead of text output
-
-### Failure behavior
-
-- registry, network, cache, or schema validation failures should exit with a clear error message
-- command-boundary messaging should preserve the underlying error details
-
-### Examples
+- `list` reads from the remote registry and does not need a local project.
+- Default output prints component names in registry order.
 
 <CodeBlock
   code={`glass-ui list
@@ -239,147 +139,66 @@ glass-ui list --json`}
   lang="bash"
 />
 
----
+## info
 
-## `info`
+Show details for a single registry component.
 
-Shows detailed information for a single component from the Glass UI registry.
-
-### Usage
+<CommandTabs
+  npm="npx @glass-ui-kit/cli@latest info card"
+  pnpm="pnpm dlx @glass-ui-kit/cli@latest info card"
+  yarn="yarn dlx @glass-ui-kit/cli@latest info card"
+  bun="bunx @glass-ui-kit/cli@latest info card"
+  client:load
+/>
 
 <CodeBlock code={`glass-ui info <component> [options]`} lang="bash" />
 
-### What it does
-
-- fetches the registry
-- resolves one component by exact name
-- prints component metadata before you run `add`
-- can output the validated registry item as JSON
-
-### Arguments
-
-| Argument      | Description                                  |
-| ------------- | -------------------------------------------- |
-| `<component>` | The exact registry component name to inspect |
-
-### Options
+**Options**
 
 | Option   | Description                                |
 | -------- | ------------------------------------------ |
 | `--json` | Output the validated registry item as JSON |
 
-### Resolution rules
+**Notes**
 
-- `info` reads from the registry and does not depend on a local project
-- component lookup should use an exact registry name match
-- `--json` should print the raw validated registry item instead of formatted text output
-
-### Default output
-
-The human-readable output should include, at minimum:
-
-- component name
-- registry type
-- files
-- dependencies
-- devDependencies
-- registryDependencies
-- `meta.requiresBlur` when present
-
-### Failure behavior
-
-- missing components should fail with a clear not-found message
-- registry, network, cache, or schema validation failures should exit with a clear error message
-- command-boundary messaging should preserve the underlying error details
-
-### Examples
+- Component lookup uses the exact registry name.
+- Useful for checking dependencies, files, and metadata before `add`.
 
 <CodeBlock
   code={`glass-ui info card
-glass-ui info card --json`}
+glass-ui info button --json`}
   lang="bash"
 />
 
----
+## doctor
 
-## `doctor`
+Diagnose whether a project is ready to use the Glass UI CLI.
 
-Diagnoses whether a target project is ready to use the Glass UI CLI.
-
-### Usage
+<CommandTabs
+  npm="npx @glass-ui-kit/cli@latest doctor"
+  pnpm="pnpm dlx @glass-ui-kit/cli@latest doctor"
+  yarn="yarn dlx @glass-ui-kit/cli@latest doctor"
+  bun="bunx @glass-ui-kit/cli@latest doctor"
+  client:load
+/>
 
 <CodeBlock code={`glass-ui doctor [options]`} lang="bash" />
 
-### What it does
-
-- inspects the target project directory
-- reports whether Glass UI prerequisites are in place
-- helps explain why `init` or `add` may fail
-- can output a structured diagnostic report as JSON
-
-### Options
+**Options**
 
 | Option         | Description                                       |
 | -------------- | ------------------------------------------------- |
 | `--cwd <path>` | Run the command against another project directory |
 | `--json`       | Output the diagnostic report as JSON              |
 
-### Resolution rules
+**Notes**
 
-- `--cwd` sets the project root for the command
-- `doctor` should report problems without mutating files
-- `--json` should emit a structured diagnostic object instead of formatted text output
-
-### Proposed checks
-
-- whether `glass.config.json` exists
-- detected framework
-- resolved CSS path
-- configured aliases
-- detected package manager
-- whether the project state looks ready for `add`
-
-### Examples
+- `doctor` inspects project state without changing files.
+- Useful when `init` or `add` is failing because config, aliases, or CSS paths look wrong.
 
 <CodeBlock
   code={`glass-ui doctor
 glass-ui doctor --cwd ../my-app
-glass-ui doctor --json
-glass-ui doctor --cwd ../my-app --json`}
+glass-ui doctor --json`}
   lang="bash"
 />
-
----
-
-## Behavior summary
-
-### `init`
-
-- should be safe by default
-- should only overwrite generated files when `--force` is used
-- should allow explicit control over framework, aliases, CSS path, and working directory
-
-### `add`
-
-- should support one component, many components, or every component in the registry
-- should preserve existing files unless `--overwrite` is used
-- should support dependency installation independently from file generation
-- should always transform imports using the current project config
-
-### `list`
-
-- should provide a read-only view of the validated registry
-- should support human-readable output by default and JSON for automation
-- should not depend on a local project directory
-
-### `info`
-
-- should provide a read-only view of one registry component by exact name
-- should support human-readable output by default and JSON for automation
-- should not depend on a local project directory
-
-### `doctor`
-
-- should inspect a local project without modifying files
-- should support human-readable output by default and JSON for automation
-- should help users understand whether the project is ready for `init` and `add`
