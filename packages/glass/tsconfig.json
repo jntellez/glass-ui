@@ -5,7 +5,7 @@
       "@glass-ui-kit/glass/*": ["./src/*"],
       "@/*": ["./src/*"]
     },
-    "types": ["bun-types", "node"]
+    "types": ["bun-types", "node", "vitest/globals", "@testing-library/jest-dom"]
   },
   "include": ["src", "scripts"]
 }

@@ -7,12 +7,12 @@ import type { RegistryIndex } from "@glass-ui-kit/schema"
  */
 export const registry: RegistryIndex = [
   {
-    name: "card",
+    name: "badge",
     type: "registry:ui",
     dependencies: ["clsx", "tailwind-merge"],
     files: [
       {
-        path: "ui/card.tsx",
+        path: "ui/badge/index.tsx",
         type: "client",
       },
     ],
@@ -23,7 +23,18 @@ export const registry: RegistryIndex = [
     dependencies: ["clsx", "tailwind-merge"],
     files: [
       {
-        path: "ui/button.tsx",
+        path: "ui/button/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
+    name: "card",
+    type: "registry:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/card/index.tsx",
         type: "client",
       },
     ],
@@ -34,7 +45,7 @@ export const registry: RegistryIndex = [
     dependencies: ["clsx", "tailwind-merge"],
     files: [
       {
-        path: "ui/input.tsx",
+        path: "ui/input/index.tsx",
         type: "client",
       },
     ],
@@ -45,18 +56,7 @@ export const registry: RegistryIndex = [
     dependencies: ["clsx", "tailwind-merge"],
     files: [
       {
-        path: "ui/textarea.tsx",
-        type: "client",
-      },
-    ],
-  },
-  {
-    name: "badge",
-    type: "registry:ui",
-    dependencies: ["clsx", "tailwind-merge"],
-    files: [
-      {
-        path: "ui/badge.tsx",
+        path: "ui/textarea/index.tsx",
         type: "client",
       },
     ],

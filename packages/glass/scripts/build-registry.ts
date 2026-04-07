@@ -3,35 +3,68 @@ import { existsSync, mkdirSync } from "node:fs" // Node FS for directory creatio
 import { registry } from "../src/registry"
 import { registryIndexSchema } from "@glass-ui-kit/schema"
 
+export type RegistryEntry = (typeof registry)[number]
+
+export type BuildRegistryOptions = {
+  cwd?: string
+  publicDir?: string
+  sourceDir?: string
+  entries?: RegistryEntry[]
+  fileExists?: (filePath: string) => Promise<boolean>
+  readText?: (filePath: string) => Promise<string>
+  writeText?: (filePath: string, content: string) => Promise<void>
+  ensureDir?: (dirPath: string) => void
+  logger?: Pick<Console, "log" | "error">
+}
+
 // Target: apps/web/public/registry.json
 // We resolve relative to packages/glass/scripts/
-const PUBLIC_DIR = path.resolve(process.cwd(), "../../apps/web/public")
-const TARGET_FILE = path.join(PUBLIC_DIR, "registry.json")
+function resolvePaths(cwd: string, publicDir?: string) {
+  const resolvedPublicDir = publicDir ?? path.resolve(cwd, "../../apps/web/public")
 
-async function buildRegistry() {
-  console.log("📦 Building registry...")
+  return {
+    publicDir: resolvedPublicDir,
+    targetFile: path.join(resolvedPublicDir, "registry.json"),
+    sourceDir: path.join(cwd, "src"),
+  }
+}
+
+export async function buildRegistry(options: BuildRegistryOptions = {}) {
+  const cwd = options.cwd ?? process.cwd()
+  const { publicDir, targetFile, sourceDir } = resolvePaths(cwd, options.publicDir)
+  const entries = options.entries ?? registry
+  const fileExists = options.fileExists ?? (async (filePath) => Bun.file(filePath).exists())
+  const readText = options.readText ?? (async (filePath) => Bun.file(filePath).text())
+  const writeText = options.writeText ?? (async (filePath, content) => Bun.write(filePath, content))
+  const ensureDir =
+    options.ensureDir ??
+    ((dirPath) => {
+      if (!existsSync(dirPath)) {
+        mkdirSync(dirPath, { recursive: true })
+      }
+    })
+  const logger = options.logger ?? console
+
+  logger.log("📦 Building registry...")
 
   // Ensure target directory exists (critical for CI/CD)
-  if (!existsSync(PUBLIC_DIR)) {
-    mkdirSync(PUBLIC_DIR, { recursive: true })
-  }
+  ensureDir(publicDir)
 
   const result = []
 
-  for (const item of registry) {
-    console.log(`   Processing: ${item.name}`)
+  for (const item of entries) {
+    logger.log(`   Processing: ${item.name}`)
 
     const filesContent = []
 
     for (const file of item.files) {
-      const filePath = path.resolve(process.cwd(), "src", file.path)
-      const fileObj = Bun.file(filePath)
+      const filePath = path.resolve(sourceDir, file.path)
 
-      if (!(await fileObj.exists())) {
+      if (!(await fileExists(filePath))) {
         throw new Error(`File not found: ${filePath}`)
       }
 
-      const content = await fileObj.text()
+      const content = await readText(filePath)
 
       filesContent.push({
         ...file,
@@ -47,13 +80,17 @@ async function buildRegistry() {
 
   const parsedRegistry = registryIndexSchema.parse(result)
 
-  await Bun.write(TARGET_FILE, JSON.stringify(parsedRegistry, null, 2))
+  await writeText(targetFile, JSON.stringify(parsedRegistry, null, 2))
 
-  console.log(`✅ Registry built with ${result.length} items.`)
-  console.log(`📍 Output: ${TARGET_FILE}`)
+  logger.log(`✅ Registry built with ${result.length} items.`)
+  logger.log(`📍 Output: ${targetFile}`)
+
+  return parsedRegistry
 }
 
-buildRegistry().catch((err) => {
-  console.error("❌ Build failed:", err)
-  process.exit(1)
-})
+if (import.meta.main) {
+  buildRegistry().catch((err) => {
+    console.error("❌ Build failed:", err)
+    process.exit(1)
+  })
+}
