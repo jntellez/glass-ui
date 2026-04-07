@@ -3,20 +3,20 @@ title: Button
 description: Interactive button used to trigger actions in the interface.
 ---
 
-import CommandTabs from '@/components/CommandTabs.tsx';
-import CodeBlock from '@/components/CodeBlock.tsx';
-import ComponentPreview from '@/components/ComponentPreview.tsx';
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
 <ComponentPreview name="button-demo" client:load />
 
 ## Installation
 
-<CommandTabs 
-  npm="npx @glass-ui-kit/cli add button" 
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add button"
   pnpm="pnpm dlx @glass-ui-kit/cli add button"
   yarn="yarn dlx @glass-ui-kit/cli add button"
   bun="bunx @glass-ui-kit/cli add button"
-  client:load 
+  client:load
 />
 
 ## Usage
@@ -25,63 +25,73 @@ import ComponentPreview from '@/components/ComponentPreview.tsx';
   lang="tsx" 
   code={`import { Button } from "@/components/ui/button"
 
-  export default function App() {
-    return (
-      <Button className="glass">
-        Click me
-      </Button>
-    )
-  }`} 
+export default function App() {
+return (
+<Button className="glass">
+Click me
+</Button>
+)
+}`}
 />
 
 ## Examples
 
 ### Sizes
+
 Use the size classes (`btn-sm`, `btn-md`, `btn-lg`) to change the button's dimensions. If no size class is provided, the button defaults to `btn-md`.
 
 <ComponentPreview name="button-sizes" client:load />
 
 ### Default
+
 A basic button without any glass utility classes. It provides the base structure and transparent background.
 
 <ComponentPreview name="button-default" client:load />
 
 ### Glass
+
 The standard glassmorphism effect. It combines backdrop blur, subtle borders, and a translucent background.
 
 <ComponentPreview name="button-glass" client:load />
 
 ### Glass Soft
+
 A softer, highly transparent glass effect. Ideal for secondary actions that shouldn't draw too much attention.
 
 <ComponentPreview name="button-glass-soft" client:load />
 
 ### Glass Strong
+
 A pronounced glass effect with higher opacity. Perfect for primary calls to action (CTAs) resting over complex backgrounds.
 
 <ComponentPreview name="button-glass-strong" client:load />
 
 ### Disabled
+
 Displays the disabled state, which automatically reduces opacity and disables pointer events while maintaining the glass aesthetic.
 
 <ComponentPreview name="button-disabled" client:load />
 
 ### Combinations
+
 You can mix and match different glass classes to establish a clear visual hierarchy in your interfaces.
 
 <ComponentPreview name="button-combinations" client:load />
 
 ### Icon
+
 Use the `btn-icon` class to create a perfectly square button.
 
 <ComponentPreview name="button-icon" client:load />
 
 ### With Icon
+
 You can easily add icons to your buttons.
 
 <ComponentPreview name="button-with-icon" client:load />
 
 ### With Spinner
+
 Displays a loading state using an animated spinner icon.
 
 <ComponentPreview name="button-spinner" client:load />
@@ -97,11 +107,13 @@ There are no variant or size props. The styling and dimensions are controlled en
   <Button className="glass glass-soft" />
   <Button className="glass glass-strong" />
 
-  /* Sizes (Defaults to md) */
-  <Button className="glass btn-sm" />
-  <Button className="glass btn-lg" />
+/_ Sizes (Defaults to md) _/
 
-  /* Icon */
+<Button className="glass btn-sm" />
+<Button className="glass btn-lg" />
+
+/_ Icon _/
+
   <Button className="glass btn-icon">
     <Icon />
   </Button>`} 

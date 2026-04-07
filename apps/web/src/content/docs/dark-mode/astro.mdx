@@ -3,8 +3,8 @@ title: Astro
 description: Implement dark mode in your Astro project.
 ---
 
-import CodeBlock from '@/components/CodeBlock.tsx';
-import Steps from '@/components/Steps.tsx';
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import Steps from "@/components/docs/Steps.tsx"
 
 ## Implementation in Astro
 
@@ -27,6 +27,7 @@ Add the following script to the `<head>` of your main layout file (`Layout.astro
   ---
 
   <!doctype html>
+
   <html lang="en">
     <head>
       <meta charset="UTF-8" />
@@ -61,6 +62,7 @@ Add the following script to the `<head>` of your main layout file (`Layout.astro
     <body>
       <slot />
     </body>
+
   </html>`}
 />
 
@@ -78,23 +80,23 @@ You can use the standalone `ThemeToggle` component which handles document classe
   import { Sun, Monitor, Moon } from "lucide-react";
   import { cn } from "@/lib/utils";
 
-  type Theme = "light" | "system" | "dark";
+type Theme = "light" | "system" | "dark";
 
-  const LENS_POSITIONS: Record<Theme, string> = {
-    light: "translate-x-0",
-    system: "translate-x-full",
-    dark: "translate-x-[200%]",
-  };
+const LENS_POSITIONS: Record<Theme, string> = {
+light: "translate-x-0",
+system: "translate-x-full",
+dark: "translate-x-[200%]",
+};
 
-  const THEME_OPTIONS = [
-    { value: "light", icon: Sun, label: "Light theme" },
-    { value: "system", icon: Monitor, label: "System theme" },
-    { value: "dark", icon: Moon, label: "Dark theme" },
-  ] as const;
+const THEME_OPTIONS = [
+{ value: "light", icon: Sun, label: "Light theme" },
+{ value: "system", icon: Monitor, label: "System theme" },
+{ value: "dark", icon: Moon, label: "Dark theme" },
+] as const;
 
-  export default function ThemeToggle({ className }: { className?: string }) {
-    const [mounted, setMounted] = useState(false);
-    const [theme, setTheme] = useState<Theme>("system");
+export default function ThemeToggle({ className }: { className?: string }) {
+const [mounted, setMounted] = useState(false);
+const [theme, setTheme] = useState<Theme>("system");
 
     useEffect(() => {
       const stored = (localStorage.getItem("theme") as Theme) || "system";
@@ -160,7 +162,8 @@ You can use the standalone `ThemeToggle` component which handles document classe
         ))}
       </div>
     );
-  }`}
+
+}`}
 />
 
 ### Render the component

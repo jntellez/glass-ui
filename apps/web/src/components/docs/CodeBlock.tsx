@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react"
 import { Highlight, themes } from "prism-react-renderer"
 import CopyButton from "./CopyButton"
-import { cn } from "../lib/utils"
+import { cn } from "@/lib/utils"
 import { Card, Button } from "@glass-ui-kit/glass"
 import "@/lib/prism-setup"
 

@@ -3,9 +3,9 @@ title: Next.js
 description: Install and configure Glass UI in a Next.js project.
 ---
 
-import CommandTabs from '@/components/CommandTabs.tsx';
-import CodeBlock from '@/components/CodeBlock.tsx';
-import Steps from '@/components/Steps.tsx';
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import Steps from "@/components/docs/Steps.tsx"
 
 ## Installation
 
@@ -15,24 +15,24 @@ import Steps from '@/components/Steps.tsx';
 
 Start by creating a fresh Next.js application. If you already have a project, you can skip this step.
 
-<CommandTabs 
-  npm="npx create-next-app@latest" 
+<CommandTabs
+  npm="npx create-next-app@latest"
   pnpm="pnpm create next-app"
   yarn="yarn create next-app"
   bun="bun create next-app"
-  client:load 
+  client:load
 />
 
 We recommend accepting the default prompts so Next.js automatically configures Tailwind CSS, the App Router, and the `@/*` import alias for you.
 
 If you prefer a `src/` directory, add the `--src-dir` flag:
 
-<CommandTabs 
-  npm="npx create-next-app@latest --src-dir" 
+<CommandTabs
+  npm="npx create-next-app@latest --src-dir"
   pnpm="pnpm create next-app --src-dir"
   yarn="yarn create next-app --src-dir"
   bun="bun create next-app --src-dir"
-  client:load 
+  client:load
 />
 
 ### Verify Configuration
@@ -42,7 +42,7 @@ If you created your project using the recommended defaults above, you can safely
 For existing or custom Next.js setups, ensure you have Tailwind CSS configured first. Then, verify that your `tsconfig.json` includes the `@/*` path alias:
 
 <CodeBlock
-  client:load 
+  client:load
   filename="tsconfig.json"
   showLineNumbers
   highlightLines="3-5"
@@ -61,7 +61,7 @@ If your project uses a `src/` directory, make sure the alias points to `["./src/
 
 ### Run the CLI
 
-Run the `init` command to set up your configuration, base utilities, and global styles. 
+Run the `init` command to set up your configuration, base utilities, and global styles.
 
 <CommandTabs
   npm="npx @glass-ui-kit/cli@latest init"
@@ -94,15 +94,15 @@ Replace the contents of your `app/page.tsx` with the following code to see Glass
   showLineNumbers
   code={`import { Card } from "@/components/ui/card"
 
-  export default function Home() {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md text-center text-xl">
-          <h1>Welcome to Glass UI</h1>
-        </Card>
-      </div>
-    )
-  }`}
+export default function Home() {
+return (
+<div className="min-h-screen flex items-center justify-center">
+<Card className="w-full max-w-md text-center text-xl">
+<h1>Welcome to Glass UI</h1>
+</Card>
+</div>
+)
+}`}
 />
 
 If you are using a `src/` directory, the file will be located at `src/app/page.tsx` instead.

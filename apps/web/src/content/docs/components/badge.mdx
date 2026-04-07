@@ -3,20 +3,20 @@ title: Badge
 description: Interactive badge used to display status, tags, or trigger actions in the interface.
 ---
 
-import CommandTabs from '@/components/CommandTabs.tsx';
-import CodeBlock from '@/components/CodeBlock.tsx';
-import ComponentPreview from '@/components/ComponentPreview.tsx';
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
 <ComponentPreview name="badge-demo" client:load />
 
 ## Installation
 
-<CommandTabs 
-  npm="npx @glass-ui-kit/cli add badge" 
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add badge"
   pnpm="pnpm dlx @glass-ui-kit/cli add badge"
   yarn="yarn dlx @glass-ui-kit/cli add badge"
   bun="bunx @glass-ui-kit/cli add badge"
-  client:load 
+  client:load
 />
 
 ## Usage
@@ -25,38 +25,43 @@ import ComponentPreview from '@/components/ComponentPreview.tsx';
   lang="tsx" 
   code={`import { Badge } from "@/components/ui/badge"
 
-  export default function App() {
-    return (
-      <Badge className="glass">
-        Glass Badge
-      </Badge>
-    )
-  }`} 
+export default function App() {
+return (
+<Badge className="glass">
+Glass Badge
+</Badge>
+)
+}`}
 />
 
 ## Examples
 
 ### Weights
+
 Demonstrates the different intensities of the glassmorphism effect. You can use the `glass`, `glass-soft`, or `glass-strong` classes to adjust the background opacity and blur to perfectly match your background.
 
 <ComponentPreview name="badge-weights" client:load />
 
 ### With Icon
+
 You can easily incorporate icons inside the badge to provide more visual context.
 
 <ComponentPreview name="badge-icon" client:load />
 
 ### With Spinner
+
 A badge can display a loading state by including a spinner animation.
 
 <ComponentPreview name="badge-spinner" client:load />
 
 ### Link
+
 The badge can be rendered as a clickable element.
 
 <ComponentPreview name="badge-link" client:load />
 
 ### Custom Colors
+
 You can easily override or add colors using standard Tailwind CSS utility classes.
 
 <ComponentPreview name="badge-custom-colors" client:load />
