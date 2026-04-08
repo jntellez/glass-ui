@@ -9,7 +9,7 @@ export default function ButtonSpinner() {
         Loading
       </Button>
 
-      <Button className="glass btn-icon w-8 h-8" disabled>
+      <Button className="glass btn-icon" disabled>
         <LoaderCircle className="w-4 h-4 animate-spin" />
       </Button>
 

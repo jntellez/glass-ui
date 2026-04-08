@@ -8,7 +8,7 @@ export default function ButtonIcon() {
         <MapPin className="w-3 h-3" />
       </Button>
 
-      <Button className="glass btn-icon w-8 h-8">
+      <Button className="glass btn-icon">
         <MapPin className="w-4 h-4" />
       </Button>
 

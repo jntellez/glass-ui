@@ -34,6 +34,17 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
   }`}
 />
 
+### As link
+
+Use `as="a"` for navigation and always provide `href`.
+
+<CodeBlock
+  lang="tsx"
+  code={`<Button as="a" href="/docs" className="glass">
+    Read the docs
+  </Button>`}
+/>
+
 ## Examples
 
 ### Sizes
@@ -116,3 +127,9 @@ There are no variant or size props. The styling and dimensions are controlled en
     <Icon />
   </Button>`} 
 />
+
+## API
+
+- Default render: native `<button>` for actions and form submits.
+- `as`: render another element such as `<a>` while keeping Button styling.
+- `as="a"`: use for navigation and provide `href`.

@@ -50,12 +50,10 @@ const next =
 <div class="flex flex-row items-center justify-between mt-14 mb-8">
   {
     prev ? (
-      <a href={prev.href}>
-        <Button className="glass glass-soft">
-          <Icon name="lucide:chevron-left" class="w-4 h-4" />
-          {prev.title}
-        </Button>
-      </a>
+      <Button as="a" href={prev.href} className="glass glass-soft">
+        <Icon name="lucide:chevron-left" class="w-4 h-4" />
+        {prev.title}
+      </Button>
     ) : (
       <div />
     )
@@ -63,12 +61,10 @@ const next =
 
   {
     next && (
-      <a href={next.href}>
-        <Button className="glass glass-soft">
-          {next.title}
-          <Icon name="lucide:chevron-right" class="w-4 h-4" />
-        </Button>
-      </a>
+      <Button as="a" href={next.href} className="glass glass-soft">
+        {next.title}
+        <Icon name="lucide:chevron-right" class="w-4 h-4" />
+      </Button>
     )
   }
 </div>

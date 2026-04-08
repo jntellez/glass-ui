@@ -182,6 +182,8 @@ body {
 
 @utility btn-icon {
   padding: 0;
+  width: 2rem;
+  height: 2rem;
   aspect-ratio: 1 / 1;
 }
-`;
+`

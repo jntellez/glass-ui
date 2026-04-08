@@ -10,7 +10,7 @@ import ExternalLink from "@/components/docs/ExternalLink"
     <section
       class="flex flex-col items-center justify-center px-4 pt-20 text-center relative overflow-hidden"
     >
-      <a href="/docs/getting-started/cli" class="mb-3">
+      <a href="/docs/cli" class="mb-3">
         <Badge className="glass glass-soft px-2.5 py-1">
           <span class="flex h-2 w-2 rounded-full bg-zinc-900 dark:bg-zinc-100 mr-2 animate-pulse"
           ></span>
@@ -33,14 +33,13 @@ import ExternalLink from "@/components/docs/ExternalLink"
         A beautiful, accessible, and customizable design system engineered for the modern web.
       </p>
 
-      <div class="mt-8 flex items-center justify-center gap-4 w-full sm:w-auto z-10">
-        <a href="/docs/installation">
-          <Button className="glass glass-strong">Get started</Button>
-        </a>
-
-        <a href="/docs/components">
-          <Button className="glass glass-soft">View components</Button>
-        </a>
+      <div class="mt-8 m-1 flex items-center justify-center gap-4 w-full sm:w-auto">
+        <Button as="a" href="/docs/installation" className="glass glass-strong">
+          Get started
+        </Button>
+        <Button as="a" href="/docs/components" className="glass glass-soft">
+          View components
+        </Button>
       </div>
     </section>
 

@@ -7,42 +7,52 @@ import { Icon } from "astro-icon/components"
 <header class="glass glass-soft top-2 sticky rounded-glass-md mx-2 z-50">
   <div class="pl-1 pr-4 md:px-8 h-15 flex items-center">
     <div class="flex items-center">
-      <a href="/">
-        <Button className="h-8 text-base font-bold border-none shadow-none hover:shadow-none px-3">
-          Glass UI
-        </Button>
-      </a>
+      <Button
+        as="a"
+        href="/"
+        className="h-8 text-base font-bold border-none shadow-none hover:shadow-none px-3"
+      >
+        Glass UI
+      </Button>
 
       <nav class="hidden sm:flex items-center font-medium text-foreground">
-        <a href="/docs">
-          <Button className="h-8 border-none shadow-none hover:shadow-none px-3">Docs</Button>
-        </a>
-        <a href="/docs/components">
-          <Button className="h-8 border-none shadow-none hover:shadow-none px-3">
-            Components
-          </Button>
-        </a>
-        <a href="/customization">
-          <Button className="h-8 border-none shadow-none hover:shadow-none px-3">
-            Customization
-          </Button>
-        </a>
+        <Button as="a" href="/docs" className="border-none shadow-none hover:shadow-none px-3"
+          >Docs</Button
+        >
+        <Button
+          as="a"
+          href="/docs/components"
+          className="border-none shadow-none hover:shadow-none px-3"
+        >
+          Components
+        </Button>
+        <Button
+          as="a"
+          href="/customization"
+          className="border-none shadow-none hover:shadow-none px-3"
+        >
+          Customization
+        </Button>
       </nav>
     </div>
 
     <div class="flex flex-1 items-center justify-end gap-3">
       <Button
-        className="hidden md:inline-flex items-center h-8 font-normal hover:scale-none pr-20 md:pr-26"
+        className="hidden md:inline-flex items-center font-normal hover:scale-none pr-20 md:pr-26"
       >
         <span class="lg:hidden">Search...</span>
         <span class="hidden lg:inline">Search documentation...</span>
       </Button>
 
-      <a href="https://github.com/jntellez/glass-ui" target="_blank" rel="noreferrer">
-        <Button className="w-8 h-8 p-0">
-          <Icon name="simple-icons:github" class="w-4.5 h-4.5" />
-        </Button>
-      </a>
+      <Button
+        as="a"
+        href="https://github.com/jntellez/glass-ui"
+        target="_blank"
+        rel="noreferrer"
+        className="btn-icon"
+      >
+        <Icon name="simple-icons:github" class="w-4 h-4" />
+      </Button>
 
       <ThemeToggle client:load />
     </div>
