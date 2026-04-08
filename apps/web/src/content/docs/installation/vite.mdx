@@ -15,12 +15,12 @@ import Steps from "@/components/docs/Steps.tsx"
 
 Start by creating a new React project using Vite and TypeScript. If you already have a project, you can skip this step.
 
-<CommandTabs
-  npm="npm create vite@latest"
+<CommandTabs 
+  npm="npm create vite@latest" 
   pnpm="pnpm create vite"
   yarn="yarn create vite"
   bun="bun create vite"
-  client:load
+  client:load 
 />
 
 ### Install Tailwind CSS
@@ -49,16 +49,21 @@ Add the Tailwind CSS plugin to your `vite.config.ts` file:
   import react from "@vitejs/plugin-react"
   import tailwindcss from "@tailwindcss/vite"
 
-export default defineConfig({
-plugins: [react(), tailwindcss()],
-})`}
+  export default defineConfig({
+    plugins: [react(), tailwindcss()],
+  })`}
 />
 
 #### Import Tailwind CSS
 
 Replace the contents of your `src/index.css` with the Tailwind import directive:
 
-<CodeBlock client:load lang="css" filename="src/index.css" code={`@import "tailwindcss";`} />
+<CodeBlock
+  client:load 
+  lang="css"
+  filename="src/index.css"
+  code={`@import "tailwindcss";`}
+/>
 
 ### Configure Path Aliases
 
@@ -89,15 +94,15 @@ Add the resolve alias to your Vite configuration:
   import tailwindcss from "@tailwindcss/vite"
   import path from "path"
 
-// https://vite.dev/config/
-export default defineConfig({
-plugins: [react(), tailwindcss()],
-resolve: {
-alias: {
-"@": path.resolve(\_\_dirname, "./src"),
-},
-},
-})`}
+  // https://vite.dev/config/
+  export default defineConfig({
+    plugins: [react(), tailwindcss()],
+    resolve: {
+      alias: {
+        "@": path.resolve(\_\_dirname, "./src"),
+      },
+    },
+  })`}
 />
 
 #### Update `tsconfig.app.json`
@@ -105,7 +110,7 @@ alias: {
 Vite uses multiple `tsconfig` files. Add the `paths` configuration to your `tsconfig.app.json` (or `tsconfig.json` if you are on an older Vite version):
 
 <CodeBlock
-  client:load
+  client:load 
   filename="tsconfig.app.json"
   showLineNumbers
   highlightLines="3-5"
@@ -155,17 +160,17 @@ Clear your `src/App.tsx` and replace it with the following code to see Glass UI 
   lang="tsx"
   code={`import { Card } from "@/components/ui/card"
 
-function App() {
-return (
-<div className="min-h-screen flex items-center justify-center">
-<Card className="w-full max-w-md text-center text-xl">
-<h1>Welcome to Glass UI</h1>
-</Card>
-</div>
-)
-}
+  function App() {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md text-center text-xl">
+          <h1>Welcome to Glass UI</h1>
+        </Card>
+      </div>
+    )
+  }
 
-export default App`}
+  export default App`}
 />
 
 </Steps>

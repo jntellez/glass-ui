@@ -24,35 +24,35 @@ Create a `theme-provider.tsx` file in your components folder to manage the theme
   expandable
   code={`import { createContext, useContext, useEffect, useState } from "react"
 
-type Theme = "dark" | "light" | "system"
+  type Theme = "dark" | "light" | "system"
 
-type ThemeProviderProps = {
-children: React.ReactNode
-defaultTheme?: Theme
-storageKey?: string
-}
+  type ThemeProviderProps = {
+    children: React.ReactNode
+    defaultTheme?: Theme
+    storageKey?: string
+  }
 
-type ThemeProviderState = {
-theme: Theme
-setTheme: (theme: Theme) => void
-}
+  type ThemeProviderState = {
+    theme: Theme
+    setTheme: (theme: Theme) => void
+  }
 
-const initialState: ThemeProviderState = {
-theme: "system",
-setTheme: () => null,
-}
+  const initialState: ThemeProviderState = {
+    theme: "system",
+    setTheme: () => null,
+  }
 
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+  const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
-export function ThemeProvider({
-children,
-defaultTheme = "system",
-storageKey = "vite-ui-theme",
-...props
-}: ThemeProviderProps) {
-const [theme, setTheme] = useState<Theme>(
-() => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-)
+  export function ThemeProvider({
+    children,
+    defaultTheme = "system",
+    storageKey = "vite-ui-theme",
+    ...props
+  }: ThemeProviderProps) {
+    const [theme, setTheme] = useState<Theme>(
+      () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+    )
 
     useEffect(() => {
       const root = window.document.documentElement
@@ -85,18 +85,16 @@ const [theme, setTheme] = useState<Theme>(
         {children}
       </ThemeProviderContext.Provider>
     )
+  }
 
-}
-
-export const useTheme = () => {
-const context = useContext(ThemeProviderContext)
+  export const useTheme = () => {
+    const context = useContext(ThemeProviderContext)
 
     if (context === undefined)
       throw new Error("useTheme must be used within a ThemeProvider")
 
     return context
-
-}`}
+  }`}
 />
 
 If you see a Vite Fast Refresh warning, you can safely ignore it by adding `// eslint-disable-next-line react-refresh/only-export-components` directly above the `export const useTheme` line.
@@ -117,14 +115,14 @@ Add the `ThemeProvider` to your main entry point, typically `main.tsx` or `App.t
   import App from './App.tsx'
   import { ThemeProvider } from "@/components/theme-provider"
 
-createRoot(document.getElementById('root')!).render(
-<StrictMode>
-<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-<App />
-</ThemeProvider>
-</StrictMode>,
-)
-`}
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <App />
+      </ThemeProvider>
+    </StrictMode>,
+  )
+  `}
 />
 
 ### Add a Theme Toggle
@@ -142,23 +140,23 @@ Use the `ThemeToggle` component to allow users to switch between themes.
   import { useTheme } from "@/components/theme-provider";
   import { cn } from "@/lib/utils";
 
-type Theme = "light" | "system" | "dark";
+  type Theme = "light" | "system" | "dark";
 
-const LENS_POSITIONS: Record<Theme, string> = {
-light: "translate-x-0",
-system: "translate-x-full",
-dark: "translate-x-[200%]",
-};
+  const LENS_POSITIONS: Record<Theme, string> = {
+    light: "translate-x-0",
+    system: "translate-x-full",
+    dark: "translate-x-[200%]",
+  };
 
-const THEME_OPTIONS = [
-{ value: "light", icon: Sun, label: "Light theme" },
-{ value: "system", icon: Monitor, label: "System theme" },
-{ value: "dark", icon: Moon, label: "Dark theme" },
-] as const;
+  const THEME_OPTIONS = [
+    { value: "light", icon: Sun, label: "Light theme" },
+    { value: "system", icon: Monitor, label: "System theme" },
+    { value: "dark", icon: Moon, label: "Dark theme" },
+  ] as const;
 
-export default function ThemeToggle({ className }: { className?: string }) {
-const [mounted, setMounted] = useState(false);
-const { theme, setTheme } = useTheme();
+  export default function ThemeToggle({ className }: { className?: string }) {
+    const [mounted, setMounted] = useState(false);
+    const { theme, setTheme } = useTheme();
 
     useEffect(() => {
       const timer = setTimeout(() => setMounted(true), 0);
@@ -199,8 +197,7 @@ const { theme, setTheme } = useTheme();
         ))}
       </div>
     );
-
-}`}
+  }`}
 />
 
 </Steps>

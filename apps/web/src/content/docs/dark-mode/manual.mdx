@@ -45,11 +45,11 @@ Add the following script to the `<head>` of your main HTML layout. This applies 
           document.documentElement.classList.add(resolvedTheme);
         })();
       </script>
+
     </head>
     <body>
       <div id="app"></div>
     </body>
-
   </html>`}
 />
 
@@ -64,32 +64,30 @@ Create a small helper to read and apply the current theme from one place.
   showLineNumbers
   code={`export type Theme = "light" | "dark" | "system";
 
-const STORAGE_KEY = "theme";
+  const STORAGE_KEY = "theme";
 
-export function getStoredTheme(): Theme {
-const stored = localStorage.getItem(STORAGE_KEY);
+  export function getStoredTheme(): Theme {
+    const stored = localStorage.getItem(STORAGE_KEY);
 
     if (stored === "light" || stored === "dark" || stored === "system") {
       return stored;
     }
 
     return "system";
+  }
 
-}
-
-export function applyTheme(theme: Theme) {
-const root = document.documentElement;
-const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-? "dark"
-: "light";
+  export function applyTheme(theme: Theme) {
+    const root = document.documentElement;
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
 
     const resolvedTheme = theme === "system" ? systemTheme : theme;
 
     root.classList.remove("light", "dark");
     root.classList.add(resolvedTheme);
     localStorage.setItem(STORAGE_KEY, theme);
-
-}`}
+  }`}
 />
 
 ### Add a Theme Toggle
@@ -107,21 +105,21 @@ You can use a standalone `ThemeToggle` component that updates the root classes d
   import { cn } from "@/lib/utils";
   import { applyTheme, getStoredTheme, type Theme } from "@/lib/theme";
 
-const LENS_POSITIONS: Record<Theme, string> = {
-light: "translate-x-0",
-system: "translate-x-full",
-dark: "translate-x-[200%]",
-};
+  const LENS_POSITIONS: Record<Theme, string> = {
+    light: "translate-x-0",
+    system: "translate-x-full",
+    dark: "translate-x-[200%]",
+  };
 
-const THEME_OPTIONS = [
-{ value: "light", icon: Sun, label: "Light theme" },
-{ value: "system", icon: Monitor, label: "System theme" },
-{ value: "dark", icon: Moon, label: "Dark theme" },
-] as const;
+  const THEME_OPTIONS = [
+    { value: "light", icon: Sun, label: "Light theme" },
+    { value: "system", icon: Monitor, label: "System theme" },
+    { value: "dark", icon: Moon, label: "Dark theme" },
+  ] as const;
 
-export default function ThemeToggle({ className }: { className?: string }) {
-const [mounted, setMounted] = useState(false);
-const [theme, setTheme] = useState<Theme>("system");
+  export default function ThemeToggle({ className }: { className?: string }) {
+    const [mounted, setMounted] = useState(false);
+    const [theme, setTheme] = useState<Theme>("system");
 
     useEffect(() => {
       const stored = getStoredTheme();
@@ -171,8 +169,7 @@ const [theme, setTheme] = useState<Theme>("system");
         ))}
       </div>
     );
-
-}`}
+  }`}
 />
 
 ### Keep `system` mode in sync
@@ -199,7 +196,7 @@ If you support the `system` option, listen for operating system theme changes an
       mediaQuery.removeEventListener("change", handleChange);
     };
 
-}, [theme]);`}
+  }, [theme]);`}
 />
 
 </Steps>

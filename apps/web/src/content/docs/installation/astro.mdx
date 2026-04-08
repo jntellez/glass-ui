@@ -15,24 +15,24 @@ import Steps from "@/components/docs/Steps.tsx"
 
 Start by creating a fresh Astro project. If you already have a project, you can skip this step.
 
-<CommandTabs
-  npm="npm create astro@latest"
+<CommandTabs 
+  npm="npm create astro@latest" 
   pnpm="pnpm create astro@latest"
   yarn="yarn create astro"
   bun="bun create astro"
-  client:load
+  client:load 
 />
 
 ### Add React
 
 Add the official React integration to your Astro project:
 
-<CommandTabs
-  npm="npx astro add react"
+<CommandTabs 
+  npm="npx astro add react" 
   pnpm="pnpm astro add react"
   yarn="yarn astro add react"
   bun="bunx astro add react"
-  client:load
+  client:load 
 />
 
 ### Install Tailwind CSS
@@ -62,13 +62,13 @@ Add the Tailwind CSS plugin to your `astro.config.mjs` file via the Vite configu
   import react from "@astrojs/react";
   import tailwindcss from "@tailwindcss/vite";
 
-// https://astro.build/config
-export default defineConfig({
-integrations: [react()],
-vite: {
-plugins: [tailwindcss()],
-},
-});`}
+  // https://astro.build/config
+  export default defineConfig({
+    integrations: [react()],
+    vite: {
+      plugins: [tailwindcss()],
+    },
+  });`}
 />
 
 #### Import Tailwind CSS
@@ -76,7 +76,7 @@ plugins: [tailwindcss()],
 Create a `src/styles/global.css` file and add the Tailwind import directive:
 
 <CodeBlock
-  client:load
+  client:load 
   lang="css"
   filename="src/styles/global.css"
   code={`@import "tailwindcss";`}
@@ -97,7 +97,6 @@ Import the `global.css` file into your main layout so the styles are applied glo
   ---
 
   <!doctype html>
-
   <html lang="en">
     <head>
       <meta charset="UTF-8" />
@@ -116,7 +115,7 @@ Import the `global.css` file into your main layout so the styles are applied glo
 Verify that your `tsconfig.json` includes the `paths` configuration:
 
 <CodeBlock
-  client:load
+  client:load 
   filename="tsconfig.json"
   showLineNumbers
   highlightLines="3-5"

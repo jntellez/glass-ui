@@ -25,16 +25,16 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
   lang="tsx" 
   code={`import { Card } from "@/components/ui/card"
 
-export default function App() {
-return (
-<Card>
-<h3 className="text-lg font-medium">Card Title</h3>
-<p className="text-sm text-muted-foreground mt-2">
-This is the card content. The card automatically applies glassmorphism, padding, and rounded corners.
-</p>
-</Card>
-)
-}`}
+  export default function App() {
+    return (
+      <Card>
+        <h3 className="text-lg font-medium">Card Title</h3>
+        <p className="text-sm text-muted-foreground mt-2">
+          This is the card content. The card automatically applies glassmorphism, padding, and rounded corners.
+        </p>
+      </Card>
+    )
+  }`}
 />
 
 ## Examples
@@ -72,16 +72,15 @@ You have full control to build the interface using Tailwind CSS utilities, ensur
 <CodeBlock 
   lang="tsx"
   code={`<Card className="glass p-6 space-y-4">
-    <div>
-      <h3 className="text-lg font-medium">Title</h3>
-      <p className="text-sm text-muted-foreground">
-        Description
-      </p>
-    </div>
+  <div>
+    <h3 className="text-lg font-medium">Title</h3>
+    <p className="text-sm text-muted-foreground">
+      Description
+    </p>
+  </div>
 
-    <Button>Action</Button>
-
-  </Card>`} 
+  <Button>Action</Button>
+</Card>`} 
 />
 
 ## Styling

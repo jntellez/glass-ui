@@ -25,13 +25,13 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
   lang="tsx" 
   code={`import { Button } from "@/components/ui/button"
 
-export default function App() {
-return (
-<Button className="glass">
-Click me
-</Button>
-)
-}`}
+  export default function App() {
+    return (
+      <Button className="glass">
+        Click me
+      </Button>
+    )
+  }`}
 />
 
 ## Examples
@@ -107,13 +107,11 @@ There are no variant or size props. The styling and dimensions are controlled en
   <Button className="glass glass-soft" />
   <Button className="glass glass-strong" />
 
-/_ Sizes (Defaults to md) _/
+  /* Sizes (Defaults to md) */
+  <Button className="glass btn-sm" />
+  <Button className="glass btn-lg" />
 
-<Button className="glass btn-sm" />
-<Button className="glass btn-lg" />
-
-/_ Icon _/
-
+  /* Icon */
   <Button className="glass btn-icon">
     <Icon />
   </Button>`} 
