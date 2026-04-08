@@ -63,6 +63,10 @@
     @apply relative rounded-md bg-glass-bg shadow-glass-sm px-[0.3rem] py-[0.2rem] font-mono text-sm text-foreground;
   }
 
+  .prose :is(h2, h3, h4, h5, h6) {
+    scroll-margin-top: calc(70px + 1.5rem);
+  }
+
   input[type="password"]::-ms-reveal,
   input[type="password"]::-ms-clear {
     display: none;
