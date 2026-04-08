@@ -6,7 +6,12 @@ describe("Card", () => {
   it("renders its content inside the default glass surface", () => {
     render(<Card>Account summary</Card>)
 
-    expect(screen.getByText("Account summary")).toHaveClass("glass", "rounded-xl", "p-6")
+    expect(screen.getByText("Account summary")).toHaveClass(
+      "glass",
+      "rounded-glass-sm",
+      "text-foreground",
+      "p-6",
+    )
   })
 
   it("merges custom class names", () => {
