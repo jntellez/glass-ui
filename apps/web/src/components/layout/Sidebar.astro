@@ -6,38 +6,48 @@ const pathname = Astro.url.pathname
 ---
 
 <aside
-  class="fixed top-[57px] z-30 hidden h-[calc(100vh-57px)] w-full shrink-0 overflow-y-auto border-r border-glass-border lg:sticky lg:block px-4 py-6 lg:py-8 pb-20 no-scrollbar"
+  class="fixed top-17 z-30 hidden h-[calc(100vh-70px)] w-full shrink-0 lg:sticky lg:block relative"
 >
-  <nav class="flex flex-col gap-6 w-full pr-2">
-    {
-      sidebarNav.map((group) => (
-        <div class="flex flex-col gap-2">
-          <h4 class="text-sm text-muted-foreground px-3">{group.title}</h4>
+  <div
+    class="h-full overflow-y-auto px-4 py-6 lg:py-8 pb-20 no-scrollbar"
+    style="mask-image: linear-gradient(to bottom, black 0%, black calc(100% - 96px), transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 0%, black calc(100% - 96px), transparent 100%);"
+  >
+    <nav class="flex flex-col gap-6 w-full pr-2">
+      {
+        sidebarNav.map((group) => (
+          <div class="flex flex-col gap-2">
+            <h4 class="text-sm text-muted-foreground px-3">{group.title}</h4>
 
-          <div class="flex flex-col gap-1 text-sm">
-            {group.items.map((item) => {
-              const normalizedPath = pathname.endsWith("/") ? pathname.slice(0, -1) : pathname
-              const normalizedHref = item.href.endsWith("/") ? item.href.slice(0, -1) : item.href
+            <div class="flex flex-col gap-1 text-sm">
+              {group.items.map((item) => {
+                const normalizedPath = pathname.endsWith("/") ? pathname.slice(0, -1) : pathname
+                const normalizedHref = item.href.endsWith("/") ? item.href.slice(0, -1) : item.href
 
-              const isExactOnly = normalizedHref === "/docs"
-              const isActive = isExactOnly
-                ? normalizedPath === normalizedHref
-                : normalizedPath === normalizedHref ||
-                  normalizedPath.startsWith(normalizedHref + "/")
+                const isExactOnly = normalizedHref === "/docs"
+                const isActive = isExactOnly
+                  ? normalizedPath === normalizedHref
+                  : normalizedPath === normalizedHref ||
+                    normalizedPath.startsWith(normalizedHref + "/")
 
-              return (
-                <a href={item.href}>
-                  <Button
-                    className={`text-foreground h-7.5 border-none shadow-none hover:shadow-none px-3 ${isActive && "glass"}`}
-                  >
-                    {item.title}
-                  </Button>
-                </a>
-              )
-            })}
+                return (
+                  <a href={item.href}>
+                    <Button
+                      className={`text-foreground h-7.5 border-none shadow-none hover:shadow-none px-3 ${isActive && "glass"}`}
+                    >
+                      {item.title}
+                    </Button>
+                  </a>
+                )
+              })}
+            </div>
           </div>
-        </div>
-      ))
-    }
-  </nav>
+        ))
+      }
+    </nav>
+  </div>
+  <div
+    class="pointer-events-none absolute right-0 top-0 h-full w-px"
+    style="background: linear-gradient(to bottom, var(--glass-border) 0%, color-mix(in srgb, var(--glass-border) 68%, transparent) 72%, transparent 100%);"
+  >
+  </div>
 </aside>
