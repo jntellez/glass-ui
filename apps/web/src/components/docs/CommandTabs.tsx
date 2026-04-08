@@ -79,7 +79,7 @@ export default function CommandTabs({ npm, pnpm, yarn, bun }: CommandTabsProps) 
   const activeCommand = commands[activeTab] || npm
 
   return (
-    <Card className="p-0 my-6 shadow-glass-m overflow-hidden">
+    <Card className="p-0 my-6 overflow-hidden">
       <div className="relative flex gap-1.5 p-1.5 pb-2.5 items-center overflow-x-auto">
         {availableTabs.map((tab) => (
           <Button
