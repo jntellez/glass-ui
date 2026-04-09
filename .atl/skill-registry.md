@@ -96,6 +96,7 @@ Pre-digested rules per skill. Delegators copy matching blocks into sub-agent pro
 | File | Path | Notes |
 |------|------|-------|
 | AGENTS.md | /home/jntellez/ws/glass-ui/AGENTS.md | Index — references files below |
+| .agent/skills/ | /home/jntellez/ws/glass-ui/.agent/skills/ | Referenced by AGENTS.md |
 | skill-registry.md | /home/jntellez/ws/glass-ui/.atl/skill-registry.md | Referenced by AGENTS.md |
 | component-creation | /home/jntellez/ws/glass-ui/.agent/skills/component-creation/SKILL.md | Referenced by AGENTS.md |
 | component-docs | /home/jntellez/ws/glass-ui/.agent/skills/component-docs/SKILL.md | Referenced by AGENTS.md |

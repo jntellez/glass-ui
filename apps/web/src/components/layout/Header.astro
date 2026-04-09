@@ -1,7 +1,10 @@
 ---
 import ThemeToggle from "@/components/theme/ThemeToggle.tsx"
+import { getNavAriaCurrent } from "@/components/layout/nav"
 import { Button } from "@glass-ui-kit/glass"
 import { Icon } from "astro-icon/components"
+
+const pathname = Astro.url.pathname
 ---
 
 <header class="glass glass-soft top-2 sticky rounded-glass-md mx-2 z-50">
@@ -30,6 +33,7 @@ import { Icon } from "astro-icon/components"
           as="a"
           href="/customization"
           className="border-none shadow-none hover:shadow-none px-3"
+          aria-current={getNavAriaCurrent(pathname, "/customization")}
         >
           Customization
         </Button>
