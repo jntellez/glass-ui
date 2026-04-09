@@ -19,7 +19,7 @@ metadata:
 
 ## Critical Patterns
 
-- Create new components inside `packages/glass/src/ui` and follow the existing React + TypeScript style already used there.
+- Create new components inside `packages/glass/src/ui/<component-name>/index.tsx` and follow the existing React + TypeScript style already used there.
 - Keep components copy-paste friendly; avoid repo-only abstractions unless they clearly improve reuse across multiple components.
 - New components must feel native to the glassmorphism system, not like generic Tailwind components.
 - Prefer existing visual tokens from `packages/glass/src/css/tokens.css` for blur, background, border, radius, shadow, and foreground values before introducing new raw values.
@@ -27,6 +27,7 @@ metadata:
 - Reuse `cn` from `packages/glass/src/lib/utils` for class merging and keep class-driven customization simple.
 - Preserve semantic HTML, accessibility defaults, and keyboard behavior for interactive elements.
 - Keep public APIs stable, minimal, and composable; prefer class-based composition over complex variant systems unless explicitly requested.
+- Keep colocated tests and support files next to the component folder when needed (for example `packages/glass/src/ui/button/button.test.tsx`).
 - When adding a new component, always export it from `packages/glass/src/ui/index.ts`.
 - When adding a new component, always add it to `packages/glass/src/registry.ts` so docs and CLI flows can discover it.
 - If the new component likely needs docs/examples or registry consumers updated elsewhere, call that out explicitly even if the task scope is component-only.
@@ -35,7 +36,7 @@ metadata:
 
 ```tsx
 import * as React from "react"
-import { cn } from "../lib/utils"
+import { cn } from "../../lib/utils"
 
 export function ExampleComponent({ className, ...props }: React.ComponentProps<"div">) {
   return <div {...props} className={cn("glass rounded-glass-md", className)} />
@@ -51,7 +52,7 @@ pnpm build
 
 ## Resources
 
-- `packages/glass/src/ui/` — existing component patterns
+- `packages/glass/src/ui/` — existing component folder patterns (`<name>/index.tsx`, colocated tests)
 - `packages/glass/src/registry.ts` — component registry entries
 - `packages/glass/src/ui/index.ts` — component exports
 - `packages/glass/src/css/tokens.css` — glass design tokens
