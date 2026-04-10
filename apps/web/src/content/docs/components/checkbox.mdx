@@ -1,0 +1,70 @@
+---
+title: Checkbox
+description: Native checkbox control for binary choices in forms.
+---
+
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="checkbox-demo" client:load />
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add checkbox"
+  pnpm="pnpm dlx @glass-ui-kit/cli add checkbox"
+  yarn="yarn dlx @glass-ui-kit/cli add checkbox"
+  bun="bunx @glass-ui-kit/cli add checkbox"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { Checkbox, Field, FieldDescription, Label } from "@glass-ui-kit/glass"
+
+  export default function App() {
+    return (
+      <Field className="flex gap-2">
+        <Checkbox id="terms" />
+        <div className="flex flex-col">
+          <Label htmlFor="terms">Accept terms</Label>
+          <FieldDescription>We'll only email when it matters.</FieldDescription>
+        </div>
+      </Field>
+    )
+  }`}
+/>
+
+## Examples
+
+### Default
+
+A minimal checkbox paired with a native label.
+
+<ComponentPreview name="checkbox-default" client:load />
+
+### Field Pairing
+
+Use `Field`, `Label`, and `FieldDescription` to keep checkbox controls aligned with the rest of your forms.
+
+<ComponentPreview name="checkbox-field" client:load />
+
+### Disabled
+
+The native `disabled` attribute handles interaction and styling state.
+
+<ComponentPreview name="checkbox-disabled" client:load />
+
+## Styling & API
+
+`Checkbox` is a native `<input type="checkbox">` with glass-aware defaults. It accepts standard checkbox attributes and class composition only.
+
+<CodeBlock
+  lang="tsx"
+  code={`<Checkbox />
+  <Checkbox defaultChecked />
+  <Checkbox className="glass bg-black/20" />`}
+/>
