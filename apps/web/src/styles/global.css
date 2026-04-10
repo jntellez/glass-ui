@@ -13,6 +13,8 @@
 @theme {
   --color-foreground: var(--foreground);
   --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-glass-bg: var(--glass-bg);
   --color-glass-border: var(--glass-border);
   --shadow-glass: var(--glass-shadow);

@@ -12,6 +12,8 @@
   --color-glass-surface: var(--glass-surface);
   --color-glass-border: var(--glass-border);
   --color-glass-highlight: var(--glass-highlight);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 
   /* Shadows */
   --shadow-glass: var(--glass-shadow);
