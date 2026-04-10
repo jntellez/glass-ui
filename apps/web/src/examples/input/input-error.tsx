@@ -11,9 +11,11 @@ export default function InputError() {
         type="email"
         defaultValue="invalid-email"
         placeholder="you@example.com"
-        className="glass border-red-500/50 dark:border-red-500/80 focus-visible:ring-red-500/50"
+        className="glass border-destructive/50 dark:border-destructive/80 focus-visible:ring-destructive/50"
       />
-      <p className="text-[11px] font-medium text-red-500">Please enter a valid email address.</p>
+      <p className="text-[11px] font-medium text-destructive">
+        Please enter a valid email address.
+      </p>
     </div>
   )
 }
