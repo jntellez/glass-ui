@@ -29,6 +29,17 @@ export const registry: RegistryIndex = [
     ],
   },
   {
+    name: "checkbox",
+    type: "registry:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/checkbox/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "card",
     type: "registry:ui",
     dependencies: ["clsx", "tailwind-merge"],
@@ -40,12 +51,34 @@ export const registry: RegistryIndex = [
     ],
   },
   {
+    name: "field",
+    type: "registry:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/field/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "input",
     type: "registry:ui",
     dependencies: ["clsx", "tailwind-merge"],
     files: [
       {
         path: "ui/input/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
+    name: "label",
+    type: "registry:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/label/index.tsx",
         type: "client",
       },
     ],

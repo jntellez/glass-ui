@@ -1,0 +1,72 @@
+---
+title: Field
+description: Lightweight wrapper primitives for composing labels, controls, helper text, and errors.
+---
+
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="field-demo" client:load />
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add field"
+  pnpm="pnpm dlx @glass-ui-kit/cli add field"
+  yarn="yarn dlx @glass-ui-kit/cli add field"
+  bun="bunx @glass-ui-kit/cli add field"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { Field, FieldDescription, FieldError, Input, Label } from "@glass-ui-kit/glass"
+
+  export default function App() {
+    return (
+      <Field>
+        <Label htmlFor="email">Email</Label>
+        <Input id="email" type="email" />
+        <FieldDescription>We'll only use this for account updates.</FieldDescription>
+        <FieldError>Please enter a valid email address.</FieldError>
+      </Field>
+    )
+  }`}
+/>
+
+## Examples
+
+### Default
+
+Use `Field` to keep label, control, and supporting copy grouped with consistent spacing.
+
+<ComponentPreview name="field-demo" client:load />
+
+### Error State
+
+Compose `FieldError` alongside standard inputs when validation fails.
+
+<ComponentPreview name="field-error" client:load />
+
+### Textarea
+
+The same pattern works for multiline fields too.
+
+<ComponentPreview name="field-textarea" client:load />
+
+## Styling & API
+
+`Field` is a plain structural wrapper. `FieldDescription` and `FieldError` are text primitives; pair them with the existing `Label`, `Input`, and `Textarea` components.
+
+<CodeBlock
+  lang="tsx"
+  code={`<Field className="space-y-1.5">
+    <Label htmlFor="name">Name</Label>
+    <Input id="name" />
+    <FieldDescription>Use your full name.</FieldDescription>
+    <FieldError>Required.</FieldError>
+  </Field>`}
+/>

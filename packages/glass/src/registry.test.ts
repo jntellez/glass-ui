@@ -2,7 +2,16 @@ import { describe, expect, it } from "vitest"
 import { registryIndexSchema } from "@glass-ui-kit/schema"
 import { registry } from "./registry"
 
-const expectedNames = ["badge", "button", "card", "input", "textarea"] as const
+const expectedNames = [
+  "badge",
+  "button",
+  "checkbox",
+  "card",
+  "field",
+  "input",
+  "label",
+  "textarea",
+] as const
 
 describe("registry", () => {
   it("matches the registry schema", () => {
