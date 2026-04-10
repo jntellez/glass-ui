@@ -1,0 +1,56 @@
+---
+title: Label
+description: Native label wrapper for form fields and inline UI copy.
+---
+
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="label-demo" client:load />
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add label"
+  pnpm="pnpm dlx @glass-ui-kit/cli add label"
+  yarn="yarn dlx @glass-ui-kit/cli add label"
+  bun="bunx @glass-ui-kit/cli add label"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { Label } from "@glass-ui-kit/glass"
+
+  export default function App() {
+    return <Label htmlFor="email">Email address</Label>
+  }`}
+/>
+
+## Examples
+
+### Checkbox Pairing
+
+Labels are especially useful for making checkbox rows easier to scan and click without losing native behavior.
+
+<ComponentPreview name="label-default" client:load />
+
+### Field Pairing
+
+Use `htmlFor` with a matching form control `id` to keep label and input behavior fully native.
+
+<ComponentPreview name="label-field" client:load />
+
+## Styling & API
+
+`Label` accepts standard label attributes and class composition.
+
+<CodeBlock
+  lang="tsx"
+  code={`<Label htmlFor="name">
+    Name
+  </Label>`}
+/>
