@@ -5,6 +5,7 @@ import { cardExamples } from "./card"
 import { fieldExamples } from "./field"
 import { inputExamples } from "./input"
 import { labelExamples } from "./label"
+import { selectExamples } from "./select"
 import { textareaExamples } from "./textarea"
 
 export const examples = {
@@ -15,6 +16,7 @@ export const examples = {
   ...fieldExamples,
   ...inputExamples,
   ...labelExamples,
+  ...selectExamples,
   ...textareaExamples,
 } as const
 

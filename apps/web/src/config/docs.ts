@@ -29,6 +29,7 @@ export const sidebarNav: SidebarSection[] = [
       { title: "Field", href: "/docs/components/field" },
       { title: "Input", href: "/docs/components/input" },
       { title: "Label", href: "/docs/components/label" },
+      { title: "Native Select", href: "/docs/components/native-select" },
       { title: "Textarea", href: "/docs/components/textarea" },
     ],
   },

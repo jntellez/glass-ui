@@ -84,6 +84,17 @@ export const registry: RegistryIndex = [
     ],
   },
   {
+    name: "select",
+    type: "registry:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/native-select/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "textarea",
     type: "registry:ui",
     dependencies: ["clsx", "tailwind-merge"],

@@ -1,0 +1,79 @@
+---
+title: Native Select
+description: Native HTML select styled to match Input and the glass form controls, without becoming a custom dropdown.
+---
+
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="native-select-demo" client:load />
+
+`NativeSelect` is a native `<select>` with glass-ui form styling. It keeps the browser and OS picker behavior on purpose, so this component should be used when you want native accessibility and platform-consistent interaction instead of a fully custom dropdown.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add select"
+  pnpm="pnpm dlx @glass-ui-kit/cli add select"
+  yarn="yarn dlx @glass-ui-kit/cli add select"
+  bun="bunx @glass-ui-kit/cli add select"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { NativeGroup, NativeOption, NativeSelect } from "@/components/ui/native-select"
+
+  export default function App() {
+    return (
+      <NativeSelect defaultValue="frontend">
+        <NativeGroup label="Engineering">
+          <NativeOption value="frontend">Frontend</NativeOption>
+          <NativeOption value="backend">Backend</NativeOption>
+        </NativeGroup>
+
+        <NativeGroup label="Product">
+          <NativeOption value="design">Design</NativeOption>
+          <NativeOption value="pm">Product Manager</NativeOption>
+        </NativeGroup>
+      </NativeSelect>
+    )
+  }`}
+/>
+
+## Examples
+
+### Groups
+
+Use `NativeGroup` to organize longer native option lists without leaving the native picker behavior.
+
+<ComponentPreview name="native-select-groups" client:load />
+
+### Error
+
+Use the same error treatment as the rest of the form controls with `aria-invalid` and destructive border/ring classes.
+
+<ComponentPreview name="native-select-error" client:load />
+
+### Disabled
+
+The disabled state is fully native and keeps the same opacity behavior as the rest of the form controls.
+
+<ComponentPreview name="native-select-disabled" client:load />
+
+## Styling & API
+
+`NativeSelect` accepts the same props as a native `<select>`. `NativeGroup` and `NativeOption` are thin wrappers around `<optgroup>` and `<option>`.
+
+<CodeBlock
+  lang="tsx"
+  code={`<NativeSelect defaultValue="frontend">
+    <NativeGroup label="Engineering">
+      <NativeOption value="frontend">Frontend</NativeOption>
+      <NativeOption value="backend">Backend</NativeOption>
+    </NativeGroup>
+  </NativeSelect>`}
+/>
