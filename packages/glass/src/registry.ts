@@ -20,7 +20,7 @@ export const registry: RegistryIndex = [
   {
     name: "button",
     type: "registry:ui",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["@radix-ui/react-slot", "class-variance-authority", "clsx", "tailwind-merge"],
     files: [
       {
         path: "ui/button/index.tsx",

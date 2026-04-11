@@ -7,9 +7,9 @@ export default function FieldErrorExample() {
       <Input
         id="field-email"
         type="email"
+        aria-invalid="true"
         defaultValue="invalid-email"
         placeholder="you@example.com"
-        className="border-destructive/50 dark:border-destructive/80 focus-visible:ring-destructive/50"
       />
       <FieldDescription>We'll only use this for account notifications.</FieldDescription>
       <FieldError>Please enter a valid email address.</FieldError>

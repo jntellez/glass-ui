@@ -8,10 +8,7 @@ describe("Input", () => {
     render(<Input aria-label="Email address" />)
 
     expect(screen.getByRole("textbox", { name: "Email address" })).toHaveClass(
-      "bg-transparent",
-      "border",
-      "border-glass-border",
-      "shadow-glass-sm",
+      "glass",
       "h-8",
       "px-2.5",
       "text-sm",
@@ -24,6 +21,7 @@ describe("Input", () => {
       <>
         <Input aria-label="Small soft email" type="email" variant="soft" size="sm" />
         <Input aria-label="Large strong email" type="email" variant="strong" size="lg" />
+        <Input aria-label="Transparent work email" type="email" variant="transparent" />
       </>,
     )
 
@@ -43,6 +41,13 @@ describe("Input", () => {
       "text-base",
       "leading-6",
     )
+    expect(screen.getByRole("textbox", { name: "Transparent work email" })).toHaveClass(
+      "glass-outline",
+      "h-8",
+      "px-2.5",
+      "text-sm",
+      "leading-5",
+    )
   })
 
   it("forwards the type and keeps className as an escape hatch", () => {
@@ -59,6 +64,16 @@ describe("Input", () => {
 
     expect(input).toHaveAttribute("type", "email")
     expect(input).toHaveClass("h-10", "px-3.5", "tracking-wide", "rounded-full")
+  })
+
+  it("ties destructive border and ring styling to aria-invalid", () => {
+    render(<Input aria-label="Invalid email" aria-invalid="true" variant="soft" />)
+
+    expect(screen.getByRole("textbox", { name: "Invalid email" })).toHaveClass(
+      "aria-[invalid=true]:border-destructive/50",
+      "dark:aria-[invalid=true]:border-destructive/80",
+      "aria-[invalid=true]:focus-visible:ring-destructive/50",
+    )
   })
 
   it("forwards refs and native props", () => {

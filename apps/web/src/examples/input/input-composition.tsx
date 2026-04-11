@@ -10,9 +10,9 @@ export default function InputComposition() {
         </p>
       </div>
 
-      <div className="flex items-center gap-3">
-        <Input type="email" placeholder="you@company.com" className="input-lg glass glass-soft" />
-        <Button className="glass btn-lg whitespace-nowrap">Subscribe Now</Button>
+      <div className="flex gap-3">
+        <Input id="newsletter-email" type="email" variant="soft" placeholder="you@company.com" />
+        <Button className="whitespace-nowrap">Subscribe Now</Button>
       </div>
     </Card>
   )
