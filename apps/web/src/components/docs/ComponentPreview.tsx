@@ -16,7 +16,7 @@ export default function ComponentPreview({ name, height = 300 }: ComponentPrevie
 
   if (!example) {
     return (
-      <div className="p-4 border border-red-500/50 bg-red-500/10 text-red-500 rounded-[var(--glass-radius-md)] text-sm">
+      <div className="p-4 border border-destructive/50 bg-destructive/10 text-destructive rounded-[var(--glass-radius-md)] text-sm">
         Error: Example "{name}" not found in registry.
       </div>
     )
