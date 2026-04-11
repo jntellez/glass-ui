@@ -109,7 +109,7 @@ describe("Button", () => {
       "text-sm",
       "leading-5",
       "gap-2",
-      "btn-outline",
+      "glass-outline",
     )
     expect(screen.getByRole("button", { name: "Outline" })).not.toHaveClass("glass")
   })
