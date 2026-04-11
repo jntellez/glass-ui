@@ -24,8 +24,8 @@ export const sidebarNav: SidebarSection[] = [
     items: [
       { title: "Badge", href: "/docs/components/badge" },
       { title: "Button", href: "/docs/components/button" },
-      { title: "Checkbox", href: "/docs/components/checkbox" },
       { title: "Card", href: "/docs/components/card" },
+      { title: "Checkbox", href: "/docs/components/checkbox" },
       { title: "Field", href: "/docs/components/field" },
       { title: "Input", href: "/docs/components/input" },
       { title: "Label", href: "/docs/components/label" },
