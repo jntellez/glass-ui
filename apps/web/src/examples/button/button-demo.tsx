@@ -4,10 +4,10 @@ import { Layers } from "lucide-react"
 export default function ButtonDemo() {
   return (
     <div className="flex items-center justify-center gap-4">
-      <Button className="glass">Button</Button>
+      <Button variant="default">Button</Button>
 
-      <Button className="glass btn-icon w-8 h-8">
-        <Layers className="w-4 h-4" />
+      <Button variant="strong" size="icon" aria-label="Layers">
+        <Layers />
       </Button>
     </div>
   )

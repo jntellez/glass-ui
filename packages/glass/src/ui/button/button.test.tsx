@@ -1,4 +1,4 @@
-import { createElement, createRef, type ElementType } from "react"
+import { createRef } from "react"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
@@ -22,26 +22,115 @@ describe("Button", () => {
     expect(onClick).toHaveBeenCalledTimes(2)
   })
 
-  it("applies the default medium size class when no size override is provided", () => {
+  it("uses the default variant and medium size when no overrides are provided", () => {
     render(<Button>Continue</Button>)
 
-    expect(screen.getByRole("button", { name: "Continue" })).toHaveClass("btn-md")
+    expect(screen.getByRole("button", { name: "Continue" })).toHaveClass(
+      "glass",
+      "h-8",
+      "px-2.5",
+      "text-sm",
+      "leading-5",
+      "gap-2",
+    )
   })
 
-  it("preserves explicit size classes and custom class names", () => {
-    render(<Button className="btn-lg tracking-wide">Continue</Button>)
+  it("applies explicit variant and size props", () => {
+    render(
+      <>
+        <Button variant="soft" size="sm">
+          Soft
+        </Button>
+        <Button variant="strong" size="lg">
+          Strong
+        </Button>
+        <Button size="icon-sm" aria-label="Small map pin">
+          <span aria-hidden="true">•</span>
+        </Button>
+        <Button size="icon" aria-label="Map pin">
+          <span aria-hidden="true">•</span>
+        </Button>
+        <Button size="icon-lg" aria-label="Large map pin">
+          <span aria-hidden="true">•</span>
+        </Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button variant="transparent">Transparent</Button>
+      </>,
+    )
 
-    expect(screen.getByRole("button", { name: "Continue" })).toHaveClass("btn-lg", "tracking-wide")
-    expect(screen.getByRole("button", { name: "Continue" })).not.toHaveClass("btn-md")
+    expect(screen.getByRole("button", { name: "Soft" })).toHaveClass(
+      "glass",
+      "glass-soft",
+      "h-6",
+      "px-2",
+      "text-xs",
+      "leading-4",
+      "gap-1.5",
+    )
+    expect(screen.getByRole("button", { name: "Strong" })).toHaveClass(
+      "glass",
+      "glass-strong",
+      "h-10",
+      "px-3.5",
+      "text-base",
+      "leading-6",
+      "gap-2.5",
+    )
+    expect(screen.getByRole("button", { name: "Small map pin" })).toHaveClass(
+      "size-6",
+      "p-0",
+      "shrink-0",
+      "[&_svg]:size-3",
+    )
+    expect(screen.getByRole("button", { name: "Map pin" })).toHaveClass(
+      "size-8",
+      "p-0",
+      "shrink-0",
+      "[&_svg]:size-4",
+    )
+    expect(screen.getByRole("button", { name: "Large map pin" })).toHaveClass(
+      "size-10",
+      "p-0",
+      "shrink-0",
+      "[&_svg]:size-5",
+    )
+    expect(screen.getByRole("button", { name: "Ghost" })).toHaveClass(
+      "h-8",
+      "px-2.5",
+      "text-sm",
+      "leading-5",
+      "gap-2",
+      "bg-transparent",
+    )
+    expect(screen.getByRole("button", { name: "Ghost" })).not.toHaveClass("glass")
+    expect(screen.getByRole("button", { name: "Outline" })).toHaveClass(
+      "h-8",
+      "px-2.5",
+      "text-sm",
+      "leading-5",
+      "gap-2",
+      "btn-outline",
+    )
+    expect(screen.getByRole("button", { name: "Outline" })).not.toHaveClass("glass")
   })
 
-  it("omits the default border and shadow when a custom surface is provided", () => {
-    render(<Button className="glass bg-black/20">Continue</Button>)
+  it("keeps className as an escape hatch", () => {
+    render(
+      <Button variant="strong" size="icon-lg" className="tracking-wide rounded-full">
+        Continue
+      </Button>,
+    )
 
     const button = screen.getByRole("button", { name: "Continue" })
 
-    expect(button).toHaveClass("glass", "bg-black/20")
-    expect(button).not.toHaveClass("border", "shadow-glass-sm")
+    expect(button).toHaveClass(
+      "glass",
+      "glass-strong",
+      "size-10",
+      "p-0",
+      "tracking-wide",
+      "rounded-full",
+    )
   })
 
   it("calls onClick when pressed", async () => {
@@ -84,55 +173,42 @@ describe("Button", () => {
     expect(ref.current).toHaveAttribute("data-state", "ready")
   })
 
-  it("renders an anchor when `as` is set and preserves shared styling inputs", () => {
+  it("renders the child element when `asChild` is set", () => {
     render(
-      <>
-        <Button className="glass btn-lg">Action</Button>
-        <Button as="a" href="/docs" className="glass btn-lg">
-          Docs
-        </Button>
-      </>,
+      <Button asChild variant="strong" size="lg">
+        <a href="/docs">Docs</a>
+      </Button>,
     )
 
-    const button = screen.getByRole("button", { name: "Action" })
     const link = screen.getByRole("link", { name: "Docs" })
 
     expect(link.tagName).toBe("A")
     expect(link).toHaveAttribute("href", "/docs")
-    expect(link.className).toBe(button.className)
     expect(screen.queryByRole("button", { name: "Docs" })).not.toBeInTheDocument()
+    expect(link).toHaveClass("glass", "glass-strong", "h-10", "px-3.5", "text-base", "leading-6")
   })
 
-  it('does not expose link semantics when `as="a"` is used without an href', () => {
-    render(<Button as="a">Docs</Button>)
-
-    const anchor = screen.getByText("Docs")
-
-    expect(anchor.tagName).toBe("A")
-    expect(anchor).not.toHaveAttribute("href")
-    expect(screen.queryByRole("link", { name: "Docs" })).not.toBeInTheDocument()
-  })
-
-  it("ignores deprecated `asChild` usage and keeps the default button element", () => {
-    render(createElement(Button as ElementType, { asChild: true }, <a href="/docs">Docs</a>))
-
-    const button = screen.getByRole("button", { name: "Docs" })
-    const link = screen.getByRole("link", { name: "Docs" })
-
-    expect(button.tagName).toBe("BUTTON")
-    expect(button).toContainElement(link)
-  })
-
-  it("forwards refs to anchor targets when `as` is used", () => {
-    const ref = createRef<HTMLAnchorElement>()
+  it("forwards refs to slotted targets when `asChild` is used", () => {
+    const ref = createRef<HTMLElement>()
 
     render(
-      <Button ref={ref} as="a" href="/docs" aria-label="Docs link">
-        Docs
+      <Button ref={ref} asChild aria-label="Docs link">
+        <a href="/docs">Docs</a>
       </Button>,
     )
 
     expect(ref.current).toBe(screen.getByRole("link", { name: "Docs link" }))
     expect(ref.current).toHaveAttribute("href", "/docs")
+  })
+
+  it("exposes disabled state to slotted elements", () => {
+    render(
+      <Button asChild disabled>
+        <a href="/docs">Docs</a>
+      </Button>,
+    )
+
+    expect(screen.getByRole("link", { name: "Docs" })).toHaveAttribute("aria-disabled", "true")
+    expect(screen.getByRole("link", { name: "Docs" })).toHaveAttribute("data-disabled")
   })
 })

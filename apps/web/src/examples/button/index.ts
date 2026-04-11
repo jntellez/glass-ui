@@ -1,20 +1,23 @@
 import ButtonDemo from "./button-demo"
 import buttonDemoCode from "./button-demo.tsx?raw"
 
+import ButtonAsChild from "./button-as-child"
+import buttonAsChildCode from "./button-as-child.tsx?raw"
+
 import ButtonSizes from "./button-sizes"
 import buttonSizesCode from "./button-sizes.tsx?raw"
 
 import ButtonDefault from "./button-default"
 import buttonDefaultCode from "./button-default.tsx?raw"
 
-import ButtonGlass from "./button-glass"
-import buttonGlassCode from "./button-glass.tsx?raw"
-
 import ButtonGlassSoft from "./button-glass-soft"
 import buttonGlassSoftCode from "./button-glass-soft.tsx?raw"
 
 import ButtonGlassStrong from "./button-glass-strong"
 import buttonGlassStrongCode from "./button-glass-strong.tsx?raw"
+
+import ButtonTransparent from "./button-transparent"
+import buttonTransparentCode from "./button-transparent.tsx?raw"
 
 import ButtonDisabled from "./button-disabled"
 import buttonDisabledCode from "./button-disabled.tsx?raw"
@@ -36,6 +39,10 @@ export const buttonExamples = {
     component: ButtonDemo,
     code: buttonDemoCode,
   },
+  "button-as-child": {
+    component: ButtonAsChild,
+    code: buttonAsChildCode,
+  },
   "button-sizes": {
     component: ButtonSizes,
     code: buttonSizesCode,
@@ -44,10 +51,6 @@ export const buttonExamples = {
     component: ButtonDefault,
     code: buttonDefaultCode,
   },
-  "button-glass": {
-    component: ButtonGlass,
-    code: buttonGlassCode,
-  },
   "button-glass-soft": {
     component: ButtonGlassSoft,
     code: buttonGlassSoftCode,
@@ -55,6 +58,10 @@ export const buttonExamples = {
   "button-glass-strong": {
     component: ButtonGlassStrong,
     code: buttonGlassStrongCode,
+  },
+  "button-transparent": {
+    component: ButtonTransparent,
+    code: buttonTransparentCode,
   },
   "button-icon": {
     component: Buttonicon,

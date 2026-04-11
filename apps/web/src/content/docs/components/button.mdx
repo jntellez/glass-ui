@@ -26,56 +26,41 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
   code={`import { Button } from "@/components/ui/button"
 
   export default function App() {
-    return (
-      <Button className="glass">
-        Click me
-      </Button>
-    )
+    return <Button variant="strong">Click me</Button>
   }`}
-/>
-
-### As link
-
-Use `as="a"` for navigation and always provide `href`.
-
-<CodeBlock
-  lang="tsx"
-  code={`<Button as="a" href="/docs" className="glass">
-    Read the docs
-  </Button>`}
 />
 
 ## Examples
 
 ### Sizes
 
-Use the size classes (`btn-sm`, `btn-md`, `btn-lg`) to change the button's dimensions. If no size class is provided, the button defaults to `btn-md`.
+Use the `size` prop for the standard button scale. `md` is the default.
 
 <ComponentPreview name="button-sizes" client:load />
 
 ### Default
 
-A basic button without any glass utility classes. It provides the base structure and transparent background.
+A standard glass button for most actions.
 
 <ComponentPreview name="button-default" client:load />
 
-### Glass
-
-The standard glassmorphism effect. It combines backdrop blur, subtle borders, and a translucent background.
-
-<ComponentPreview name="button-glass" client:load />
-
 ### Glass Soft
 
-A softer, highly transparent glass effect. Ideal for secondary actions that shouldn't draw too much attention.
+A softer glass treatment for lower-emphasis actions.
 
 <ComponentPreview name="button-glass-soft" client:load />
 
 ### Glass Strong
 
-A pronounced glass effect with higher opacity. Perfect for primary calls to action (CTAs) resting over complex backgrounds.
+A stronger glass treatment for primary actions.
 
 <ComponentPreview name="button-glass-strong" client:load />
+
+### Transparent
+
+Uses a transparent surface with the standard glass border and shadow for lower-emphasis actions that still need definition.
+
+<ComponentPreview name="button-transparent" client:load />
 
 ### Disabled
 
@@ -85,13 +70,19 @@ Displays the disabled state, which automatically reduces opacity and disables po
 
 ### Combinations
 
-You can mix and match different glass classes to establish a clear visual hierarchy in your interfaces.
+Use variants to establish visual hierarchy before reaching for custom classes.
 
 <ComponentPreview name="button-combinations" client:load />
 
+### Link
+
+Use `asChild` when you need link semantics without losing Button styling.
+
+<ComponentPreview name="button-as-child" client:load />
+
 ### Icon
 
-Use the `btn-icon` class to create a perfectly square button.
+Use `size="icon-sm"`, `size="icon"`, or `size="icon-lg"` for icon-only actions.
 
 <ComponentPreview name="button-icon" client:load />
 
@@ -109,27 +100,38 @@ Displays a loading state using an animated spinner icon.
 
 ## Styling
 
-There are no variant or size props. The styling and dimensions are controlled entirely using classes, keeping the component perfectly composable and aligned with the utility-first approach.
+Button now uses a prop-first API. Reach for `variant` and `size` first. Use `className` as an escape hatch for one-off layout or visual tweaks.
 
 <CodeBlock 
   lang="tsx"
-  code={`/* Visual Styles */
-  <Button className="glass" />
-  <Button className="glass glass-soft" />
-  <Button className="glass glass-strong" />
+  code={`/* Variants */
+  <Button variant="default" />
+  <Button variant="soft" />
+  <Button variant="strong" />
+  <Button variant="transparent" />
+  <Button variant="ghost" />
 
-  /* Sizes (Defaults to md) */
-  <Button className="glass btn-sm" />
-  <Button className="glass btn-lg" />
+  /* Sizes (defaults to md) */
+
+  <Button size="sm" />
+  <Button size="icon-sm" />
+  <Button size="md" />
+  <Button size="icon" />
+  <Button size="lg" />
+  <Button size="icon-lg" />
 
   /* Icon */
-  <Button className="glass btn-icon">
+
+  <Button size="icon">
     <Icon />
   </Button>`} 
 />
 
-## API
+## API Reference
 
-- Default render: native `<button>` for actions and form submits.
-- `as`: render another element such as `<a>` while keeping Button styling.
-- `as="a"`: use for navigation and provide `href`.
+| Prop        | Type                                                          |
+| ----------- | ------------------------------------------------------------- |
+| `variant`   | `"default" \| "soft" \| "strong" \| "transparent" \| "ghost"` |
+| `size`      | `"sm" \| "md" \| "lg" \| "icon-sm" \| "icon" \| "icon-lg"`    |
+| `asChild`   | `boolean`                                                     |
+| `className` | `string`                                                      |

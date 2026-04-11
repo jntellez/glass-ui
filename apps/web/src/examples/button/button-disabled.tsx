@@ -1,11 +1,5 @@
 import { Button } from "@glass-ui-kit/glass"
 
 export default function ButtonDisabled() {
-  return (
-    <div className="flex items-center justify-center p-4">
-      <Button className="glass" disabled>
-        Disabled action
-      </Button>
-    </div>
-  )
+  return <Button disabled>Disabled action</Button>
 }

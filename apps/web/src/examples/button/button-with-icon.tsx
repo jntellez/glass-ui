@@ -3,15 +3,15 @@ import { CirclePlus, Download } from "lucide-react"
 
 export default function ButtonWithIcon() {
   return (
-    <div className="flex flex-wrap items-center gap-6">
-      <Button className="glass">
-        <CirclePlus className="w-4 h-4" />
+    <div className="flex gap-6">
+      <Button>
+        <CirclePlus />
         Add
       </Button>
 
-      <Button className="glass">
+      <Button>
         Download
-        <Download className="w-4 h-4" />
+        <Download />
       </Button>
     </div>
   )

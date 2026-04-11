@@ -3,25 +3,25 @@ import { Layers } from "lucide-react"
 
 export default function ButtonSizes() {
   return (
-    <div className="flex flex-wrap items-end gap-6">
-      <div className="flex items-start gap-2">
-        <Button className="glass btn-sm">Small</Button>
-        <Button className="glass btn-icon w-6 h-6">
-          <Layers className="w-3 h-3" />
+    <div className="flex items-end gap-6">
+      <div className="flex gap-2">
+        <Button size="sm">Small</Button>
+        <Button size="icon-sm" aria-label="Small layers">
+          <Layers />
         </Button>
       </div>
 
-      <div className="flex items-start gap-2">
-        <Button className="glass">Default</Button>
-        <Button className="glass btn-icon w-8 h-8">
-          <Layers className="w-4 h-4" />
+      <div className="flex gap-2">
+        <Button size="md">Default</Button>
+        <Button size="icon" aria-label="Medium layers">
+          <Layers />
         </Button>
       </div>
 
-      <div className="flex items-start gap-2">
-        <Button className="glass btn-lg">Large</Button>
-        <Button className="glass btn-icon w-10 h-10">
-          <Layers className="w-5 h-5" />
+      <div className="flex gap-2">
+        <Button size="lg">Large</Button>
+        <Button size="icon-lg" aria-label="Large layers">
+          <Layers />
         </Button>
       </div>
     </div>
