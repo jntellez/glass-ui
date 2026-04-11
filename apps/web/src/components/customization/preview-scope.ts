@@ -8,6 +8,8 @@ const DERIVED_PREVIEW_VARIABLES = {
   "--color-muted-foreground": "--muted-foreground",
   "--color-accent": "--accent",
   "--color-accent-foreground": "--accent-foreground",
+  "--color-destructive": "--destructive",
+  "--color-destructive-foreground": "--destructive-foreground",
   "--color-background": "--glass-bg",
   "--color-glass-bg": "--glass-bg",
   "--color-border": "--glass-border",

@@ -108,28 +108,31 @@ export function CustomizationApp() {
   return (
     <section
       aria-label="Customization workspace"
-      className="flex min-h-[calc(100vh-8rem)] flex-col gap-4"
+      className="flex h-full min-h-0 flex-row gap-4 overflow-hidden"
     >
-      <div className="lg:sticky lg:top-20 lg:z-10">
-        <CustomizationToolbar
+      <div className="flex h-full min-h-0 w-100 shrink-0 overflow-hidden">
+        <TokenControlsPanel
+          filterQuery={editorState.filterQuery}
           previewMode={editorState.previewMode}
-          onPreviewModeChange={handlePreviewModeChange}
-          onApplyPreset={handleApplyPreset}
-          onReset={handleReset}
-          onCopyExport={handleCopyExport}
+          values={activeValues}
+          onFilterQueryChange={handleFilterQueryChange}
+          onTokenChange={handleTokenChange}
         />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-start">
-        <div className="lg:sticky lg:top-44 lg:max-h-[calc(100vh-12rem)] lg:overflow-auto">
-          <TokenControlsPanel
-            filterQuery={editorState.filterQuery}
+      <div className="flex min-h-0 w-full flex-1 flex-col gap-4 overflow-hidden">
+        <div className="shrink-0">
+          <CustomizationToolbar
             previewMode={editorState.previewMode}
-            values={activeValues}
-            onFilterQueryChange={handleFilterQueryChange}
-            onTokenChange={handleTokenChange}
+            onPreviewModeChange={handlePreviewModeChange}
+            onApplyPreset={handleApplyPreset}
+            onReset={handleReset}
+            onCopyExport={handleCopyExport}
+            activeScene={editorState.activeScene}
+            onSceneChange={handleSceneChange}
           />
         </div>
+
         <PreviewPanel
           previewMode={editorState.previewMode}
           values={activeValues}

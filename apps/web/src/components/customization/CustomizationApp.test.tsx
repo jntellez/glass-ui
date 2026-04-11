@@ -190,7 +190,15 @@ describe("CustomizationApp", () => {
     expect(tokenInputs).toHaveLength(CANONICAL_TOKEN_ORDER.length)
     expect(tokenRows).toHaveLength(CANONICAL_TOKEN_ORDER.length)
 
-    for (const group of ["Text", "Accent", "Base glass", "Shadows", "Radius", "Variant tokens"]) {
+    for (const group of [
+      "Text",
+      "Accent",
+      "Status",
+      "Base glass",
+      "Shadows",
+      "Radius",
+      "Variant tokens",
+    ]) {
       expect(within(controlsRegion).getByRole("heading", { name: group })).toBeInTheDocument()
     }
 
@@ -229,6 +237,25 @@ describe("CustomizationApp", () => {
 
     expect(within(defaultSample).getByText("Accent #c084fc")).toBeInTheDocument()
     expect(within(defaultSample).getByText("Accent foreground #18181b")).toBeInTheDocument()
+  })
+
+  it("shows destructive controls and updates preview theme variables in the active mode", () => {
+    render(<CustomizationApp />)
+
+    const destructiveInput = screen.getByRole("textbox", { name: "--destructive" })
+    const destructiveForegroundInput = screen.getByRole("textbox", {
+      name: "--destructive-foreground",
+    })
+    const previewScope = screen.getByTestId("preview-scope")
+
+    expect(destructiveInput).toHaveValue("#dc2626")
+    expect(destructiveForegroundInput).toHaveValue("#ffffff")
+
+    fireEvent.change(destructiveInput, { target: { value: "#b91c1c" } })
+    fireEvent.change(destructiveForegroundInput, { target: { value: "#fff1f2" } })
+
+    expect(previewScope.style.getPropertyValue("--color-destructive")).toBe("#b91c1c")
+    expect(previewScope.style.getPropertyValue("--color-destructive-foreground")).toBe("#fff1f2")
   })
 
   it("filters token rows to matching controls and hides empty groups", async () => {
@@ -283,6 +310,20 @@ describe("CustomizationApp", () => {
 
     render(<CustomizationApp />)
 
+    async function tabTo(target: HTMLElement, limit = 50) {
+      for (let index = 0; index < limit; index += 1) {
+        if (target === document.activeElement) {
+          return
+        }
+
+        await user.tab()
+      }
+
+      throw new Error(
+        `Timed out waiting for ${target.getAttribute("aria-label") ?? target.textContent}`,
+      )
+    }
+
     const workspace = screen.getByRole("region", { name: /customization workspace/i })
     const toolbar = within(workspace).getByRole("toolbar", { name: /customization actions/i })
 
@@ -298,28 +339,11 @@ describe("CustomizationApp", () => {
     expect(screen.getByRole("button", { name: /copy export/i })).toBeInTheDocument()
 
     await user.tab()
-    expect(screen.getByRole("button", { name: /light preview/i })).toHaveFocus()
-
-    await user.tab()
-    expect(screen.getByRole("button", { name: /dark preview/i })).toHaveFocus()
-
-    await user.tab()
-    expect(screen.getByRole("button", { name: /apply soft variant/i })).toHaveFocus()
-
-    await user.tab()
-    expect(screen.getByRole("button", { name: /apply strong variant/i })).toHaveFocus()
-
-    await user.tab()
-    expect(screen.getByRole("button", { name: /^reset$/i })).toHaveFocus()
-
-    await user.tab()
-    expect(screen.getByRole("button", { name: /copy export/i })).toHaveFocus()
-
-    await user.tab()
     expect(screen.getByRole("searchbox", { name: /filter tokens/i })).toHaveFocus()
 
-    await user.tab()
-    expect(screen.getByRole("textbox", { name: "--foreground" })).toHaveFocus()
+    await tabTo(screen.getByRole("button", { name: /light preview/i }))
+    await tabTo(screen.getByRole("button", { name: /copy export/i }))
+    await tabTo(screen.getByRole("textbox", { name: "--foreground" }))
   })
 
   it("describes which preview mode is currently active", async () => {

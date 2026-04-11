@@ -17,29 +17,44 @@ const packageTokensCss = readFileSync(
 )
 
 describe("customization tokens", () => {
-  it("includes accent tokens in canonical order and grouped editor metadata", () => {
-    expect(CANONICAL_TOKEN_ORDER.slice(0, 4)).toEqual([
+  it("includes semantic color tokens in canonical order and grouped editor metadata", () => {
+    expect(CANONICAL_TOKEN_ORDER.slice(0, 6)).toEqual([
       "--foreground",
       "--muted-foreground",
       "--accent",
       "--accent-foreground",
+      "--destructive",
+      "--destructive-foreground",
     ])
     expect(TOKEN_GROUPS).toContainEqual({
       id: "accent",
       label: "Accent",
       tokens: ["--accent", "--accent-foreground"],
     })
+    expect(TOKEN_GROUPS).toContainEqual({
+      id: "status",
+      label: "Status",
+      tokens: ["--destructive", "--destructive-foreground"],
+    })
   })
 
-  it("keeps light and dark accent defaults aligned with the package token source", () => {
+  it("keeps light and dark semantic color defaults aligned with the package token source", () => {
     expect(DEFAULT_LIGHT_TOKENS["--accent"]).toBe("#d946ef")
     expect(DEFAULT_LIGHT_TOKENS["--accent-foreground"]).toBe("#ffffff")
     expect(DEFAULT_DARK_TOKENS["--accent"]).toBe("#c084fc")
     expect(DEFAULT_DARK_TOKENS["--accent-foreground"]).toBe("#18181b")
+    expect(DEFAULT_LIGHT_TOKENS["--destructive"]).toBe("#dc2626")
+    expect(DEFAULT_LIGHT_TOKENS["--destructive-foreground"]).toBe("#ffffff")
+    expect(DEFAULT_DARK_TOKENS["--destructive"]).toBe("#f87171")
+    expect(DEFAULT_DARK_TOKENS["--destructive-foreground"]).toBe("#18181b")
     expect(packageTokensCss).toContain("--accent: #d946ef;")
     expect(packageTokensCss).toContain("--accent-foreground: #ffffff;")
     expect(packageTokensCss).toContain("--accent: #c084fc;")
     expect(packageTokensCss).toContain("--accent-foreground: #18181b;")
+    expect(packageTokensCss).toContain("--destructive: #dc2626;")
+    expect(packageTokensCss).toContain("--destructive-foreground: #ffffff;")
+    expect(packageTokensCss).toContain("--destructive: #f87171;")
+    expect(packageTokensCss).toContain("--destructive-foreground: #18181b;")
   })
 
   it("keeps radius defaults in shared token data instead of duplicating them per theme", () => {

@@ -1,21 +1,18 @@
 ---
 import { CustomizationApp } from "@/components/customization/CustomizationApp"
-import {
-  CUSTOMIZATION_PAGE_DESCRIPTION,
-  CUSTOMIZATION_PAGE_TITLE,
-  getCustomizationPageA11yProps,
-  getCustomizationPageSectionClassName,
-} from "@/components/customization/customization-page"
 import Layout from "@/layouts/Layout.astro"
-
-const pageA11y = getCustomizationPageA11yProps()
 ---
 
-<Layout title={CUSTOMIZATION_PAGE_TITLE} description={CUSTOMIZATION_PAGE_DESCRIPTION}>
+<Layout
+  title="Customization editor - Glass UI"
+  description="Tune the canonical glass tokens, preview them locally, and export deterministic CSS."
+  bodyClass="h-screen overflow-hidden"
+  class="min-h-0 overflow-hidden px-2 mb-2"
+>
   <section
-    aria-labelledby={pageA11y.labelledBy}
-    aria-describedby={pageA11y.describedBy}
-    class={getCustomizationPageSectionClassName()}
+    aria-labelledby="customization-title"
+    aria-describedby="customization-description"
+    class="flex min-h-0 w-full flex-1 flex-col pt-6 overflow-hidden"
   >
     <CustomizationApp client:load />
   </section>
