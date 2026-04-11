@@ -11,6 +11,8 @@ const expectedDefaultCss = `:root {
   --muted-foreground: #3f3f46;
   --accent: #d946ef;
   --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
   --glass-bg: rgba(255, 255, 255, 0.35);
   --glass-border: rgba(255, 255, 255, 0.6);
   --glass-shadow: var(--glass-shadow-sm);
@@ -35,6 +37,8 @@ const expectedDefaultCss = `:root {
   --muted-foreground: #d4d4d8;
   --accent: #c084fc;
   --accent-foreground: #18181b;
+  --destructive: #f87171;
+  --destructive-foreground: #18181b;
   --glass-bg: rgba(255, 255, 255, 0.08);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-shadow: var(--glass-shadow-sm);
