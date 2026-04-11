@@ -10,6 +10,7 @@ const expectedNames = [
   "field",
   "input",
   "label",
+  "select",
   "textarea",
 ] as const
 
