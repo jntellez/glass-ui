@@ -62,17 +62,29 @@ type ButtonProps = React.ComponentPropsWithoutRef<"button"> &
   }
 
 const Button = React.forwardRef<HTMLElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, disabled, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+  ({ className, variant, size, asChild = false, disabled, onClick, tabIndex, ...props }, ref) => {
+    const Comp = (asChild ? Slot : "button") as React.ElementType
+
+    const handleClick: React.MouseEventHandler<HTMLElement> = (event) => {
+      if (disabled && asChild) {
+        event.preventDefault()
+        event.stopPropagation()
+        return
+      }
+
+      onClick?.(event as never)
+    }
 
     return (
       <Comp
+        {...props}
         className={cn(buttonVariants({ variant, size }), className)}
-        ref={ref as React.Ref<HTMLButtonElement>}
+        ref={ref as React.Ref<HTMLElement>}
         disabled={asChild ? undefined : disabled}
         aria-disabled={asChild && disabled ? true : undefined}
         data-disabled={disabled ? "" : undefined}
-        {...props}
+        tabIndex={asChild && disabled ? -1 : tabIndex}
+        onClick={handleClick}
       />
     )
   },

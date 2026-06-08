@@ -103,7 +103,7 @@ describe("Button", () => {
       "bg-transparent",
     )
     expect(screen.getByRole("button", { name: "Ghost" })).not.toHaveClass("glass")
-    expect(screen.getByRole("button", { name: "Outline" })).toHaveClass(
+    expect(screen.getByRole("button", { name: "Transparent" })).toHaveClass(
       "h-8",
       "px-2.5",
       "text-sm",
@@ -111,7 +111,7 @@ describe("Button", () => {
       "gap-2",
       "glass-outline",
     )
-    expect(screen.getByRole("button", { name: "Outline" })).not.toHaveClass("glass")
+    expect(screen.getByRole("button", { name: "Transparent" })).not.toHaveClass("glass")
   })
 
   it("keeps className as an escape hatch", () => {
@@ -210,5 +210,26 @@ describe("Button", () => {
 
     expect(screen.getByRole("link", { name: "Docs" })).toHaveAttribute("aria-disabled", "true")
     expect(screen.getByRole("link", { name: "Docs" })).toHaveAttribute("data-disabled")
+  })
+
+  it("prevents interaction for disabled slotted anchors", async () => {
+    const user = userEvent.setup()
+    const onClick = vi.fn()
+
+    render(
+      <Button asChild disabled onClick={onClick}>
+        <a href="/docs">Docs</a>
+      </Button>,
+    )
+
+    const link = screen.getByRole("link", { name: "Docs" })
+
+    await user.click(link)
+
+    expect(onClick).not.toHaveBeenCalled()
+    expect(link).toHaveAttribute("href", "/docs")
+    expect(link).toHaveAttribute("aria-disabled", "true")
+    expect(link).toHaveAttribute("data-disabled")
+    expect(link).toHaveAttribute("tabindex", "-1")
   })
 })
