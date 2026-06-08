@@ -1,17 +1,20 @@
 import { createRef } from "react"
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
+import { Checkbox } from "../checkbox"
+import { Input } from "../input"
+import { Label } from "../label"
 import { Field, FieldDescription, FieldError } from "./index"
 
 describe("Field", () => {
-  it("renders a structural wrapper with spacing", () => {
+  it("renders a lightweight wrapper without forcing layout", () => {
     render(
       <Field data-testid="field">
         <span>Content</span>
       </Field>,
     )
 
-    expect(screen.getByTestId("field")).toHaveClass("space-y-1.5")
+    expect(screen.getByTestId("field").className).toBe("")
   })
 
   it("forwards refs and merges class names", () => {
@@ -25,6 +28,52 @@ describe("Field", () => {
 
     expect(ref.current).toBe(screen.getByTestId("field"))
     expect(ref.current).toHaveClass("max-w-sm")
+  })
+
+  it("links labels, descriptions, and errors to the field control automatically", () => {
+    render(
+      <Field invalid>
+        <Label>Email</Label>
+        <Input type="email" />
+        <FieldDescription>We only use this for updates.</FieldDescription>
+        <FieldError>Please enter a valid email address.</FieldError>
+      </Field>,
+    )
+
+    const input = screen.getByRole("textbox", { name: "Email" })
+    const description = screen.getByText("We only use this for updates.")
+    const error = screen.getByRole("alert")
+
+    expect(input).toHaveAttribute("id")
+    expect(screen.getByText("Email")).toHaveAttribute("for", input.getAttribute("id"))
+    expect(description).toHaveAttribute("id")
+    expect(error).toHaveAttribute("id")
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      `${description.getAttribute("id")} ${error.getAttribute("id")}`,
+    )
+    expect(input).toHaveAttribute("aria-invalid", "true")
+  })
+
+  it("supports checkbox rows without requiring explicit control ids", () => {
+    render(
+      <Field className="flex items-start gap-3">
+        <Checkbox />
+        <div className="space-y-1.5">
+          <Label>Enable notifications</Label>
+          <FieldDescription>We only send important updates.</FieldDescription>
+        </div>
+      </Field>,
+    )
+
+    const checkbox = screen.getByRole("checkbox", { name: "Enable notifications" })
+
+    expect(checkbox).toHaveAttribute("id")
+    expect(screen.getByText("Enable notifications")).toHaveAttribute(
+      "for",
+      checkbox.getAttribute("id"),
+    )
+    expect(checkbox).toHaveAttribute("aria-describedby")
   })
 })
 
