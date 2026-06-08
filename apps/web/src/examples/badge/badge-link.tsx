@@ -5,9 +5,9 @@ export default function BadgeLink() {
   return (
     <div className="flex items-center justify-center gap-4">
       <a href="#link">
-        <Badge className="glass">
+        <Badge>
           Open link
-          <ArrowUpRight className="ml-1 h-3 w-3" />
+          <ArrowUpRight />
         </Badge>
       </a>
     </div>

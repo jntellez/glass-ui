@@ -1,17 +1,11 @@
-import { Textarea } from "@glass-ui-kit/glass"
+import { Field, FieldDescription, Label, Textarea } from "@glass-ui-kit/glass"
 
 export default function TextareaComposition() {
   return (
-    <div className="w-full max-w-md mx-auto space-y-2">
-      <label htmlFor="bio" className="text-sm font-medium leading-none">
-        Bio
-      </label>
-
-      <Textarea id="bio" placeholder="A short description about you" rows={6} />
-
-      <p className="text-xs text-muted-foreground">
-        Keep it brief. You can always edit this later.
-      </p>
-    </div>
+    <Field className="w-full max-w-md mx-auto space-y-1.5">
+      <Label>Bio</Label>
+      <Textarea placeholder="A short description about you" rows={6} variant="soft" />
+      <FieldDescription>Keep it brief. You can always edit this later.</FieldDescription>
+    </Field>
   )
 }

@@ -1,4 +1,4 @@
-import { Input, Button, Card } from "@glass-ui-kit/glass"
+import { Button, Card, Field, FieldDescription, Input, Label } from "@glass-ui-kit/glass"
 
 export default function InputComposition() {
   return (
@@ -10,10 +10,16 @@ export default function InputComposition() {
         </p>
       </div>
 
-      <div className="flex gap-3">
-        <Input id="newsletter-email" type="email" variant="soft" placeholder="you@company.com" />
-        <Button className="whitespace-nowrap">Subscribe Now</Button>
-      </div>
+      <Field className="space-y-1.5">
+        <Label>Email address</Label>
+        <div className="flex gap-3">
+          <Input type="email" variant="soft" placeholder="you@company.com" />
+          <Button className="whitespace-nowrap">Subscribe Now</Button>
+        </div>
+        <FieldDescription>
+          Product updates, release notes, and new component drops.
+        </FieldDescription>
+      </Field>
     </Card>
   )
 }

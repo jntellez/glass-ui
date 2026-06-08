@@ -1,7 +1,7 @@
 ---
 import { flattenedDocs, installationDocs, darkModeDocs, sidebarNav } from "@/config/docs"
-import { Button } from "@glass-ui-kit/glass"
-import { Icon } from "astro-icon/components"
+import Button from "@/components/ui/Button.astro"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "")
 
@@ -50,9 +50,11 @@ const next =
 <div class="flex flex-row items-center justify-between mt-14 mb-8">
   {
     prev ? (
-      <Button as="a" href={prev.href} className="glass glass-soft">
-        <Icon name="lucide:chevron-left" class="w-4 h-4" />
-        {prev.title}
+      <Button asChild variant="soft">
+        <a href={prev.href}>
+          <ChevronLeft className="w-4 h-4" />
+          {prev.title}
+        </a>
       </Button>
     ) : (
       <div />
@@ -61,9 +63,11 @@ const next =
 
   {
     next && (
-      <Button as="a" href={next.href} className="glass glass-soft">
-        {next.title}
-        <Icon name="lucide:chevron-right" class="w-4 h-4" />
+      <Button asChild variant="soft">
+        <a href={next.href}>
+          {next.title}
+          <ChevronRight className="w-4 h-4" />
+        </a>
       </Button>
     )
   }

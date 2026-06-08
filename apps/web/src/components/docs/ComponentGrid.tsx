@@ -10,11 +10,11 @@ export default function ComponentGrid() {
       {components.map((item) => (
         <Button
           key={item.href}
-          as="a"
-          href={item.href}
-          className="w-full justify-start py-6 px-4 text-md font-normal text-foreground"
+          asChild
+          variant="transparent"
+          className="justify-start text-foreground py-6 px-4"
         >
-          {item.title}
+          <a href={item.href}>{item.title}</a>
         </Button>
       ))}
     </div>

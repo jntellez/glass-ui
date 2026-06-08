@@ -11,7 +11,9 @@ export default function TextareaDemo() {
         <Textarea
           id="message"
           placeholder="Tell us what you are building..."
-          className="glass glass-soft min-h-32"
+          variant="soft"
+          size="lg"
+          rows={6}
         />
       </div>
 

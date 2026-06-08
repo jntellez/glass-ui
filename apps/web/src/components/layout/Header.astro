@@ -1,8 +1,8 @@
 ---
 import ThemeToggle from "@/components/theme/ThemeToggle.tsx"
 import { getNavAriaCurrent } from "@/components/layout/nav"
-import { Button } from "@glass-ui-kit/glass"
-import { Icon } from "astro-icon/components"
+import Button from "@/components/ui/Button.astro"
+import { SiGithub } from "@icons-pack/react-simple-icons"
 
 const pathname = Astro.url.pathname
 ---
@@ -11,51 +11,41 @@ const pathname = Astro.url.pathname
   <div class="pl-1 pr-4 md:px-8 h-15 flex items-center">
     <div class="flex items-center">
       <Button
-        as="a"
-        href="/"
-        className="h-8 text-base font-bold border-none shadow-none hover:shadow-none px-3"
+        asChild
+        variant="ghost"
+        className="h-8 text-base font-bold px-3 hover:border-transparent hover:glass"
       >
-        Glass UI
+        <a href="/">Glass UI</a>
       </Button>
 
       <nav class="hidden sm:flex items-center font-medium text-foreground">
-        <Button as="a" href="/docs" className="border-none shadow-none hover:shadow-none px-3"
-          >Docs</Button
-        >
-        <Button
-          as="a"
-          href="/docs/components"
-          className="border-none shadow-none hover:shadow-none px-3"
-        >
-          Components
+        <Button asChild variant="ghost" className="hover:border-transparent hover:glass px-3">
+          <a href="/docs">Docs</a>
         </Button>
-        <Button
-          as="a"
-          href="/customization"
-          className="border-none shadow-none hover:shadow-none px-3"
-          aria-current={getNavAriaCurrent(pathname, "/customization")}
-        >
-          Customization
+        <Button asChild variant="ghost" className="hover:border-transparent hover:glass px-3">
+          <a href="/docs/components">Components</a>
+        </Button>
+        <Button asChild variant="ghost" className="hover:border-transparent hover:glass px-3">
+          <a href="/customization" aria-current={getNavAriaCurrent(pathname, "/customization")}
+            >Customization</a
+          >
         </Button>
       </nav>
     </div>
 
     <div class="flex flex-1 items-center justify-end gap-3">
       <Button
+        variant="transparent"
         className="hidden md:inline-flex items-center font-normal hover:scale-none pr-20 md:pr-26"
       >
         <span class="lg:hidden">Search...</span>
         <span class="hidden lg:inline">Search documentation...</span>
       </Button>
 
-      <Button
-        as="a"
-        href="https://github.com/jntellez/glass-ui"
-        target="_blank"
-        rel="noreferrer"
-        className="btn-icon"
-      >
-        <Icon name="simple-icons:github" class="w-4 h-4" />
+      <Button asChild variant="transparent" size="icon">
+        <a href="https://github.com/jntellez/glass-ui" target="_blank" rel="noreferrer">
+          <SiGithub />
+        </a>
       </Button>
 
       <ThemeToggle client:load />

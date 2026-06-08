@@ -24,7 +24,7 @@ export default function CopyButton({ code }: CopyButtonProps) {
   return (
     <Button
       onClick={copyToClipboard}
-      className="glass absolute top-1.5 right-1.5 z-40 h-7 w-7 p-1 hover:glass-strong"
+      className="absolute top-1.5 right-1.5 z-40 h-7 w-7 p-1"
       aria-label="Copy to clipboard"
     >
       {hasCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}

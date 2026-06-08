@@ -55,20 +55,14 @@ export default function ComponentPreview({ name, height = 300 }: ComponentPrevie
         <div className="flex gap-2">
           <Button
             onClick={() => setView("preview")}
-            className={`transition-all duration-200 ${
-              view === "preview"
-                ? "glass glass-strong"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
+            variant={view === "preview" ? "strong" : "transparent"}
           >
             Preview
           </Button>
 
           <Button
             onClick={() => setView("code")}
-            className={`transition-all duration-200 ${
-              view === "code" ? "glass glass-strong" : "text-muted-foreground hover:text-foreground"
-            }`}
+            variant={view === "code" ? "strong" : "transparent"}
           >
             Code
           </Button>

@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro"
-import { Badge, Button } from "@glass-ui-kit/glass"
+import { Badge } from "@glass-ui-kit/glass"
+import Button from "@/components/ui/Button.astro"
 import ExternalLink from "@/components/docs/ExternalLink"
 ---
 
@@ -34,11 +35,11 @@ import ExternalLink from "@/components/docs/ExternalLink"
       </p>
 
       <div class="mt-8 m-1 flex items-center justify-center gap-4 w-full sm:w-auto">
-        <Button as="a" href="/docs/installation" className="glass glass-strong">
-          Get started
+        <Button asChild className="glass glass-strong">
+          <a href="/docs/installation">Get started</a>
         </Button>
-        <Button as="a" href="/docs/components" className="glass glass-soft">
-          View components
+        <Button asChild className="glass glass-soft">
+          <a href="/docs/components">View components</a>
         </Button>
       </div>
     </section>

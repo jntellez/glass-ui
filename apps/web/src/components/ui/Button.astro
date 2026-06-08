@@ -1,0 +1,146 @@
+---
+import { cn } from "@/lib/utils"
+
+interface Props {
+  asChild?: boolean
+  className?: string
+  disabled?: boolean
+  variant?: "default" | "soft" | "strong" | "transparent" | "ghost"
+  size?: "sm" | "md" | "lg" | "icon-sm" | "icon" | "icon-lg"
+}
+
+const { asChild = false, className, disabled, variant, size, ...rest } = Astro.props
+
+const baseClasses = [
+  "inline-flex items-center justify-center whitespace-nowrap rounded-glass-sm font-medium",
+  "transition-all duration-200 transform-gpu will-change-transform antialiased",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 dark:focus-visible:ring-white/50 focus-visible:ring-offset-2",
+  "disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+  "hover:scale-98 active:scale-95 active:duration-100",
+]
+
+const variantClasses = {
+  default: [
+    "glass",
+    "hover:bg-glass-bg/80 hover:border-glass-border/80 hover:shadow-glass-sm",
+    "active:bg-glass-bg/60 active:border-glass-border/60",
+  ],
+  soft: [
+    "glass glass-soft",
+    "hover:bg-glass-bg/80 hover:border-glass-border/80 hover:shadow-glass-sm",
+    "active:bg-glass-bg/60 active:border-glass-border/60",
+  ],
+  strong: [
+    "glass glass-strong",
+    "hover:bg-glass-bg/80 hover:border-glass-border/80 hover:shadow-glass-sm",
+    "active:bg-glass-bg/60 active:border-glass-border/60",
+  ],
+  transparent: [
+    "glass-outline",
+    "hover:bg-glass-bg-soft/60 hover:border-glass-border-soft/80",
+    "active:bg-glass-bg-soft/40 active:border-glass-border-soft/60",
+  ],
+  ghost: [
+    "border border-transparent bg-transparent shadow-none",
+    "hover:bg-glass-bg-soft/60 hover:border-glass-border-soft/80",
+    "active:bg-glass-bg-soft/40 active:border-glass-border-soft/60",
+  ],
+} as const
+
+const sizeClasses = {
+  sm: "h-6 gap-1.5 px-2 text-xs leading-4 [&_svg]:size-3",
+  md: "h-8 gap-2 px-2.5 text-sm leading-5 [&_svg]:size-4",
+  lg: "h-10 gap-2.5 px-3.5 text-base leading-6 [&_svg]:size-5",
+  "icon-sm": "size-6 shrink-0 p-0 [&_svg]:size-3",
+  icon: "size-8 shrink-0 p-0 [&_svg]:size-4",
+  "icon-lg": "size-10 shrink-0 p-0 [&_svg]:size-5",
+} as const
+
+const resolvedVariant = variant ?? "default"
+const resolvedSize = size ?? "md"
+
+const classes = cn(
+  baseClasses,
+  variantClasses[resolvedVariant],
+  sizeClasses[resolvedSize],
+  className,
+)
+
+function escapeAttribute(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+}
+
+function stringifyAttributes(attributes: Record<string, unknown>) {
+  return Object.entries(attributes)
+    .flatMap(([key, value]) => {
+      if (value === undefined || value === null || value === false) {
+        return []
+      }
+
+      if (value === true) {
+        return [key]
+      }
+
+      return [`${key}="${escapeAttribute(String(value))}"`]
+    })
+    .join(" ")
+}
+
+function injectAttributesIntoFirstElement(html: string, attributes: Record<string, unknown>) {
+  const normalizedHtml = html.trim()
+  const match = normalizedHtml.match(/^<([a-zA-Z0-9:-]+)([^>]*)>/)
+
+  if (!match) {
+    return normalizedHtml
+  }
+
+  const [openingTag, tagName, rawAttributes] = match
+  const classMatch = rawAttributes.match(/\sclass=("([^"]*)"|'([^']*)')/)
+  const existingClass = classMatch?.[2] ?? classMatch?.[3] ?? ""
+  const mergedClass = cn(
+    existingClass,
+    typeof attributes.class === "string" ? attributes.class : undefined,
+  )
+
+  let nextAttributes = rawAttributes
+
+  if (classMatch) {
+    nextAttributes = nextAttributes.replace(classMatch[0], "")
+  }
+
+  const extraAttributes = stringifyAttributes({
+    ...attributes,
+    class: mergedClass || undefined,
+  })
+
+  return normalizedHtml.replace(
+    openingTag,
+    `<${tagName}${nextAttributes}${extraAttributes ? ` ${extraAttributes}` : ""}>`,
+  )
+}
+
+const childHtml = asChild ? await Astro.slots.render("default") : ""
+const enhancedChildHtml = asChild
+  ? injectAttributesIntoFirstElement(childHtml, {
+      ...rest,
+      class: classes,
+      "aria-disabled": disabled ? "true" : undefined,
+      "data-disabled": disabled ? "" : undefined,
+      tabindex: disabled ? -1 : rest.tabindex,
+    })
+  : null
+---
+
+{
+  asChild ? (
+    <Fragment set:html={enhancedChildHtml ?? ""} />
+  ) : (
+    <button class={classes} disabled={disabled} {...rest}>
+      <slot />
+    </button>
+  )
+}

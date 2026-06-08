@@ -1,13 +1,11 @@
 ---
-import { Button } from "@glass-ui-kit/glass"
+import Button from "@/components/ui/Button.astro"
 import { sidebarNav } from "@/config/docs"
 
 const pathname = Astro.url.pathname
 ---
 
-<aside
-  class="fixed top-17 z-30 hidden h-[calc(100vh-70px)] w-full shrink-0 lg:sticky lg:block relative"
->
+<aside class="fixed top-17 z-30 hidden h-[calc(100vh-70px)] w-full shrink-0 lg:sticky lg:block">
   <div
     class="h-full overflow-y-auto px-4 py-6 lg:py-8 pb-20 no-scrollbar"
     style="mask-image: linear-gradient(to bottom, black 0%, black calc(100% - 96px), transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 0%, black calc(100% - 96px), transparent 100%);"
@@ -32,11 +30,11 @@ const pathname = Astro.url.pathname
                 return (
                   <li>
                     <Button
-                      as="a"
-                      href={item.href}
-                      className={`text-foreground h-7.5 border-none shadow-none hover:shadow-none px-3 ${isActive && "glass"}`}
+                      asChild
+                      variant={isActive ? "default" : "ghost"}
+                      className="text-foreground h-7.5 px-3 border-none hover:glass hover:border-none"
                     >
-                      {item.title}
+                      <a href={item.href}>{item.title}</a>
                     </Button>
                   </li>
                 )

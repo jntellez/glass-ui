@@ -85,11 +85,8 @@ export default function CommandTabs({ npm, pnpm, yarn, bun }: CommandTabsProps) 
           <Button
             key={tab}
             onClick={() => handleTabChange(tab)}
-            className={`relative h-7 px-3 font-mono text-sm transition-colors ${
-              activeTab === tab
-                ? "glass glass-strong text-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
+            variant={activeTab === tab ? "strong" : "transparent"}
+            className="relative h-7 px-3 font-mono text-sm"
           >
             {tab}
           </Button>

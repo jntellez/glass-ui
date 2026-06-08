@@ -6,11 +6,10 @@ export default function InputPassword() {
   const [show, setShow] = useState(false)
 
   return (
-    <Field className="relative w-full max-w-sm">
-      <Label htmlFor="password">Password</Label>
+    <Field className="relative w-full max-w-sm space-y-1.5">
+      <Label>Password</Label>
       <div className="relative">
         <Input
-          id="password"
           type={show ? "text" : "password"}
           variant="soft"
           defaultValue="hI9$2@1n"
