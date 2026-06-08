@@ -1,8 +1,9 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* 1. Le decimos a Tailwind que escanee el código de los componentes */
-@source "../../../../packages/glass";
+/* 1. Le decimos a Tailwind que escanee el código de los componentes y la app web */
+@source "../../../../packages/glass/**/*.{ts,tsx}";
+@source "../**/*.{astro,mdx,ts,tsx}";
 
 /* 2. IMPORTAMOS LA ÚNICA FUENTE DE VERDAD (El paquete real) */
 /* Esto trae automáticamente tokens.css y la clase .glass exacta que usa el CLI */
