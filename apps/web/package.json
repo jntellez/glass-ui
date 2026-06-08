@@ -12,7 +12,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@astrojs/mdx": "5.0.0",
+    "@astrojs/mdx": "6.0.2",
     "@glass-ui-kit/glass": "workspace:*",
     "@glass-ui-kit/schema": "workspace:*",
     "@iconify-json/lucide": "^1.2.98",
@@ -27,7 +27,7 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
-    "@astrojs/react": "4.4.2",
+    "@astrojs/react": "5.0.7",
     "@glass-ui-kit/tsconfig": "workspace:*",
     "@tailwindcss/vite": "4.0.0-alpha.32",
     "@testing-library/jest-dom": "^6.9.1",
@@ -35,7 +35,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "astro": "5.16.15",
+    "astro": "6.4.4",
     "jsdom": "^29.0.2",
     "react": "^19.0.0",
     "react-dom": "^19.2.3",

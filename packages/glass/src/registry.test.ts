@@ -30,10 +30,14 @@ describe("registry", () => {
   it("keeps each entry pointed at a single client ui file with shared deps", () => {
     for (const entry of registry) {
       expect(entry.type).toBe("registry:ui")
-      expect(entry.dependencies).toEqual(["clsx", "tailwind-merge"])
+      expect(entry.dependencies).toEqual(
+        entry.name === "button"
+          ? ["@radix-ui/react-slot", "class-variance-authority", "clsx", "tailwind-merge"]
+          : ["clsx", "tailwind-merge"],
+      )
       expect(entry.files).toHaveLength(1)
       expect(entry.files[0]).toMatchObject({
-        path: `ui/${entry.name}/index.tsx`,
+        path: entry.name === "select" ? "ui/native-select/index.tsx" : `ui/${entry.name}/index.tsx`,
         type: "client",
       })
     }
