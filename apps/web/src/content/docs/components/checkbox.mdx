@@ -27,10 +27,10 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
   export default function App() {
     return (
-      <Field className="flex gap-2">
-        <Checkbox id="terms" />
-        <div className="flex flex-col">
-          <Label htmlFor="terms">Accept terms</Label>
+      <Field className="flex items-start gap-3">
+        <Checkbox />
+        <div className="space-y-1.5">
+          <Label>Accept terms</Label>
           <FieldDescription>We'll only email when it matters.</FieldDescription>
         </div>
       </Field>
@@ -48,7 +48,7 @@ A minimal checkbox paired with a native label.
 
 ### Field Pairing
 
-Use `Field`, `Label`, and `FieldDescription` to keep checkbox controls aligned with the rest of your forms.
+Use `Field`, `Label`, and `FieldDescription` to keep checkbox controls aligned with the rest of your forms without manually wiring ids.
 
 <ComponentPreview name="checkbox-field" client:load />
 
@@ -58,13 +58,25 @@ The native `disabled` attribute handles interaction and styling state.
 
 <ComponentPreview name="checkbox-disabled" client:load />
 
-## Styling & API
+## Styling
 
-`Checkbox` is a native `<input type="checkbox">` with glass-aware defaults. It accepts standard checkbox attributes and class composition only.
+`Checkbox` is a native `<input type="checkbox">` with glass-aware defaults. Use `className` as an escape hatch for one-off visual tweaks.
 
 <CodeBlock
   lang="tsx"
-  code={`<Checkbox />
+  code={`/* Native state */
+  <Checkbox />
   <Checkbox defaultChecked />
+  <Checkbox disabled />
+
+  /* Escape hatch */
   <Checkbox className="glass bg-black/20" />`}
 />
+
+## API Reference
+
+| Prop        | Type     |
+| ----------- | -------- |
+| `className` | `string` |
+
+`Checkbox` accepts the standard native `<input type="checkbox">` props, including `checked`, `defaultChecked`, `disabled`, `name`, `value`, and `onChange`.

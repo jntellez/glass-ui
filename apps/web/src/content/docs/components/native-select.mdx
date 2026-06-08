@@ -29,14 +29,14 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
   export default function App() {
     return (
-      <NativeSelect defaultValue="frontend">
+      <NativeSelect defaultValue="frontend" variant="soft">
         <NativeGroup label="Engineering">
           <NativeOption value="frontend">Frontend</NativeOption>
-          <NativeOption value="backend">Backend</NativeOption>
-        </NativeGroup>
+            <NativeOption value="backend">Backend</NativeOption>
+          </NativeGroup>
 
-        <NativeGroup label="Product">
-          <NativeOption value="design">Design</NativeOption>
+          <NativeGroup label="Product">
+            <NativeOption value="design">Design</NativeOption>
           <NativeOption value="pm">Product Manager</NativeOption>
         </NativeGroup>
       </NativeSelect>
@@ -46,6 +46,12 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
 ## Examples
 
+### Canonical Field Composition
+
+Use `Field`, `Label`, and `FieldDescription` when the select belongs to one logical form field.
+
+<ComponentPreview name="native-select-demo" client:load />
+
 ### Groups
 
 Use `NativeGroup` to organize longer native option lists without leaving the native picker behavior.
@@ -54,7 +60,7 @@ Use `NativeGroup` to organize longer native option lists without leaving the nat
 
 ### Error
 
-Use the same error treatment as the rest of the form controls with `aria-invalid` and destructive border/ring classes.
+Glass UI selects **do not use an `error` prop**. Set `aria-invalid="true"` directly, or set `invalid` on the surrounding `Field` when you want the field to propagate it.
 
 <ComponentPreview name="native-select-error" client:load />
 
@@ -64,16 +70,49 @@ The disabled state is fully native and keeps the same opacity behavior as the re
 
 <ComponentPreview name="native-select-disabled" client:load />
 
-## Styling & API
+## Styling
 
-`NativeSelect` accepts the same props as a native `<select>`. `NativeGroup` and `NativeOption` are thin wrappers around `<optgroup>` and `<option>`.
+NativeSelect follows the same prop-first direction as Input and Textarea, but it keeps native select semantics first. Reach for `variant` and `uiSize` before custom classes, then use `className` as an escape hatch. When used inside `Field`, the actual `<select>` receives the generated id and merged descriptions even though it renders inside a wrapper div.
 
 <CodeBlock
   lang="tsx"
-  code={`<NativeSelect defaultValue="frontend">
+  code={`/* Variants */
+
+  <NativeSelect variant="default" />
+  <NativeSelect variant="soft" />
+  <NativeSelect variant="strong" />
+  <NativeSelect variant="transparent" />
+
+  /* UI sizes (defaults to md) */
+
+  <NativeSelect uiSize="sm" />
+  <NativeSelect uiSize="md" />
+  <NativeSelect uiSize="lg" />
+
+  /* Native select behavior stays available */
+
+  <NativeSelect size={6} />
+  <NativeSelect multiple />
+  <NativeSelect aria-invalid="true" />
+
+  /* Escape hatch */
+
+  <NativeSelect className="max-w-xs" />
+
+  <NativeSelect defaultValue="frontend" variant="soft">
     <NativeGroup label="Engineering">
       <NativeOption value="frontend">Frontend</NativeOption>
       <NativeOption value="backend">Backend</NativeOption>
     </NativeGroup>
   </NativeSelect>`}
 />
+
+## API Reference
+
+| Prop        | Type                                               |
+| ----------- | -------------------------------------------------- |
+| `variant`   | `"default" \| "soft" \| "strong" \| "transparent"` |
+| `uiSize`    | `"sm" \| "md" \| "lg"`                             |
+| `className` | `string`                                           |
+
+`NativeSelect` also accepts the full native `<select>` API, including `multiple`, `size`, `name`, `value`, and `onChange`. `NativeGroup` and `NativeOption` stay thin wrappers around `<optgroup>` and `<option>`.

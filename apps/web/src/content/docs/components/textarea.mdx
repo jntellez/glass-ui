@@ -27,7 +27,7 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
   export default function App() {
     return (
-      <Textarea placeholder="Share your thoughts" />
+      <Textarea variant="soft" size="md" placeholder="Share your thoughts" />
     )
   }`}
 />
@@ -36,41 +36,73 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
 ### Default
 
-The base textarea uses the same glass surface treatment as the rest of the system and defaults to a resizable multiline field.
+The standard textarea uses the default variant with the medium size.
 
 <ComponentPreview name="textarea-default" height={240} client:load />
 
-### Glass
+### Sizes
 
-Add the `glass` class when you want the textarea to pick up a stronger glassmorphism surface.
+Use the `size` prop for the standard textarea scale. `md` is the default. Pair it with native `rows` when you want more room for content.
 
-<ComponentPreview name="textarea-glass" height={240} client:load />
+<ComponentPreview name="textarea-sizes" height={360} client:load />
+
+### Variants
+
+Use variants to change the surface treatment before reaching for custom classes.
+
+<ComponentPreview name="textarea-glass" height={420} client:load />
+
+### Error State
+
+Glass UI textareas **do not use an `error` prop**. Set `aria-invalid="true"` to opt into the built-in destructive border and focus ring.
+
+<ComponentPreview name="textarea-error" height={260} client:load />
 
 ### Disabled
 
-The disabled state follows the native `disabled` attribute and applies reduced opacity plus blocked pointer interaction.
+The disabled state is automatically handled by the component using Tailwind's native `disabled` attribute.
 
 <ComponentPreview name="textarea-disabled" height={240} client:load />
 
 ### Form Composition
 
-Compose `Textarea` with native labels and helper text to build accessible form layouts without adding extra props.
+Use `Field` for the canonical label + control + helper text pattern. `Textarea` remains a native textarea outside that wrapper too.
 
 <ComponentPreview name="textarea-composition" height={320} client:load />
 
-## Styling & API
+## Styling
 
-`Textarea` accepts standard HTML textarea attributes and keeps styling fully class-driven. It ships with `resize-y`, a minimum height, and a default glass surface unless you override it with your own classes.
+Textarea now follows the same prop-first API direction as Button and Input. Reach for `variant` and `size` first, then use `className` as an escape hatch for one-off layout or state styling.
 
 <CodeBlock 
   lang="tsx"
-  code={`<Textarea className="glass" />
+  code={`/* Variants */
 
-<Textarea className="glass glass-soft" />
-<Textarea className="glass glass-strong" />
+  <Textarea variant="default" />
+  <Textarea variant="soft" />
+  <Textarea variant="strong" />
+  <Textarea variant="transparent" />
 
-<Textarea rows={6} placeholder="Notes" />
-<Textarea disabled />
+  /* Sizes (defaults to md) */
 
-<Textarea className="border-red-500 focus-visible:ring-red-500" />`} 
+  <Textarea size="sm" />
+  <Textarea size="md" />
+  <Textarea size="lg" />
+
+  /* Native sizing and invalid state */
+
+  <Textarea rows={6} placeholder="Notes" />
+  <Textarea aria-invalid="true" />
+
+  /* Escape hatch */
+
+  <Textarea className="rounded-3xl" />`} 
 />
+
+## API Reference
+
+| Prop        | Type                                               |
+| ----------- | -------------------------------------------------- |
+| `variant`   | `"default" \| "soft" \| "strong" \| "transparent"` |
+| `size`      | `"sm" \| "md" \| "lg"`                             |
+| `className` | `string`                                           |

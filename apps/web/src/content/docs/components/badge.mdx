@@ -27,8 +27,8 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
   export default function App() {
     return (
-      <Badge className="glass">
-        Glass Badge
+      <Badge variant="soft">
+        Beta
       </Badge>
     )
   }`}
@@ -38,7 +38,7 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
 ### Weights
 
-Demonstrates the different intensities of the glassmorphism effect. You can use the `glass`, `glass-soft`, or `glass-strong` classes to adjust the background opacity and blur to perfectly match your background.
+Demonstrates the built-in surface variants. Reach for `variant` before falling back to custom classes.
 
 <ComponentPreview name="badge-weights" client:load />
 
@@ -62,19 +62,35 @@ The badge can be rendered as a clickable element.
 
 ### Custom Colors
 
-You can easily override or add colors using standard Tailwind CSS utility classes.
+Use `className` as an escape hatch when you need custom semantic colors on top of the default badge surface.
 
 <ComponentPreview name="badge-custom-colors" client:load />
 
 ## Styling
 
-There are no variant props. The styling is controlled entirely using classes, as the system is based on glassmorphism.
+Badge now follows the same small prop-first direction as the other migrated form and action primitives. Start with `variant` and `size`, then use `className` for one-off overrides.
 
 <CodeBlock 
   lang="tsx"
-  code={`<Badge className="glass" />
+  code={`/* Variants */
+  <Badge variant="default" />
+  <Badge variant="soft" />
+  <Badge variant="strong" />
+  <Badge variant="transparent" />
 
-<Badge className="glass glass-soft" />
+  /* Sizes (defaults to md) */
+  <Badge size="sm" />
+  <Badge size="md" />
+  <Badge size="lg" />
 
-<Badge className="glass glass-strong" />`} 
+  /* Escape hatch */
+  <Badge className="bg-emerald-50/50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300" />`} 
 />
+
+## API Reference
+
+| Prop        | Type                                               |
+| ----------- | -------------------------------------------------- |
+| `variant`   | `"default" \| "soft" \| "strong" \| "transparent"` |
+| `size`      | `"sm" \| "md" \| "lg"`                       |
+| `className` | `string`                                           |

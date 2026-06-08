@@ -40,17 +40,34 @@ Labels are especially useful for making checkbox rows easier to scan and click w
 
 ### Field Pairing
 
-Use `htmlFor` with a matching form control `id` to keep label and input behavior fully native.
+Inside `Field`, `Label` can inherit the control id automatically. Use `htmlFor` when you need to target a control outside the current field.
 
 <ComponentPreview name="label-field" client:load />
 
-## Styling & API
+## Styling
 
-`Label` accepts standard label attributes and class composition.
+`Label` accepts standard label attributes and class composition. Use `className` as an escape hatch for one-off visual tweaks. When `htmlFor` is omitted inside `Field`, it binds to the registered field control automatically.
 
 <CodeBlock
   lang="tsx"
-  code={`<Label htmlFor="name">
-    Name
-  </Label>`}
+  code={`/* Native binding */
+  <Label htmlFor="name">Name</Label>
+
+  /* Inside Field (htmlFor optional) */
+  <Field className="space-y-1.5">
+    <Label>Email</Label>
+    <Input type="email" />
+  </Field>
+
+  /* Escape hatch */
+  <Label className="text-sm font-medium">Custom label</Label>`}
 />
+
+## API Reference
+
+| Prop        | Type     |
+| ----------- | -------- |
+| `htmlFor`   | `string` |
+| `className` | `string` |
+
+`Label` also accepts the standard native `<label>` props. Inside `Field`, `htmlFor` becomes optional because the control id can be inferred automatically.

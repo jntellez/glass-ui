@@ -27,7 +27,7 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
   export default function App() {
     return (
-      <Input type="email" placeholder="Email address" />
+      <Input type="email" variant="soft" size="md" placeholder="Email address" />
     )
   }`}
 />
@@ -60,7 +60,7 @@ Glass UI inputs **do not use an `error` prop**. Set `aria-invalid="true"` to opt
 
 ### Form Composition
 
-Since the input stays native-first, it composes cleanly with labels, descriptions, and buttons using standard layout utilities.
+Use `Field` for the canonical one-field pattern. `Input` still works outside `Field`, but inside it can inherit ids, descriptions, and invalid state.
 
 <ComponentPreview name="input-composition" client:load />
 
@@ -78,7 +78,7 @@ The disabled state is automatically handled by the component using Tailwind's na
 
 ## Styling
 
-Input now follows the same prop-first API direction as Button. Reach for `variant` and `size` first, then use `className` as an escape hatch for one-off layout or state styling.
+Input now follows the same prop-first API direction as Button. Reach for `variant` and `size` first, then use `className` as an escape hatch for one-off layout or state styling. When composed inside `Field`, explicit `id`, `aria-describedby`, and `aria-invalid` props still win.
 
 <CodeBlock 
   lang="tsx"

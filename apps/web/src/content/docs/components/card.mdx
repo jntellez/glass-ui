@@ -27,10 +27,10 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
   export default function App() {
     return (
-      <Card>
+      <Card variant="soft" padding="sm">
         <h3 className="text-lg font-medium">Card Title</h3>
         <p className="text-sm text-muted-foreground mt-2">
-          This is the card content. The card automatically applies glassmorphism, padding, and rounded corners.
+          This card uses the soft surface and compact padding.
         </p>
       </Card>
     )
@@ -41,37 +41,49 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
 ### Default
 
-The standard card automatically applies the base `.glass` class, providing a balanced backdrop blur and subtle border.
+The default card uses `variant="default"` and `padding="md"`, giving you the standard glass surface with comfortable spacing.
 
 <ComponentPreview name="card-default" client:load />
 
 ### Glass Soft
 
-By adding the `glass-soft` class, the card becomes more transparent. This is ideal for secondary content or when nesting cards within other glassmorphism containers.
+Use `variant="soft"` when the card should sit a little quieter in the hierarchy.
 
 <ComponentPreview name="card-soft" client:load />
 
 ### Glass Strong
 
-The `glass-strong` class increases the background opacity and blur. Use this when the card needs to stand out as a primary focal point over busy backgrounds.
+Use `variant="strong"` when the card should feel more prominent over busy backgrounds.
 
 <ComponentPreview name="card-strong" client:load />
 
 ### Interactive
 
-Since the styling is controlled via utility classes, you can easily compose Tailwind CSS hover and transition utilities to make the card interactive.
+Use `asChild` when the whole card should become a semantic link or button while keeping the card styling.
 
 <ComponentPreview name="card-interactive" client:load />
 
 ## Composition
 
-The `Card` component is designed to be completely agnostic. It does not define a strict internal layout nor does it rely on subcomponents.
-
-You have full control to build the interface using Tailwind CSS utilities, ensuring maximum flexibility.
+`Card` stays layout-agnostic. It gives you a glass surface, spacing, and rounded corners, then gets out of the way.
 
 <CodeBlock 
   lang="tsx"
-  code={`<Card className="glass p-6 space-y-4">
+  code={`<Card asChild padding="lg" className="space-y-4 hover:shadow-glass-md">
+  <a href="/projects/glass-ui">
+    <div>
+      <h3 className="text-lg font-medium">Title</h3>
+      <p className="text-sm text-muted-foreground">
+        Description
+      </p>
+    </div>
+
+    <Button variant="soft">Action</Button>
+
+  </a>
+</Card>
+
+<Card className="space-y-4">
   <div>
     <h3 className="text-lg font-medium">Title</h3>
     <p className="text-sm text-muted-foreground">
@@ -85,13 +97,37 @@ You have full control to build the interface using Tailwind CSS utilities, ensur
 
 ## Styling
 
-The `Card` component acts as a flexible wrapper. It inherently includes the `glass` class. To change its visual intensity, simply append your preferred preset class.
+`Card` exposes a small prop-first API and still keeps `className` as the escape hatch for layout and one-off styling.
 
-<CodeBlock 
+<CodeBlock
   lang="tsx"
-  code={`<Card> ... </Card>
+  code={`/* Variants */
+  <Card variant="default" />
+  <Card variant="soft" />
+  <Card variant="strong" />
 
-<Card className="glass-soft"> ... </Card>
+  /* Padding (defaults to md) */
+  <Card padding="none" />
+  <Card padding="sm" />
+  <Card padding="md" />
+  <Card padding="lg" />
 
-<Card className="glass-strong"> ... </Card>`} 
+  /* asChild */
+  <Card asChild>
+    <a href="/docs">Link</a>
+  </Card>
+
+  /* Escape hatch */
+  <Card className="max-w-md gap-4" />`}
 />
+
+## API Reference
+
+| Prop        | Type                                   |
+| ----------- | -------------------------------------- |
+| `variant`   | `"default" \| "soft" \| "strong"` |
+| `padding`   | `"none" \| "sm" \| "md" \| "lg"` |
+| `asChild`   | `boolean`                              |
+| `className` | `string`                               |
+
+`Card` also accepts standard `div` props like `id`, `role`, `aria-*`, and event handlers.
