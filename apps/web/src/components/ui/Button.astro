@@ -7,9 +7,10 @@ interface Props {
   disabled?: boolean
   variant?: "default" | "soft" | "strong" | "transparent" | "ghost"
   size?: "sm" | "md" | "lg" | "icon-sm" | "icon" | "icon-lg"
+  tabindex?: number | string
 }
 
-const { asChild = false, className, disabled, variant, size, ...rest } = Astro.props
+const { asChild = false, className, disabled, variant, size, tabindex, ...rest } = Astro.props
 
 const baseClasses = [
   "inline-flex items-center justify-center whitespace-nowrap rounded-glass-sm font-medium",
@@ -36,7 +37,7 @@ const variantClasses = {
     "active:bg-glass-bg/60 active:border-glass-border/60",
   ],
   transparent: [
-    "glass-outline",
+    "bg-transparent border border-glass-border shadow-glass-sm",
     "hover:bg-glass-bg-soft/60 hover:border-glass-border-soft/80",
     "active:bg-glass-bg-soft/40 active:border-glass-border-soft/60",
   ],
@@ -130,7 +131,7 @@ const enhancedChildHtml = asChild
       class: classes,
       "aria-disabled": disabled ? "true" : undefined,
       "data-disabled": disabled ? "" : undefined,
-      tabindex: disabled ? -1 : rest.tabindex,
+      tabindex: disabled ? -1 : tabindex,
     })
   : null
 ---

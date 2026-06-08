@@ -21,7 +21,7 @@ describe("Button examples and published sources", () => {
   it("prefers prop-first variants and `asChild` in docs and examples", () => {
     expect(componentGridSource).toContain("asChild")
     expect(componentGridSource).toContain("href={item.href}")
-    expect(componentGridSource).toContain('variant="ghost"')
+    expect(componentGridSource).toContain('variant="transparent"')
 
     expect(buttonDocsSource).toContain('<Button variant="strong">Click me</Button>')
     expect(buttonDocsSource).toContain('<Button variant="transparent" />')

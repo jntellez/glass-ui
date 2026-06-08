@@ -109,7 +109,10 @@ describe("Button", () => {
       "text-sm",
       "leading-5",
       "gap-2",
-      "glass-outline",
+      "bg-transparent",
+      "border",
+      "border-glass-border",
+      "shadow-glass-sm",
     )
     expect(screen.getByRole("button", { name: "Transparent" })).not.toHaveClass("glass")
   })

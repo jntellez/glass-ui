@@ -20,11 +20,3 @@
   --glass-border: var(--glass-border-soft);
   --glass-blur: var(--glass-blur-soft);
 }
-
-@utility glass-outline {
-  background-color: transparent;
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--glass-border);
-  box-shadow: var(--glass-shadow-sm);
-}

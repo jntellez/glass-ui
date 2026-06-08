@@ -18,7 +18,7 @@ const inputVariants = cva(
         default: "glass",
         soft: "glass glass-soft",
         strong: "glass glass-strong",
-        transparent: "glass-outline",
+        transparent: "bg-transparent border border-glass-border",
       },
       size: {
         sm: "h-6 px-2 text-xs leading-4",

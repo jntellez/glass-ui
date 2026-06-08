@@ -17,7 +17,7 @@ const nativeSelectVariants = cva(
         default: "glass",
         soft: "glass glass-soft",
         strong: "glass glass-strong",
-        transparent: "glass-outline",
+        transparent: "bg-transparent border border-glass-border",
       },
       uiSize: {
         sm: "",

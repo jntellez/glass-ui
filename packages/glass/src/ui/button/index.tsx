@@ -30,7 +30,7 @@ const buttonVariants = cva(
           "active:bg-glass-bg/60 active:border-glass-border/60",
         ],
         transparent: [
-          "glass-outline",
+          "bg-transparent border border-glass-border shadow-glass-sm",
           "hover:bg-glass-bg-soft/60 hover:border-glass-border-soft/80",
           "active:bg-glass-bg-soft/40 active:border-glass-border-soft/60",
         ],

@@ -44,7 +44,9 @@ describe("Input", () => {
       "leading-6",
     )
     expect(screen.getByRole("textbox", { name: "Transparent work email" })).toHaveClass(
-      "glass-outline",
+      "bg-transparent",
+      "border",
+      "border-glass-border",
       "h-8",
       "px-2.5",
       "text-sm",

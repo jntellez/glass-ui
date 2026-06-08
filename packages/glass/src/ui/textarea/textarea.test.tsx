@@ -45,7 +45,9 @@ describe("Textarea", () => {
       "leading-6",
     )
     expect(screen.getByRole("textbox", { name: "Transparent notes" })).toHaveClass(
-      "glass-outline",
+      "bg-transparent",
+      "border",
+      "border-glass-border",
       "min-h-20",
       "px-2.5",
       "text-sm",

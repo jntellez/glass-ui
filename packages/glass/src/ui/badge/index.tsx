@@ -13,7 +13,7 @@ const badgeVariants = cva(
         default: "glass",
         soft: "glass glass-soft",
         strong: "glass glass-strong",
-        transparent: "glass-outline shadow-none",
+        transparent: "bg-transparent border border-glass-border shadow-none",
       },
       size: {
         sm: "gap-1 px-2 py-0.5 text-[11px] leading-4 [&_svg]:size-3",
