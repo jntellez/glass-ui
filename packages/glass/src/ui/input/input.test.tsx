@@ -1,6 +1,8 @@
 import { createRef } from "react"
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
+import { Field, FieldDescription, FieldError } from "../field"
+import { Label } from "../label"
 import { Input } from "./index"
 
 describe("Input", () => {
@@ -84,5 +86,47 @@ describe("Input", () => {
     expect(ref.current).toBe(screen.getByRole("textbox", { name: "Username" }))
     expect(ref.current).toHaveAttribute("type", "text")
     expect(ref.current).toHaveAttribute("autocomplete", "username")
+  })
+
+  it("opts into field ids and descriptions when composed inside Field", () => {
+    render(
+      <Field invalid>
+        <Label>Email</Label>
+        <Input type="email" />
+        <FieldDescription>Used for notifications.</FieldDescription>
+        <FieldError>Please enter a valid email address.</FieldError>
+      </Field>,
+    )
+
+    const input = screen.getByRole("textbox", { name: "Email" })
+    const description = screen.getByText("Used for notifications.")
+    const error = screen.getByRole("alert")
+
+    expect(input).toHaveAttribute("id")
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      `${description.getAttribute("id")} ${error.getAttribute("id")}`,
+    )
+    expect(input).toHaveAttribute("aria-invalid", "true")
+  })
+
+  it("keeps explicit id, aria-describedby, and aria-invalid over field defaults", () => {
+    render(
+      <Field invalid>
+        <Label>Email</Label>
+        <Input id="work-email" aria-describedby="custom-help" aria-invalid={false} />
+        <FieldDescription>Used for notifications.</FieldDescription>
+      </Field>,
+    )
+
+    const input = screen.getByRole("textbox", { name: "Email" })
+    const description = screen.getByText("Used for notifications.")
+
+    expect(input).toHaveAttribute("id", "work-email")
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      `custom-help ${description.getAttribute("id")}`,
+    )
+    expect(input).toHaveAttribute("aria-invalid", "false")
   })
 })

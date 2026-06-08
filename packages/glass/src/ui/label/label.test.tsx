@@ -1,6 +1,8 @@
 import { createRef } from "react"
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
+import { Field } from "../field"
+import { Input } from "../input"
 import { Label } from "./index"
 
 describe("Label", () => {
@@ -35,5 +37,29 @@ describe("Label", () => {
     render(<Label className="uppercase tracking-wider">Role</Label>)
 
     expect(screen.getByText("Role")).toHaveClass("uppercase", "tracking-wider")
+  })
+
+  it("binds to the field control when htmlFor is omitted", () => {
+    render(
+      <Field>
+        <Label>Email</Label>
+        <Input />
+      </Field>,
+    )
+
+    const input = screen.getByRole("textbox", { name: "Email" })
+
+    expect(screen.getByText("Email")).toHaveAttribute("for", input.getAttribute("id"))
+  })
+
+  it("keeps explicit htmlFor over the field context id", () => {
+    render(
+      <Field>
+        <Label htmlFor="custom-id">Email</Label>
+        <Input />
+      </Field>,
+    )
+
+    expect(screen.getByText("Email")).toHaveAttribute("for", "custom-id")
   })
 })

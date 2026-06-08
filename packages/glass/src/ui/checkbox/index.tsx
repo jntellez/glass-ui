@@ -1,10 +1,13 @@
 import * as React from "react"
 import { cn } from "../../lib/utils"
+import { useFieldControlProps } from "../field/use-field-control-props"
 
 const Checkbox = React.forwardRef<
   HTMLInputElement,
   Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">
 >(({ className, ...props }, ref) => {
+  const fieldControlProps = useFieldControlProps(props)
+
   return (
     <input
       ref={ref}
@@ -18,6 +21,7 @@ const Checkbox = React.forwardRef<
         className,
       )}
       {...props}
+      {...fieldControlProps}
     />
   )
 })

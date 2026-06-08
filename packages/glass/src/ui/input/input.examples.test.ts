@@ -44,7 +44,8 @@ describe("Input examples and docs", () => {
     expect(inputDocsSource).toContain(
       'Set `aria-invalid="true"` to opt into the built-in destructive border and focus ring.',
     )
-    expect(inputErrorExampleSource).toContain('aria-invalid="true"')
+    expect(inputDocsSource).toContain("Use `Field` for the canonical one-field pattern.")
+    expect(inputErrorExampleSource).toContain("<Field invalid")
     expect(inputErrorExampleSource).not.toContain("border-destructive/50")
     expect(inputErrorExampleSource).not.toContain("focus-visible:ring-destructive/50")
   })

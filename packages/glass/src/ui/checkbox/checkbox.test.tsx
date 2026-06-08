@@ -2,6 +2,8 @@ import { createRef } from "react"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
+import { Field, FieldDescription } from "../field"
+import { Label } from "../label"
 import { Checkbox } from "./index"
 
 describe("Checkbox", () => {
@@ -59,5 +61,21 @@ describe("Checkbox", () => {
     expect(ref.current).toBeChecked()
     expect(ref.current).toHaveAttribute("data-state", "ready")
     expect(ref.current).toHaveStyle({ accentColor: "var(--accent)" })
+  })
+
+  it("composes with field labels and descriptions without explicit ids", () => {
+    render(
+      <Field>
+        <Checkbox />
+        <Label>Accept terms</Label>
+        <FieldDescription>You can unsubscribe later.</FieldDescription>
+      </Field>,
+    )
+
+    const checkbox = screen.getByRole("checkbox", { name: "Accept terms" })
+    const description = screen.getByText("You can unsubscribe later.")
+
+    expect(checkbox).toHaveAttribute("id")
+    expect(checkbox).toHaveAttribute("aria-describedby", description.getAttribute("id") ?? "")
   })
 })

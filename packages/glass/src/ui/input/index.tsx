@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "../../lib/utils"
+import { useFieldControlProps } from "../field/use-field-control-props"
 
 const inputVariants = cva(
   [
@@ -37,12 +38,15 @@ type InputProps = Omit<React.ComponentPropsWithoutRef<"input">, "size"> &
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, variant, size, ...props }, ref) => {
+    const fieldControlProps = useFieldControlProps(props)
+
     return (
       <input
         type={type}
         className={cn(inputVariants({ variant, size }), className)}
         ref={ref}
         {...props}
+        {...fieldControlProps}
       />
     )
   },
