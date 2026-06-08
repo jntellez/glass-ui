@@ -14,6 +14,26 @@ describe("Card", () => {
     )
   })
 
+  it("supports variant and padding props", () => {
+    render(
+      <Card variant="soft" padding="sm">
+        Billing details
+      </Card>,
+    )
+
+    expect(screen.getByText("Billing details")).toHaveClass("glass-soft", "p-4")
+  })
+
+  it("supports asChild composition", () => {
+    render(
+      <Card asChild variant="strong">
+        <a href="/projects/glass-ui">Open project</a>
+      </Card>,
+    )
+
+    expect(screen.getByRole("link", { name: "Open project" })).toHaveClass("glass-strong")
+  })
+
   it("merges custom class names", () => {
     render(<Card className="border-0 shadow-none">Summary</Card>)
 

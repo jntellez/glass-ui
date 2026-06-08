@@ -1,10 +1,12 @@
 import { createRef } from "react"
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
+import { Field, FieldDescription, FieldError } from "../field"
+import { Label } from "../label"
 import { NativeGroup, NativeOption, NativeSelect } from "./index"
 
 describe("NativeSelect", () => {
-  it("renders an accessible select with the default glass styles", () => {
+  it("renders an accessible select with default prop-first styles", () => {
     render(
       <NativeSelect aria-label="Timezone" defaultValue="utc">
         <option value="utc">UTC</option>
@@ -13,17 +15,20 @@ describe("NativeSelect", () => {
 
     const select = screen.getByRole("combobox", { name: "Timezone" })
 
-    expect(select).toHaveClass("input-md")
+    expect(select).toHaveClass("glass", "h-8", "appearance-none")
     expect(select.parentElement).toHaveClass("relative", "w-full", "min-w-0")
+    expect(select.parentElement?.querySelector("svg")).toBeInTheDocument()
   })
 
-  it("preserves explicit size classes and native props", () => {
+  it("supports explicit variant and uiSize props while preserving native props", () => {
     render(
       <NativeSelect
         aria-label="Country"
-        className="input-lg tracking-wide"
+        className="tracking-wide"
         defaultValue="mx"
         name="country"
+        variant="soft"
+        uiSize="lg"
       >
         <option value="mx">Mexico</option>
       </NativeSelect>,
@@ -31,22 +36,43 @@ describe("NativeSelect", () => {
 
     const select = screen.getByRole("combobox", { name: "Country" })
 
-    expect(select).toHaveClass("input-lg", "tracking-wide")
-    expect(select).not.toHaveClass("input-md")
+    expect(select).toHaveClass("glass-soft", "h-10", "tracking-wide")
+    expect(select).not.toHaveClass("h-8")
     expect(select).toHaveAttribute("name", "country")
   })
 
-  it("omits the default surface classes when a custom surface is provided", () => {
+  it("keeps className as an escape hatch without parsing it for API decisions", () => {
     render(
-      <NativeSelect aria-label="Plan" className="glass bg-black/20" defaultValue="starter">
+      <NativeSelect
+        aria-label="Plan"
+        className="bg-black/20 ring-1 ring-white/20"
+        defaultValue="starter"
+      >
         <option value="starter">Starter</option>
       </NativeSelect>,
     )
 
     const select = screen.getByRole("combobox", { name: "Plan" })
 
-    expect(select).toHaveClass("glass", "bg-black/20")
-    expect(select).not.toHaveClass("bg-transparent", "border", "shadow-glass-sm")
+    expect(select).toHaveClass("glass", "h-8", "bg-black/20", "ring-1", "ring-white/20")
+  })
+
+  it("preserves native listbox semantics when using size or multiple", () => {
+    render(
+      <NativeSelect aria-label="Assignees" defaultValue={["beatriz"]} multiple size={5} uiSize="lg">
+        <option value="ana">Ana</option>
+        <option value="beatriz">Beatriz</option>
+        <option value="carlos">Carlos</option>
+      </NativeSelect>,
+    )
+
+    const select = screen.getByRole("listbox", { name: "Assignees" })
+
+    expect(select).toHaveAttribute("multiple")
+    expect(select).toHaveAttribute("size", "5")
+    expect(select).toHaveClass("min-h-24", "px-3.5", "py-2.5")
+    expect(select).not.toHaveClass("appearance-none", "h-10")
+    expect(select.parentElement?.querySelector("svg")).not.toBeInTheDocument()
   })
 
   it("forwards refs to the native select element", () => {
@@ -101,5 +127,29 @@ describe("NativeSelect", () => {
     expect(groupRef.current).toBe(screen.getByRole("group", { name: "Open" }))
     expect(optionRef.current).toBe(screen.getByRole("option", { name: "High" }))
     expect(optionRef.current).toHaveAttribute("disabled")
+  })
+
+  it("composes with field ids and invalid state through the native select element", () => {
+    render(
+      <Field invalid>
+        <Label>Department</Label>
+        <NativeSelect defaultValue="engineering">
+          <NativeOption value="engineering">Engineering</NativeOption>
+        </NativeSelect>
+        <FieldDescription>Used for routing approvals.</FieldDescription>
+        <FieldError>Please choose a department.</FieldError>
+      </Field>,
+    )
+
+    const select = screen.getByRole("combobox", { name: "Department" })
+    const description = screen.getByText("Used for routing approvals.")
+    const error = screen.getByRole("alert")
+
+    expect(select).toHaveAttribute("id")
+    expect(select).toHaveAttribute(
+      "aria-describedby",
+      `${description.getAttribute("id")} ${error.getAttribute("id")}`,
+    )
+    expect(select).toHaveAttribute("aria-invalid", "true")
   })
 })
