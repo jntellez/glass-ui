@@ -7,6 +7,10 @@ export const GLASS_BASE_STYLES = `
     /* === TEXT TOKENS (Light) === */
     --foreground: #18181b;
     --muted-foreground: #3f3f46;
+    --accent: #3f3f46;
+    --accent-foreground: #ffffff;
+    --destructive: #dc2626;
+    --destructive-foreground: #ffffff;
 
     /* === BASE PRIMITIVES (Default) === */
     --glass-bg: rgba(255, 255, 255, 0.35);
@@ -39,6 +43,10 @@ export const GLASS_BASE_STYLES = `
     /* === TEXT TOKENS (Dark) === */
     --foreground: #fafafa;
     --muted-foreground: #d4d4d8;
+    --accent: #d4d4d8;
+    --accent-foreground: #18181b;
+    --destructive: #f87171;
+    --destructive-foreground: #18181b;
 
     /* === DARK PRIMITIVES === */
     --glass-bg: rgba(255, 255, 255, 0.08);
@@ -122,68 +130,11 @@ body {
   --glass-blur: var(--glass-blur-soft);
 }
 
-@utility input-sm {
-  height: 1.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  gap: 0.375rem;
-}
-
-@utility btn-sm {
-  height: 1.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  gap: 0.375rem;
-}
-
-@utility input-md {
-  height: 2rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 0.625rem;
-  padding-right: 0.625rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  gap: 0.5rem;
-}
-
-@utility btn-md {
-  height: 2rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 0.625rem;
-  padding-right: 0.625rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  gap: 0.5rem;
-}
-
-@utility input-lg {
-  height: 2.5rem;
-  padding-left: 0.875rem;
-  padding-right: 0.875rem;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  gap: 0.625rem;
-}
-
-@utility btn-lg {
-  height: 2.5rem;
-  padding-left: 0.875rem;
-  padding-right: 0.875rem;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  gap: 0.625rem;
-}
-
-@utility btn-icon {
-  padding: 0;
-  width: 2rem;
-  height: 2rem;
-  aspect-ratio: 1 / 1;
+@utility glass-outline {
+  background-color: transparent;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--glass-border);
+  box-shadow: var(--glass-shadow-sm);
 }
 `
