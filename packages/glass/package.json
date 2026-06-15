@@ -25,7 +25,8 @@
     "@glass-ui-kit/schema": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "@glass-ui-kit/tsconfig": "workspace:*",
