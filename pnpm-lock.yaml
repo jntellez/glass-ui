@@ -22,6 +22,9 @@ importers:
       prettier-plugin-astro:
         specifier: ^0.14.1
         version: 0.14.1
+      tslib:
+        specifier: ^2.8.1
+        version: 2.8.1
       turbo:
         specifier: ^2.7.5
         version: 2.9.3
