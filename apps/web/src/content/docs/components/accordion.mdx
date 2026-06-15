@@ -1,0 +1,178 @@
+---
+title: Accordion
+description: Vertically stacked collapsible sections with glassmorphism styling.
+---
+
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="accordion-demo" client:load />
+
+`Accordion` displays vertically stacked collapsible sections built on Radix UI. It supports single or multiple expansion modes, keyboard navigation, and glassmorphism styling that matches the rest of the design system.
+
+Each trigger includes a built-in chevron affordance that rotates with the open state, and content uses an internal padded wrapper so text spacing stays consistent by default.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add accordion"
+  pnpm="pnpm dlx @glass-ui-kit/cli add accordion"
+  yarn="yarn dlx @glass-ui-kit/cli add accordion"
+  bun="bunx @glass-ui-kit/cli add accordion"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import {
+    Accordion,
+    AccordionContent,
+    AccordionHeader,
+    AccordionItem,
+    AccordionTrigger,
+  } from "@/components/ui/accordion"
+
+  export default function App() {
+    return (
+      <Accordion type="single" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionHeader>
+            <AccordionTrigger>Is it accessible?</AccordionTrigger>
+          </AccordionHeader>
+          <AccordionContent>
+            Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    )
+  }`}
+/>
+
+## Examples
+
+### Multiple
+
+Allow multiple sections to be open at the same time.
+
+<ComponentPreview name="accordion-multiple" client:load />
+
+### Variants
+
+Use the `variant` prop on `AccordionItem` to match the visual hierarchy of your interface.
+
+<ComponentPreview name="accordion-variants" client:load height={480} />
+
+### Disabled
+
+Disable individual items to prevent interaction.
+
+<ComponentPreview name="accordion-disabled" client:load />
+
+### Controlled
+
+Use `value` and `onValueChange` when the open item must be controlled by surrounding state.
+
+<CodeBlock
+  lang="tsx"
+  code={`import { useState } from "react"
+  import {
+    Accordion,
+    AccordionContent,
+    AccordionHeader,
+    AccordionItem,
+    AccordionTrigger,
+  } from "@/components/ui/accordion"
+
+  export default function ControlledAccordion() {
+    const [value, setValue] = useState("item-1")
+
+    return (
+      <Accordion type="single" value={value} onValueChange={setValue} collapsible>
+        <AccordionItem value="item-1">
+          <AccordionHeader>
+            <AccordionTrigger>First section</AccordionTrigger>
+          </AccordionHeader>
+          <AccordionContent>Content for the first section.</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-2">
+          <AccordionHeader>
+            <AccordionTrigger>Second section</AccordionTrigger>
+          </AccordionHeader>
+          <AccordionContent>Content for the second section.</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    )
+  }`}
+/>
+
+## Styling
+
+Accordion follows a prop-first API. Reach for `type` on the root and `variant` on items first. Use `className` as an escape hatch for one-off layout or visual tweaks. The trigger ships with a built-in chevron and the content wrapper already applies balanced horizontal and bottom padding.
+
+<CodeBlock
+  lang="tsx"
+  code={`/* Single expansion (default) */
+  <Accordion type="single" collapsible>
+    <AccordionItem value="item-1">
+      <AccordionHeader>
+        <AccordionTrigger>Section One</AccordionTrigger>
+      </AccordionHeader>
+      <AccordionContent>Content for section one.</AccordionContent>
+    </AccordionItem>
+  </Accordion>
+
+  /* Multiple expansion */
+  <Accordion type="multiple">
+    <AccordionItem value="item-1">
+      <AccordionHeader>
+        <AccordionTrigger>Section One</AccordionTrigger>
+      </AccordionHeader>
+      <AccordionContent>Content for section one.</AccordionContent>
+    </AccordionItem>
+  </Accordion>
+
+  /* Variants (on AccordionItem) */
+  <AccordionItem variant="default" />
+  <AccordionItem variant="soft" />
+  <AccordionItem variant="strong" />
+
+  /* Escape hatch */
+  <AccordionItem className="max-w-md" />`}
+/>
+
+## API Reference
+
+### Accordion
+
+Accepts all Radix `Accordion.Root` props.
+
+| Prop | Type |
+| --- | --- |
+| `type` | `"single" \| "multiple"` |
+| `collapsible` | `boolean` (single mode only) |
+| `defaultValue` | `string \| string[]` |
+| `value` | `string \| string[]` |
+| `onValueChange` | `(value: string \| string[]) => void` |
+| `dir` | `"ltr" \| "rtl"` |
+| `orientation` | `"vertical" \| "horizontal"` |
+| `className` | `string` |
+
+### AccordionItem
+
+| Prop | Type |
+| --- | --- |
+| `value` | `string` (required) |
+| `variant` | `"default" \| "soft" \| "strong"` |
+| `disabled` | `boolean` |
+| `className` | `string` |
+
+### Other Sub-components
+
+| Component | Props |
+| --- | --- |
+| `AccordionHeader` | Standard h3 props |
+| `AccordionTrigger` | Standard button props |
+| `AccordionContent` | Standard div props |

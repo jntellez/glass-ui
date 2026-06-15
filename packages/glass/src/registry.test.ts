@@ -3,6 +3,7 @@ import { registryIndexSchema } from "@glass-ui-kit/schema"
 import { registry } from "./registry"
 
 const expectedNames = [
+  "accordion",
   "badge",
   "button",
   "checkbox",
@@ -32,11 +33,13 @@ describe("registry", () => {
     for (const entry of registry) {
       expect(entry.type).toBe("registry:ui")
       expect(entry.dependencies).toEqual(
-        entry.name === "button"
-          ? ["@radix-ui/react-slot", "class-variance-authority", "clsx", "tailwind-merge"]
-          : entry.name === "select"
-            ? ["@radix-ui/react-select", "class-variance-authority", "clsx", "tailwind-merge"]
-            : ["clsx", "tailwind-merge"],
+        entry.name === "accordion"
+          ? ["@radix-ui/react-accordion", "class-variance-authority", "clsx", "tailwind-merge"]
+          : entry.name === "button"
+            ? ["@radix-ui/react-slot", "class-variance-authority", "clsx", "tailwind-merge"]
+            : entry.name === "select"
+              ? ["@radix-ui/react-select", "class-variance-authority", "clsx", "tailwind-merge"]
+              : ["clsx", "tailwind-merge"],
       )
       expect(entry.files).toHaveLength(1)
       expect(entry.files[0]).toMatchObject({

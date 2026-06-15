@@ -7,6 +7,22 @@ import type { RegistryIndex } from "@glass-ui-kit/schema"
  */
 export const registry: RegistryIndex = [
   {
+    name: "accordion",
+    type: "registry:ui",
+    dependencies: [
+      "@radix-ui/react-accordion",
+      "class-variance-authority",
+      "clsx",
+      "tailwind-merge",
+    ],
+    files: [
+      {
+        path: "ui/accordion/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "badge",
     type: "registry:ui",
     dependencies: ["clsx", "tailwind-merge"],
