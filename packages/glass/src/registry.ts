@@ -84,12 +84,23 @@ export const registry: RegistryIndex = [
     ],
   },
   {
-    name: "select",
+    name: "native-select",
     type: "registry:ui",
     dependencies: ["clsx", "tailwind-merge"],
     files: [
       {
         path: "ui/native-select/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
+    name: "select",
+    type: "registry:ui",
+    dependencies: ["@radix-ui/react-select", "class-variance-authority", "clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/select/index.tsx",
         type: "client",
       },
     ],

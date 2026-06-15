@@ -10,6 +10,7 @@ const expectedNames = [
   "field",
   "input",
   "label",
+  "native-select",
   "select",
   "textarea",
 ] as const
@@ -33,11 +34,16 @@ describe("registry", () => {
       expect(entry.dependencies).toEqual(
         entry.name === "button"
           ? ["@radix-ui/react-slot", "class-variance-authority", "clsx", "tailwind-merge"]
-          : ["clsx", "tailwind-merge"],
+          : entry.name === "select"
+            ? ["@radix-ui/react-select", "class-variance-authority", "clsx", "tailwind-merge"]
+            : ["clsx", "tailwind-merge"],
       )
       expect(entry.files).toHaveLength(1)
       expect(entry.files[0]).toMatchObject({
-        path: entry.name === "select" ? "ui/native-select/index.tsx" : `ui/${entry.name}/index.tsx`,
+        path:
+          entry.name === "native-select"
+            ? "ui/native-select/index.tsx"
+            : `ui/${entry.name}/index.tsx`,
         type: "client",
       })
     }

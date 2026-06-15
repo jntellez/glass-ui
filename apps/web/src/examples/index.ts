@@ -1,3 +1,4 @@
+import { accordionExamples } from "./accordion"
 import { badgeExamples } from "./badge"
 import { buttonExamples } from "./button"
 import { checkboxExamples } from "./checkbox"
@@ -5,10 +6,12 @@ import { cardExamples } from "./card"
 import { fieldExamples } from "./field"
 import { inputExamples } from "./input"
 import { labelExamples } from "./label"
+import { nativeSelectExamples } from "./native-select"
 import { selectExamples } from "./select"
 import { textareaExamples } from "./textarea"
 
 export const examples = {
+  ...accordionExamples,
   ...badgeExamples,
   ...buttonExamples,
   ...checkboxExamples,
@@ -16,6 +19,7 @@ export const examples = {
   ...fieldExamples,
   ...inputExamples,
   ...labelExamples,
+  ...nativeSelectExamples,
   ...selectExamples,
   ...textareaExamples,
 } as const

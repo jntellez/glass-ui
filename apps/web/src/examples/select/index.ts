@@ -1,30 +1,44 @@
-import SelectDemo from "./native-select-demo"
-import selectDemoCode from "./native-select-demo.tsx?raw"
+import SelectDemo from "./select-demo"
+import selectDemoCode from "./select-demo.tsx?raw"
 
-import SelectGroups from "./native-select-groups"
-import selectGroupsCode from "./native-select-groups.tsx?raw"
+import SelectSizes from "./select-sizes"
+import selectSizesCode from "./select-sizes.tsx?raw"
 
-import SelectError from "./native-select-error"
-import selectErrorCode from "./native-select-error.tsx?raw"
+import SelectVariants from "./select-variants"
+import selectVariantsCode from "./select-variants.tsx?raw"
 
-import SelectDisabled from "./native-select-disabled"
-import selectDisabledCode from "./native-select-disabled.tsx?raw"
+import SelectGroups from "./select-groups"
+import selectGroupsCode from "./select-groups.tsx?raw"
+
+import SelectDisabled from "./select-disabled"
+import selectDisabledCode from "./select-disabled.tsx?raw"
+
+import SelectForm from "./select-form"
+import selectFormCode from "./select-form.tsx?raw"
 
 export const selectExamples = {
-  "native-select-demo": {
+  "select-demo": {
     component: SelectDemo,
     code: selectDemoCode,
   },
-  "native-select-groups": {
+  "select-sizes": {
+    component: SelectSizes,
+    code: selectSizesCode,
+  },
+  "select-variants": {
+    component: SelectVariants,
+    code: selectVariantsCode,
+  },
+  "select-groups": {
     component: SelectGroups,
     code: selectGroupsCode,
   },
-  "native-select-error": {
-    component: SelectError,
-    code: selectErrorCode,
-  },
-  "native-select-disabled": {
+  "select-disabled": {
     component: SelectDisabled,
     code: selectDisabledCode,
+  },
+  "select-form": {
+    component: SelectForm,
+    code: selectFormCode,
   },
 } as const

@@ -1,0 +1,221 @@
+---
+title: Select
+description: Accessible dropdown select with keyboard navigation, groups, and glassmorphism styling.
+---
+
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="select-demo" client:load />
+
+`Select` is a fully accessible custom dropdown built on Radix UI. It provides keyboard navigation, search-friendly item lists, and glassmorphism styling that matches the rest of the design system. Use it when you need a custom dropdown experience instead of the native browser picker.
+
+For the native `<select>` element with glass styling, see [Native Select](/docs/components/native-select).
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add select"
+  pnpm="pnpm dlx @glass-ui-kit/cli add select"
+  yarn="yarn dlx @glass-ui-kit/cli add select"
+  bun="bunx @glass-ui-kit/cli add select"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectItemText,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+
+  export default function App() {
+    return (
+      <Select defaultValue="apple">
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select a fruit" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="apple">
+            <SelectItemText>Apple</SelectItemText>
+          </SelectItem>
+          <SelectItem value="banana">
+            <SelectItemText>Banana</SelectItemText>
+          </SelectItem>
+          <SelectItem value="orange">
+            <SelectItemText>Orange</SelectItemText>
+          </SelectItem>
+        </SelectContent>
+      </Select>
+    )
+  }`}
+/>
+
+## Examples
+
+### Sizes
+
+Use the `size` prop on `SelectTrigger` for the standard scale. `md` is the default.
+
+<ComponentPreview name="select-sizes" client:load />
+
+### Variants
+
+Use the `variant` prop on `SelectTrigger` to match the visual hierarchy of your interface.
+
+<ComponentPreview name="select-variants" client:load />
+
+### Groups
+
+Use `SelectGroup` and `SelectLabel` to organize longer option lists into logical sections. Labels are automatically styled with muted text and extra top padding for the first group.
+
+<ComponentPreview name="select-groups" client:load />
+
+### Disabled
+
+Disable the entire select or individual items. Disabled items show reduced opacity and prevent interaction.
+
+<ComponentPreview name="select-disabled" client:load />
+
+### Form Integration
+
+Use `Field`, `Label`, and `FieldDescription` when the select belongs to a form. The trigger automatically receives `aria-invalid` and `aria-describedby` from the field context.
+
+<ComponentPreview name="select-form" client:load />
+
+### Controlled
+
+Use `value` and `onValueChange` for full control over the selected state.
+
+<CodeBlock
+  lang="tsx"
+  code={`import { useState } from "react"
+  import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectItemText,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+
+  export default function ControlledSelect() {
+    const [value, setValue] = useState("")
+
+    return (
+      <Select value={value} onValueChange={setValue}>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select a fruit" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="apple"><SelectItemText>Apple</SelectItemText></SelectItem>
+          <SelectItem value="banana"><SelectItemText>Banana</SelectItemText></SelectItem>
+          <SelectItem value="orange"><SelectItemText>Orange</SelectItemText></SelectItem>
+        </SelectContent>
+      </Select>
+    )
+  }`}
+/>
+
+## Styling
+
+Select follows a prop-first API. Reach for `variant` and `size` on `SelectTrigger` first. Use `className` as an escape hatch for one-off layout or visual tweaks.
+
+<CodeBlock
+  lang="tsx"
+  code={`/* Variants (on SelectTrigger) */
+  <SelectTrigger variant="default" />
+  <SelectTrigger variant="soft" />
+  <SelectTrigger variant="strong" />
+  <SelectTrigger variant="transparent" />
+
+  /* Sizes (on SelectTrigger, defaults to md) */
+  <SelectTrigger size="sm" />
+  <SelectTrigger size="md" />
+  <SelectTrigger size="lg" />
+
+  /* Escape hatch */
+  <SelectTrigger className="w-full max-w-xs" />
+
+  /* Full composition */
+  <Select defaultValue="option-1" onValueChange={(value) => console.log(value)}>
+    <SelectTrigger variant="soft" className="w-full">
+      <SelectValue placeholder="Select an option" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="option-1">
+        <SelectItemText>Option One</SelectItemText>
+      </SelectItem>
+      <SelectItem value="option-2">
+        <SelectItemText>Option Two</SelectItemText>
+      </SelectItem>
+    </SelectContent>
+  </Select>`}
+/>
+
+## API Reference
+
+### Select
+
+Accepts all Radix `Select.Root` props.
+
+| Prop | Type |
+| --- | --- |
+| `defaultValue` | `string` |
+| `value` | `string` |
+| `onValueChange` | `(value: string) => void` |
+| `open` | `boolean` |
+| `onOpenChange` | `(open: boolean) => void` |
+| `disabled` | `boolean` |
+| `dir` | `"ltr" \| "rtl"` |
+| `name` | `string` |
+| `required` | `boolean` |
+
+### SelectTrigger
+
+| Prop | Type |
+| --- | --- |
+| `variant` | `"default" \| "soft" \| "strong" \| "transparent"` |
+| `size` | `"sm" \| "md" \| "lg"` |
+| `className` | `string` |
+| `asChild` | `boolean` |
+
+### SelectContent
+
+| Prop | Type |
+| --- | --- |
+| `side` | `"top" \| "bottom"` |
+| `align` | `"start" \| "center" \| "end"` |
+| `sideOffset` | `number` |
+| `position` | `"popper" \| "item-aligned"` |
+| `className` | `string` |
+
+### SelectItem
+
+| Prop | Type |
+| --- | --- |
+| `value` | `string` (required) |
+| `disabled` | `boolean` |
+| `textValue` | `string` |
+| `className` | `string` |
+
+### Other Sub-components
+
+| Component | Props |
+| --- | --- |
+| `SelectValue` | `placeholder?: string` |
+| `SelectViewport` | Standard div props |
+| `SelectItemText` | Standard span props |
+| `SelectItemIndicator` | Standard span props |
+| `SelectLabel` | Standard label props |
+| `SelectGroup` | Standard group props |
+| `SelectSeparator` | Standard hr props |
+| `SelectScrollUpButton` | Standard button props |
+| `SelectScrollDownButton` | Standard button props |

@@ -22,6 +22,7 @@ export const sidebarNav: SidebarSection[] = [
   {
     title: "Components",
     items: [
+      { title: "Accordion", href: "/docs/components/accordion" },
       { title: "Badge", href: "/docs/components/badge" },
       { title: "Button", href: "/docs/components/button" },
       { title: "Card", href: "/docs/components/card" },
@@ -30,6 +31,7 @@ export const sidebarNav: SidebarSection[] = [
       { title: "Input", href: "/docs/components/input" },
       { title: "Label", href: "/docs/components/label" },
       { title: "Native Select", href: "/docs/components/native-select" },
+      { title: "Select", href: "/docs/components/select" },
       { title: "Textarea", href: "/docs/components/textarea" },
     ],
   },
