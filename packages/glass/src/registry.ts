@@ -67,6 +67,22 @@ export const registry: RegistryIndex = [
     ],
   },
   {
+    name: "collapsible",
+    type: "registry:ui",
+    dependencies: [
+      "@radix-ui/react-collapsible",
+      "class-variance-authority",
+      "clsx",
+      "tailwind-merge",
+    ],
+    files: [
+      {
+        path: "ui/collapsible/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "field",
     type: "registry:ui",
     dependencies: ["clsx", "tailwind-merge"],

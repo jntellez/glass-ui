@@ -1,6 +1,7 @@
 export * from "./accordion"
 export * from "./badge"
 export * from "./checkbox"
+export * from "./collapsible"
 export * from "./button"
 export * from "./card"
 export * from "./field"

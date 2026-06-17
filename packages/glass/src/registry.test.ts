@@ -8,6 +8,7 @@ const expectedNames = [
   "button",
   "card",
   "checkbox",
+  "collapsible",
   "field",
   "input",
   "label",
@@ -20,6 +21,12 @@ const expectedNames = [
 const expectedDependenciesByName = {
   accordion: ["@radix-ui/react-accordion", "class-variance-authority", "clsx", "tailwind-merge"],
   button: ["@radix-ui/react-slot", "class-variance-authority", "clsx", "tailwind-merge"],
+  collapsible: [
+    "@radix-ui/react-collapsible",
+    "class-variance-authority",
+    "clsx",
+    "tailwind-merge",
+  ],
   select: ["@radix-ui/react-select", "class-variance-authority", "clsx", "tailwind-merge"],
   tabs: ["@radix-ui/react-tabs", "class-variance-authority", "clsx", "tailwind-merge"],
 } satisfies Partial<Record<(typeof expectedNames)[number], string[]>>

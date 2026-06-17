@@ -27,6 +27,7 @@ export const sidebarNav: SidebarSection[] = [
       { title: "Button", href: "/docs/components/button" },
       { title: "Card", href: "/docs/components/card" },
       { title: "Checkbox", href: "/docs/components/checkbox" },
+      { title: "Collapsible", href: "/docs/components/collapsible" },
       { title: "Field", href: "/docs/components/field" },
       { title: "Input", href: "/docs/components/input" },
       { title: "Label", href: "/docs/components/label" },

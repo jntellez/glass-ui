@@ -1,0 +1,148 @@
+---
+title: Collapsible
+description: A lightweight disclosure for revealing supporting content without an accordion-style container.
+---
+
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="collapsible-demo" client:load />
+
+`Collapsible` reveals supporting content without forcing a full accordion layout. It is built on Radix UI, so the trigger exposes the expected disclosure semantics and keeps keyboard interaction intact while matching the rest of the glass component set.
+
+Use it when you need one independent disclosure with a compact, button-like trigger and content that appears directly underneath. If you need stacked, coordinated sections, use `Accordion` instead.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add collapsible"
+  pnpm="pnpm dlx @glass-ui-kit/cli add collapsible"
+  yarn="yarn dlx @glass-ui-kit/cli add collapsible"
+  bun="bunx @glass-ui-kit/cli add collapsible"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+
+  export default function App() {
+    return (
+      <Collapsible className="w-full max-w-sm" defaultOpen>
+        <CollapsibleTrigger>Primary</CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="rounded-glass-sm border border-glass-border/50 bg-white/5 p-3">
+            Keep related rows available without wrapping them in a heavy card.
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
+    )
+  }`}
+/>
+
+## Examples
+
+### Sizes
+
+Use the `size` prop to match the trigger to surrounding button density.
+
+<ComponentPreview name="collapsible-sizes" height={320} client:load />
+
+### Variants
+
+Use the `variant` prop to tune trigger emphasis without changing the lightweight layout.
+
+<ComponentPreview name="collapsible-variants" height={320} client:load />
+
+### Disabled
+
+Use `disabled` when the disclosure should stay visible but not interactive.
+
+<ComponentPreview name="collapsible-disabled" client:load />
+
+### Controlled
+
+Use `open` and `onOpenChange` when another part of the interface needs to coordinate the disclosure state.
+
+<CodeBlock
+  lang="tsx"
+  code={`import { useState } from "react"
+  import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+
+  export default function ControlledCollapsible() {
+    const [open, setOpen] = useState(false)
+
+    return (
+      <Collapsible open={open} onOpenChange={setOpen} className="max-w-sm">
+        <CollapsibleTrigger>Project notes</CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="rounded-glass-sm border border-glass-border/50 bg-white/5 p-3">
+            This panel stays in sync with surrounding state.
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
+    )
+  }`}
+/>
+
+## Styling
+
+Collapsible follows a prop-first API, but unlike `Accordion` it does not ship as a framed item container. Reach for `variant` to adjust trigger depth, then use `className` for local layout changes such as width constraints or extra spacing around the revealed content.
+
+<CodeBlock
+  lang="tsx"
+  code={`/* Surface variants */
+  <Collapsible variant="default" />
+  <Collapsible variant="soft" />
+  <Collapsible variant="strong" />
+
+  /* Trigger sizes */
+  <CollapsibleTrigger size="sm" />
+  <CollapsibleTrigger size="md" />
+  <CollapsibleTrigger size="lg" />
+
+  /* Controlled state */
+  <Collapsible open={open} onOpenChange={setOpen} />
+
+  /* Escape hatches */
+  <Collapsible className="max-w-md" />
+  <CollapsibleTrigger className="tracking-wide" />
+  <CollapsibleContent className="pl-3" />`}
+/>
+
+## API Reference
+
+### Collapsible
+
+Accepts all Radix `Collapsible.Root` props.
+
+| Prop | Type |
+| --- | --- |
+| `defaultOpen` | `boolean` |
+| `open` | `boolean` |
+| `onOpenChange` | `(open: boolean) => void` |
+| `disabled` | `boolean` |
+| `variant` | `"default" \| "soft" \| "strong"` |
+| `className` | `string` |
+
+`variant` changes the trigger surface emphasis only. Content remains layout-light so you can compose your own rows, lists, or small token groups underneath.
+
+### CollapsibleTrigger
+
+| Prop | Type |
+| --- | --- |
+| `disabled` | `boolean` |
+| `size` | `"sm" \| "md" \| "lg"` |
+| `className` | `string` |
+
+`size` mirrors the density of `Button` while keeping the built-in chevron and lightweight disclosure layout. `CollapsibleTrigger` does not support `asChild` because it renders an integrated chevron.
+
+### CollapsibleContent
+
+| Prop | Type |
+| --- | --- |
+| `forceMount` | `boolean` |
+| `className` | `string` |

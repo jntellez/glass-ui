@@ -3,6 +3,7 @@ import { badgeExamples } from "./badge"
 import { buttonExamples } from "./button"
 import { checkboxExamples } from "./checkbox"
 import { cardExamples } from "./card"
+import { collapsibleExamples } from "./collapsible"
 import { fieldExamples } from "./field"
 import { inputExamples } from "./input"
 import { labelExamples } from "./label"
@@ -17,6 +18,7 @@ export const examples = {
   ...buttonExamples,
   ...checkboxExamples,
   ...cardExamples,
+  ...collapsibleExamples,
   ...fieldExamples,
   ...inputExamples,
   ...labelExamples,
