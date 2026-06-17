@@ -83,6 +83,33 @@ export const registry: RegistryIndex = [
     ],
   },
   {
+    name: "color-picker",
+    type: "registry:ui",
+    dependencies: ["class-variance-authority", "clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/color-picker/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
+    name: "dropdown-menu",
+    type: "registry:ui",
+    dependencies: [
+      "@radix-ui/react-dropdown-menu",
+      "class-variance-authority",
+      "clsx",
+      "tailwind-merge",
+    ],
+    files: [
+      {
+        path: "ui/dropdown-menu/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "field",
     type: "registry:ui",
     dependencies: ["clsx", "tailwind-merge"],
@@ -122,6 +149,17 @@ export const registry: RegistryIndex = [
     files: [
       {
         path: "ui/native-select/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
+    name: "popover",
+    type: "registry:ui",
+    dependencies: ["@radix-ui/react-popover", "class-variance-authority", "clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/popover/index.tsx",
         type: "client",
       },
     ],

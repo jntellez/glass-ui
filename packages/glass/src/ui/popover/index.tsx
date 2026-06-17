@@ -1,0 +1,69 @@
+import * as React from "react"
+import * as PopoverPrimitive from "@radix-ui/react-popover"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "../../lib/utils"
+
+const popoverContentVariants = cva(
+  [
+    "z-50 w-72 rounded-glass-md border border-glass-border p-4 shadow-glass-md outline-none",
+    "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+    "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+    "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2",
+    "data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+  ],
+  {
+    variants: {
+      variant: {
+        default: "glass",
+        soft: "glass glass-soft",
+        strong: "glass glass-strong",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
+)
+
+type PopoverContentProps = React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> &
+  VariantProps<typeof popoverContentVariants>
+
+const Popover = PopoverPrimitive.Root
+const PopoverTrigger = PopoverPrimitive.Trigger
+const PopoverAnchor = PopoverPrimitive.Anchor
+const PopoverPortal = PopoverPrimitive.Portal
+
+const PopoverContent = React.forwardRef<
+  React.ElementRef<typeof PopoverPrimitive.Content>,
+  PopoverContentProps
+>(
+  (
+    { className, align = "center", collisionPadding = 12, sideOffset = 12, variant, ...props },
+    ref,
+  ) => (
+    <PopoverPortal>
+      <PopoverPrimitive.Content
+        ref={ref}
+        align={align}
+        collisionPadding={collisionPadding}
+        sideOffset={sideOffset}
+        className={cn(popoverContentVariants({ variant }), className)}
+        {...props}
+      />
+    </PopoverPortal>
+  ),
+)
+
+PopoverContent.displayName = "PopoverContent"
+
+const popoverVariants = popoverContentVariants
+
+export {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+  PopoverPortal,
+  PopoverTrigger,
+  popoverContentVariants,
+  popoverVariants,
+}

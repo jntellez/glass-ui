@@ -1,0 +1,219 @@
+---
+title: Dropdown Menu
+description: A compact action menu for contextual commands, toggles, and grouped options.
+---
+
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="dropdown-menu-demo" height={320} client:load />
+
+`DropdownMenu` presents focused actions near a trigger without taking over the page. It is built on Radix UI, so it preserves expected menu semantics, roving focus, dismissal behavior, and keyboard navigation while matching the glass styling used across the component set.
+
+Use it for contextual actions, lightweight settings, and small grouped choices. If the content needs long-form input or larger layouts, use a bigger surface instead.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add dropdown-menu"
+  pnpm="pnpm dlx @glass-ui-kit/cli add dropdown-menu"
+  yarn="yarn dlx @glass-ui-kit/cli add dropdown-menu"
+  bun="bunx @glass-ui-kit/cli add dropdown-menu"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
+  import { Button } from "@/components/ui/button"
+
+  export default function App() {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="strong">Workspace</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Rename</DropdownMenuItem>
+          <DropdownMenuItem>Duplicate</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }`}
+/>
+
+## Examples
+
+### Variants
+
+Use the `variant` prop on `DropdownMenuContent` to tune the floating surface depth without changing the trigger.
+
+<ComponentPreview name="dropdown-menu-variants" height={320} client:load />
+
+### Selection controls
+
+Use checkbox and radio items when the menu needs to toggle visibility or switch between compact option sets.
+
+<ComponentPreview name="dropdown-menu-selection" height={320} client:load />
+
+### Controlled
+
+Use `open` and `onOpenChange` when another part of the interface needs to coordinate the menu state.
+
+<CodeBlock
+  lang="tsx"
+  code={`import { useState } from "react"
+  import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
+  import { Button } from "@/components/ui/button"
+
+  export default function ControlledDropdownMenu() {
+    const [open, setOpen] = useState(false)
+
+    return (
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger asChild>
+          <Button>Project actions</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Open details</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }`}
+/>
+
+### asChild
+
+Use `asChild` on `DropdownMenuTrigger` when another interactive element should own the visible trigger. In that mode, Radix forwards menu state and ARIA props to your child, and your child owns the final layout and styling.
+
+<CodeBlock
+  lang="tsx"
+  code={`import { Button } from "@/components/ui/button"
+  import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
+
+  export default function CustomTriggerDropdownMenu() {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="strong" className="min-w-32 justify-between">
+            Workspace
+            <span aria-hidden="true">⌄</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Rename</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }`}
+/>
+
+## Styling
+
+Dropdown Menu keeps the API small. Reach for `variant` on `DropdownMenuContent` first, then use Radix placement props such as `side`, `align`, and `sideOffset` for layout tuning. Use `className` as an escape hatch for local width or spacing adjustments.
+
+<CodeBlock
+  lang="tsx"
+  code={`/* Content variants */
+  <DropdownMenuContent variant="default" />
+  <DropdownMenuContent variant="soft" />
+  <DropdownMenuContent variant="strong" />
+
+  /* Placement */
+  <DropdownMenuContent side="right" align="start" sideOffset={8} />
+
+  /* Controlled state */
+  <DropdownMenu open={open} onOpenChange={setOpen} />
+
+  /* Escape hatch */
+  <DropdownMenuContent className="w-64" />`}
+/>
+
+## API Reference
+
+### DropdownMenu
+
+Accepts all Radix `DropdownMenu.Root` props.
+
+| Prop | Type |
+| --- | --- |
+| `defaultOpen` | `boolean` |
+| `open` | `boolean` |
+| `onOpenChange` | `(open: boolean) => void` |
+| `modal` | `boolean` |
+
+### DropdownMenuTrigger
+
+Accepts all Radix `DropdownMenu.Trigger` props.
+
+| Prop | Type |
+| --- | --- |
+| `asChild` | `boolean` |
+| `disabled` | `boolean` |
+| `className` | `string` |
+
+### DropdownMenuContent
+
+| Prop | Type |
+| --- | --- |
+| `variant` | `"default" \| "soft" \| "strong"` |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` |
+| `align` | `"start" \| "center" \| "end"` |
+| `sideOffset` | `number` |
+| `collisionPadding` | `number \| Partial<Record<"top" \| "right" \| "bottom" \| "left", number>>` |
+| `loop` | `boolean` |
+| `className` | `string` |
+
+`DropdownMenuContent` defaults to `align="start"`, `sideOffset={8}`, and `collisionPadding={8}` so action lists stay close to the trigger without crowding the viewport edge.
+
+### DropdownMenuItem
+
+| Prop | Type |
+| --- | --- |
+| `disabled` | `boolean` |
+| `onSelect` | `(event: Event) => void` |
+| `className` | `string` |
+
+### DropdownMenuCheckboxItem
+
+| Prop | Type |
+| --- | --- |
+| `checked` | `boolean \| "indeterminate"` |
+| `onCheckedChange` | `(checked: boolean) => void` |
+| `disabled` | `boolean` |
+| `className` | `string` |
+
+### DropdownMenuRadioGroup / DropdownMenuRadioItem
+
+| Prop | Type |
+| --- | --- |
+| `value` | `string` |
+| `onValueChange` | `(value: string) => void` |
+| `disabled` | `boolean` |
+| `className` | `string` |
+
+### DropdownMenuSub / DropdownMenuSubTrigger / DropdownMenuSubContent
+
+Use these when a compact secondary action group should stay nested in the same contextual menu. `DropdownMenuSubContent` accepts the same `variant`, placement, and `className` escape hatches as `DropdownMenuContent`.
+
+### DropdownMenuLabel / DropdownMenuSeparator / DropdownMenuShortcut
+
+Use these helpers to group commands, separate sections, and align compact keyboard hints without adding more layout wrappers.

@@ -88,6 +88,34 @@ Use `open` and `onOpenChange` when another part of the interface needs to coordi
   }`}
 />
 
+### asChild
+
+Use `asChild` when another interactive element should become the trigger. In that mode, Radix forwards disclosure state and ARIA props to your child, and you are responsible for rendering the label, layout, and any chevron/icon yourself.
+
+<CodeBlock
+  lang="tsx"
+  code={`import { Button } from "@/components/ui/button"
+  import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+
+  export default function CustomTriggerCollapsible() {
+    return (
+      <Collapsible className="max-w-sm">
+        <CollapsibleTrigger asChild>
+          <Button variant="strong" className="w-full justify-between">
+            <span>Project notes</span>
+            <span aria-hidden="true">⌄</span>
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="rounded-glass-sm border border-glass-border/50 bg-white/5 p-3">
+            Bring your own trigger content when composing with another component.
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
+    )
+  }`}
+/>
+
 ## Styling
 
 Collapsible follows a prop-first API, but unlike `Accordion` it does not ship as a framed item container. Reach for `variant` to adjust trigger depth, then use `className` for local layout changes such as width constraints or extra spacing around the revealed content.
@@ -135,10 +163,11 @@ Accepts all Radix `Collapsible.Root` props.
 | Prop | Type |
 | --- | --- |
 | `disabled` | `boolean` |
+| `asChild` | `boolean` |
 | `size` | `"sm" \| "md" \| "lg"` |
 | `className` | `string` |
 
-`size` mirrors the density of `Button` while keeping the built-in chevron and lightweight disclosure layout. `CollapsibleTrigger` does not support `asChild` because it renders an integrated chevron.
+`size` mirrors the density of `Button`. In the default trigger mode, `CollapsibleTrigger` renders the built-in chevron and wraps its children in the compact disclosure layout. When `asChild` is set, Radix applies trigger props and classes to your child, and your child owns the visible content, spacing, and chevron/icon.
 
 ### CollapsibleContent
 

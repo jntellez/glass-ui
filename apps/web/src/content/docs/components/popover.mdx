@@ -1,0 +1,154 @@
+---
+title: Popover
+description: A compact floating surface for lightweight actions, summaries, and supporting context.
+---
+
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="popover-demo" height={320} client:load />
+
+`Popover` reveals focused content near a trigger without navigating away from the current view. It is built on Radix UI, so it preserves the expected focus management, dismissal behavior, and keyboard support while adopting the same glassmorphism styling used across the component set.
+
+Use it for small action groups, quick settings, or supporting context that should stay anchored to the trigger. If the content needs full page structure or long-form input, use a larger surface instead.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add popover"
+  pnpm="pnpm dlx @glass-ui-kit/cli add popover"
+  yarn="yarn dlx @glass-ui-kit/cli add popover"
+  bun="bunx @glass-ui-kit/cli add popover"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { Button } from "@/components/ui/button"
+  import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+
+  export default function App() {
+    return (
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="strong">Share project</Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-72">
+          <div className="space-y-1.5">
+            <p className="text-sm font-semibold text-foreground">Quick share</p>
+            <p className="text-sm text-muted-foreground">
+              Send a focused update without leaving the current view.
+            </p>
+          </div>
+        </PopoverContent>
+      </Popover>
+    )
+  }`}
+/>
+
+## Examples
+
+### Variants
+
+Use the `variant` prop on `PopoverContent` to change the floating surface depth without changing the trigger.
+
+<ComponentPreview name="popover-variants" height={320} client:load />
+
+### Sides
+
+Use `side` when the trigger placement calls for directional positioning instead of the default centered bottom placement.
+
+<ComponentPreview name="popover-sides" height={320} client:load />
+
+### Controlled
+
+Use `open` and `onOpenChange` when another part of the interface needs to coordinate the floating state.
+
+<CodeBlock
+  lang="tsx"
+  code={`import { useState } from "react"
+  import { Button } from "@/components/ui/button"
+  import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+
+  export default function ControlledPopover() {
+    const [open, setOpen] = useState(false)
+
+    return (
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button>Workspace summary</Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <p className="text-sm text-muted-foreground">
+            Keep the popover in sync with surrounding controls.
+          </p>
+        </PopoverContent>
+      </Popover>
+    )
+  }`}
+/>
+
+## Styling
+
+Popover keeps the API small. Reach for `variant` on `PopoverContent` first, then use Radix placement props such as `side`, `align`, and `sideOffset` for layout tuning. Use `className` as an escape hatch when you need custom width or spacing inside the surface.
+
+<CodeBlock
+  lang="tsx"
+  code={`/* Content variants */
+  <PopoverContent variant="default" />
+  <PopoverContent variant="soft" />
+  <PopoverContent variant="strong" />
+
+  /* Placement */
+  <PopoverContent side="top" align="start" sideOffset={8} />
+
+  /* Controlled state */
+  <Popover open={open} onOpenChange={setOpen} />
+
+  /* Escape hatch */
+  <PopoverContent className="w-80 p-5" />`}
+/>
+
+## API Reference
+
+### Popover
+
+Accepts all Radix `Popover.Root` props.
+
+| Prop | Type |
+| --- | --- |
+| `defaultOpen` | `boolean` |
+| `open` | `boolean` |
+| `onOpenChange` | `(open: boolean) => void` |
+| `modal` | `boolean` |
+
+### PopoverTrigger
+
+Accepts all Radix `Popover.Trigger` props.
+
+| Prop | Type |
+| --- | --- |
+| `asChild` | `boolean` |
+| `disabled` | `boolean` |
+| `className` | `string` |
+
+### PopoverContent
+
+| Prop | Type |
+| --- | --- |
+| `variant` | `"default" \| "soft" \| "strong"` |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` |
+| `align` | `"start" \| "center" \| "end"` |
+| `sideOffset` | `number` |
+| `collisionPadding` | `number \| Partial<Record<"top" \| "right" \| "bottom" \| "left", number>>` |
+| `forceMount` | `boolean` |
+| `className` | `string` |
+
+`PopoverContent` defaults to `sideOffset={12}` and `collisionPadding={12}` so small floating surfaces have breathing room from the trigger and viewport edges.
+
+### PopoverAnchor
+
+Accepts all Radix `Popover.Anchor` props.

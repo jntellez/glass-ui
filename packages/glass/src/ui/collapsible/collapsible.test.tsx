@@ -2,6 +2,7 @@ import { createRef, useState } from "react"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
+import { Button } from "../button"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger, collapsibleVariants } from "./index"
 
 describe("Collapsible", () => {
@@ -154,6 +155,51 @@ describe("Collapsible", () => {
       "pt-1",
       "text-muted-foreground",
     )
+  })
+
+  it("supports asChild with a single custom child and still toggles content", async () => {
+    const user = userEvent.setup()
+
+    render(
+      <Collapsible variant="soft">
+        <CollapsibleTrigger asChild size="lg">
+          <button type="button">Custom trigger</button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>Hidden content</CollapsibleContent>
+      </Collapsible>,
+    )
+
+    const trigger = screen.getByRole("button", { name: "Custom trigger" })
+
+    expect(trigger).toHaveClass("h-10", "px-3.5", "text-base")
+    expect(trigger).toHaveAttribute("aria-expanded", "false")
+    expect(trigger.querySelector("[data-slot=collapsible-chevron]")).toBeNull()
+
+    await user.click(trigger)
+
+    expect(trigger).toHaveAttribute("aria-expanded", "true")
+    expect(screen.getByText("Hidden content")).toBeVisible()
+  })
+
+  it("passes trigger classes through when asChild wraps another component", async () => {
+    const user = userEvent.setup()
+
+    render(
+      <Collapsible>
+        <CollapsibleTrigger asChild className="w-full justify-start">
+          <Button variant="strong">Open custom</Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>Hidden content</CollapsibleContent>
+      </Collapsible>,
+    )
+
+    const trigger = screen.getByRole("button", { name: "Open custom" })
+
+    expect(trigger).toHaveClass("glass", "glass-strong", "w-full", "justify-start")
+
+    await user.click(trigger)
+
+    expect(screen.getByText("Hidden content")).toBeVisible()
   })
 
   it("supports controlled mode", async () => {

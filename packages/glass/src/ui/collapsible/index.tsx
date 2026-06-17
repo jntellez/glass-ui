@@ -49,13 +49,8 @@ const collapsibleTriggerVariants = cva(
 type CollapsibleProps = React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Root> &
   VariantProps<typeof collapsibleVariants>
 
-type CollapsibleTriggerProps = Omit<
-  React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Trigger>,
-  "asChild"
-> &
-  VariantProps<typeof collapsibleTriggerVariants> & {
-    asChild?: never
-  }
+type CollapsibleTriggerProps = React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Trigger> &
+  VariantProps<typeof collapsibleTriggerVariants>
 
 const Collapsible = React.forwardRef<
   React.ElementRef<typeof CollapsiblePrimitive.Root>,
@@ -74,32 +69,50 @@ Collapsible.displayName = "Collapsible"
 const CollapsibleTrigger = React.forwardRef<
   React.ElementRef<typeof CollapsiblePrimitive.Trigger>,
   CollapsibleTriggerProps
->(({ className, children, size, asChild: _asChild, ...props }, ref) => (
-  <CollapsiblePrimitive.Trigger
-    ref={ref}
-    data-slot="collapsible-trigger"
-    className={cn(collapsibleTriggerVariants({ size }), className)}
-    {...props}
-  >
-    <span className="min-w-0 flex-1 truncate">{children}</span>
-    <svg
-      data-slot="collapsible-chevron"
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="shrink-0 text-current/70 transition-transform duration-200 group-data-[state=open]:rotate-180"
+>(({ className, children, size, asChild = false, ...props }, ref) => {
+  const triggerClassName = cn(collapsibleTriggerVariants({ size }), className)
+
+  if (asChild) {
+    return (
+      <CollapsiblePrimitive.Trigger
+        ref={ref}
+        asChild
+        data-slot="collapsible-trigger"
+        className={triggerClassName}
+        {...props}
+      >
+        {children}
+      </CollapsiblePrimitive.Trigger>
+    )
+  }
+
+  return (
+    <CollapsiblePrimitive.Trigger
+      ref={ref}
+      data-slot="collapsible-trigger"
+      className={triggerClassName}
+      {...props}
     >
-      <path
-        d="m4 6 4 4 4-4"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.5"
-      />
-    </svg>
-  </CollapsiblePrimitive.Trigger>
-))
+      <span className="min-w-0 flex-1 truncate">{children}</span>
+      <svg
+        data-slot="collapsible-chevron"
+        aria-hidden="true"
+        focusable="false"
+        viewBox="0 0 16 16"
+        className="shrink-0 text-current/70 transition-transform duration-200 group-data-[state=open]:rotate-180"
+      >
+        <path
+          d="m4 6 4 4 4-4"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+        />
+      </svg>
+    </CollapsiblePrimitive.Trigger>
+  )
+})
 
 CollapsibleTrigger.displayName = "CollapsibleTrigger"
 

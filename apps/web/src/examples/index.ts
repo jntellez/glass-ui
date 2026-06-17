@@ -4,10 +4,13 @@ import { buttonExamples } from "./button"
 import { checkboxExamples } from "./checkbox"
 import { cardExamples } from "./card"
 import { collapsibleExamples } from "./collapsible"
+import { colorPickerExamples } from "./color-picker"
+import { dropdownMenuExamples } from "./dropdown-menu"
 import { fieldExamples } from "./field"
 import { inputExamples } from "./input"
 import { labelExamples } from "./label"
 import { nativeSelectExamples } from "./native-select"
+import { popoverExamples } from "./popover"
 import { selectExamples } from "./select"
 import { tabsExamples } from "./tabs"
 import { textareaExamples } from "./textarea"
@@ -19,10 +22,13 @@ export const examples = {
   ...checkboxExamples,
   ...cardExamples,
   ...collapsibleExamples,
+  ...colorPickerExamples,
+  ...dropdownMenuExamples,
   ...fieldExamples,
   ...inputExamples,
   ...labelExamples,
   ...nativeSelectExamples,
+  ...popoverExamples,
   ...selectExamples,
   ...tabsExamples,
   ...textareaExamples,

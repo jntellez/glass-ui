@@ -1,0 +1,82 @@
+---
+title: Color Picker
+description: A compact color control for theme tokens, accents, and lightweight visual settings.
+---
+
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="color-picker-demo" height={320} client:load />
+
+`ColorPicker` is the compact primitive for this library: a native color well presented as a small glass swatch button that fits settings panels, token pickers, and toolbar controls.
+
+Use it for theme accents, semantic token editing, and small customization flows. Compose it with `Input` when you also need direct hex editing. If you need gradients, alpha channels, or a full design-tool canvas, reach for a specialized picker instead.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add color-picker"
+  pnpm="pnpm dlx @glass-ui-kit/cli add color-picker"
+  yarn="yarn dlx @glass-ui-kit/cli add color-picker"
+  bun="bunx @glass-ui-kit/cli add color-picker"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { ColorPicker } from "@/components/ui/color-picker"
+
+  export default function App() {
+    return <ColorPicker aria-label="Accent color" defaultValue="#7c3aed" />
+  }`}
+/>
+
+## Examples
+
+### Controlled
+
+Use `value` and `onValueChange` when a token editor or settings form owns the current color. Add `Input` beside it when users should edit the hex value directly.
+
+<ComponentPreview name="color-picker-controlled" height={320} client:load />
+
+## Styling
+
+Color Picker keeps the API intentionally small. Reach for `size` first, then use `className` or native color-input props when you need local adjustments.
+
+<CodeBlock
+  lang="tsx"
+  code={`/* Sizes */
+  <ColorPicker size="sm" />
+  <ColorPicker size="md" />
+  <ColorPicker size="lg" />
+
+  /* Controlled state */
+  <ColorPicker value={value} onValueChange={setValue} />
+
+  /* Native input props */
+  <ColorPicker aria-label="Accent color" name="accentColor" />`}
+/>
+
+## API Reference
+
+### ColorPicker
+
+| Prop | Type |
+| --- | --- |
+| `value` | `string` |
+| `defaultValue` | `string` |
+| `onValueChange` | `(value: string) => void` |
+| `disabled` | `boolean` |
+| `size` | `"sm" \| "md" \| "lg"` |
+| Native color input props | `InputHTMLAttributes<HTMLInputElement>` |
+| `swatchAriaLabel` | `string` |
+| `className` | `string` |
+
+`ColorPicker` normalizes controlled and uncontrolled values to lowercase six-digit hex values. Three-digit values like `#abc` are expanded to `#aabbcc`, and invalid incoming values fall back to the default swatch color.
+
+### Accessibility and composition
+
+Pass `aria-label` for standalone use, or pair `ColorPicker` with an external `<label>` when it lives inside a field row. Use `swatchAriaLabel` if you want a dedicated accessible name without setting the generic input prop directly.
