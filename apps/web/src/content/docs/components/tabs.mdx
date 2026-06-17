@@ -1,0 +1,155 @@
+---
+title: Tabs
+description: Accessible tabbed views with keyboard navigation and glassmorphism styling.
+---
+
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="tabs-demo" client:load />
+
+`Tabs` organizes related content into a compact, keyboard-friendly interface. It is built on Radix UI, so it ships with the expected WAI-ARIA tab pattern, roving focus, and arrow-key navigation while matching the glassmorphism language used across the system.
+
+Use the `variant` prop on `TabsList` to adjust container emphasis and the `size` prop on `TabsTrigger` to match the density of the surrounding UI.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add tabs"
+  pnpm="pnpm dlx @glass-ui-kit/cli add tabs"
+  yarn="yarn dlx @glass-ui-kit/cli add tabs"
+  bun="bunx @glass-ui-kit/cli add tabs"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+  export default function App() {
+    return (
+      <Tabs defaultValue="overview" className="w-full max-w-xl">
+        <TabsList aria-label="Project views">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="activity">Activity</TabsTrigger>
+          <TabsTrigger value="members">Members</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">Overview content.</TabsContent>
+        <TabsContent value="activity">Activity content.</TabsContent>
+        <TabsContent value="members">Members content.</TabsContent>
+      </Tabs>
+    )
+  }`}
+/>
+
+## Examples
+
+### Sizes
+
+Use the `size` prop on `TabsTrigger` to match nearby control density. `md` is the default and is sized to align visually with `Button` `md`.
+
+<ComponentPreview name="tabs-sizes" client:load />
+
+### Variants
+
+Use the `variant` prop on `TabsList` to adjust the glass depth without changing the component structure.
+
+<ComponentPreview name="tabs-variants" client:load />
+
+### Vertical
+
+Set `orientation="vertical"` on the root and give the layout a two-column wrapper when your labels work better as a side rail.
+
+<ComponentPreview name="tabs-vertical" client:load />
+
+### Controlled
+
+Use `value` and `onValueChange` when the active tab needs to stay in sync with surrounding state.
+
+<CodeBlock
+  lang="tsx"
+  code={`import { useState } from "react"
+  import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+  export default function ControlledTabs() {
+    const [value, setValue] = useState("overview")
+
+    return (
+      <Tabs value={value} onValueChange={setValue}>
+        <TabsList aria-label="Project views">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="activity">Activity</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">Overview content.</TabsContent>
+        <TabsContent value="activity">Activity content.</TabsContent>
+      </Tabs>
+    )
+  }`}
+/>
+
+## Styling
+
+Tabs follows a prop-first API. Reach for `variant` on `TabsList` and `size` on `TabsTrigger` first. Use `className` as an escape hatch for layout-specific spacing like vertical side rails or custom panel widths.
+
+<CodeBlock
+  lang="tsx"
+  code={`/* List variants */
+  <TabsList variant="default" />
+  <TabsList variant="soft" />
+  <TabsList variant="strong" />
+
+  /* Trigger sizes */
+  <TabsTrigger size="sm" value="overview" />
+  <TabsTrigger size="md" value="overview" />
+  <TabsTrigger size="lg" value="overview" />
+
+  /* Escape hatches */
+  <Tabs className="max-w-2xl" />
+  <TabsList className="w-full" />
+  <TabsContent className="mt-0" />`}
+/>
+
+## API Reference
+
+### Tabs
+
+Accepts all Radix `Tabs.Root` props.
+
+| Prop | Type |
+| --- | --- |
+| `defaultValue` | `string` |
+| `value` | `string` |
+| `onValueChange` | `(value: string) => void` |
+| `orientation` | `"horizontal" \| "vertical"` |
+| `dir` | `"ltr" \| "rtl"` |
+| `activationMode` | `"automatic" \| "manual"` |
+| `className` | `string` |
+
+### TabsList
+
+| Prop | Type |
+| --- | --- |
+| `variant` | `"default" \| "soft" \| "strong"` |
+| `loop` | `boolean` |
+| `aria-label` | `string` |
+| `className` | `string` |
+
+### TabsTrigger
+
+| Prop | Type |
+| --- | --- |
+| `value` | `string` (required) |
+| `size` | `"sm" \| "md" \| "lg"` |
+| `disabled` | `boolean` |
+| `className` | `string` |
+
+### TabsContent
+
+| Prop | Type |
+| --- | --- |
+| `value` | `string` (required) |
+| `forceMount` | `boolean` |
+| `className` | `string` |

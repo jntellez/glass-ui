@@ -6,15 +6,23 @@ const expectedNames = [
   "accordion",
   "badge",
   "button",
-  "checkbox",
   "card",
+  "checkbox",
   "field",
   "input",
   "label",
   "native-select",
   "select",
+  "tabs",
   "textarea",
 ] as const
+
+const expectedDependenciesByName = {
+  accordion: ["@radix-ui/react-accordion", "class-variance-authority", "clsx", "tailwind-merge"],
+  button: ["@radix-ui/react-slot", "class-variance-authority", "clsx", "tailwind-merge"],
+  select: ["@radix-ui/react-select", "class-variance-authority", "clsx", "tailwind-merge"],
+  tabs: ["@radix-ui/react-tabs", "class-variance-authority", "clsx", "tailwind-merge"],
+} satisfies Partial<Record<(typeof expectedNames)[number], string[]>>
 
 describe("registry", () => {
   it("matches the registry schema", () => {
@@ -33,13 +41,7 @@ describe("registry", () => {
     for (const entry of registry) {
       expect(entry.type).toBe("registry:ui")
       expect(entry.dependencies).toEqual(
-        entry.name === "accordion"
-          ? ["@radix-ui/react-accordion", "class-variance-authority", "clsx", "tailwind-merge"]
-          : entry.name === "button"
-            ? ["@radix-ui/react-slot", "class-variance-authority", "clsx", "tailwind-merge"]
-            : entry.name === "select"
-              ? ["@radix-ui/react-select", "class-variance-authority", "clsx", "tailwind-merge"]
-              : ["clsx", "tailwind-merge"],
+        expectedDependenciesByName[entry.name] ?? ["clsx", "tailwind-merge"],
       )
       expect(entry.files).toHaveLength(1)
       expect(entry.files[0]).toMatchObject({

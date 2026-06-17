@@ -8,6 +8,7 @@ import { inputExamples } from "./input"
 import { labelExamples } from "./label"
 import { nativeSelectExamples } from "./native-select"
 import { selectExamples } from "./select"
+import { tabsExamples } from "./tabs"
 import { textareaExamples } from "./textarea"
 
 export const examples = {
@@ -21,6 +22,7 @@ export const examples = {
   ...labelExamples,
   ...nativeSelectExamples,
   ...selectExamples,
+  ...tabsExamples,
   ...textareaExamples,
 } as const
 
