@@ -9,6 +9,9 @@ import icon from "astro-icon"
 export default defineConfig({
   integrations: [react(), mdx(), icon()],
   vite: {
+    resolve: {
+      dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
+    },
     plugins: [tailwindcss()],
   },
 })
