@@ -6,7 +6,6 @@ import {
   DEFAULT_RADIUS_TOKENS,
   getEditorTokenValues,
   isRadiusToken,
-  type PresetVariant,
   type RadiusTokenValues,
   type TokenName,
   type ThemeTokenValues,
@@ -17,6 +16,7 @@ import { TokenControlsPanel } from "./TokenControlsPanel"
 import { PreviewPanel } from "./PreviewPanel"
 import type { PreviewSceneId } from "./preview-scenes"
 import { applyTheme, getInitialResolvedTheme } from "../theme/theme"
+import { getPresetVariant } from "./theme-presets"
 
 interface EditorState {
   light: ThemeTokenValues
@@ -25,6 +25,7 @@ interface EditorState {
   previewMode: PreviewMode
   filterQuery: string
   activeScene: PreviewSceneId
+  activePreset: { light: string | null; dark: string | null }
 }
 
 function createInitialState(): EditorState {
@@ -37,6 +38,7 @@ function createInitialState(): EditorState {
     previewMode,
     filterQuery: "",
     activeScene: "overview",
+    activePreset: { light: "default", dark: "default" },
   }
 }
 
@@ -66,6 +68,10 @@ export function CustomizationApp() {
           ...current[current.previewMode],
           [token]: value,
         },
+        activePreset: {
+          ...current.activePreset,
+          [current.previewMode]: null,
+        },
       }
     })
   }, [])
@@ -79,11 +85,33 @@ export function CustomizationApp() {
     setEditorState((current) => ({ ...current, previewMode }))
   }, [])
 
-  const handleApplyPreset = React.useCallback((variant: PresetVariant) => {
-    setEditorState((current) => ({
-      ...current,
-      [current.previewMode]: applyPreset(current[current.previewMode], variant),
-    }))
+  const handlePresetChange = React.useCallback((presetId: string) => {
+    setEditorState((current) => {
+      const variant = getPresetVariant(presetId)
+      const modeValues = current[current.previewMode]
+      let nextValues = modeValues
+
+      if (variant === null) {
+        const defaults = current.previewMode === "dark" ? DEFAULT_DARK_TOKENS : DEFAULT_LIGHT_TOKENS
+        nextValues = {
+          ...modeValues,
+          "--glass-bg": defaults["--glass-bg"],
+          "--glass-border": defaults["--glass-border"],
+          "--glass-blur": defaults["--glass-blur"],
+        }
+      } else {
+        nextValues = applyPreset(modeValues, variant)
+      }
+
+      return {
+        ...current,
+        [current.previewMode]: nextValues,
+        activePreset: {
+          ...current.activePreset,
+          [current.previewMode]: presetId,
+        },
+      }
+    })
   }, [])
 
   const handleFilterQueryChange = React.useCallback((filterQuery: string) => {
@@ -113,9 +141,10 @@ export function CustomizationApp() {
       <div className="flex h-full min-h-0 w-100 shrink-0 overflow-hidden">
         <TokenControlsPanel
           filterQuery={editorState.filterQuery}
-          previewMode={editorState.previewMode}
+          presetValue={editorState.activePreset[editorState.previewMode]}
           values={activeValues}
           onFilterQueryChange={handleFilterQueryChange}
+          onPresetChange={handlePresetChange}
           onTokenChange={handleTokenChange}
         />
       </div>
@@ -125,7 +154,6 @@ export function CustomizationApp() {
           <CustomizationToolbar
             previewMode={editorState.previewMode}
             onPreviewModeChange={handlePreviewModeChange}
-            onApplyPreset={handleApplyPreset}
             onReset={handleReset}
             onCopyExport={handleCopyExport}
             activeScene={editorState.activeScene}

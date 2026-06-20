@@ -1,4 +1,10 @@
-import { TOKEN_GROUPS, type TokenName, type TokenValues } from "./customization-tokens"
+import {
+  TOKEN_GROUPS,
+  TOKEN_LABELS,
+  type TokenName,
+  type TokenTab,
+  type TokenValues,
+} from "./customization-tokens"
 
 export interface TokenRowModel {
   token: TokenName
@@ -20,6 +26,7 @@ function matchesFilter(token: TokenName, groupLabel: string, filterQuery: string
 
   return (
     token.toLowerCase().includes(normalizedFilter) ||
+    TOKEN_LABELS[token].toLowerCase().includes(normalizedFilter) ||
     groupLabel.toLowerCase().includes(normalizedFilter)
   )
 }
@@ -31,13 +38,21 @@ function mapTokenRows(tokens: readonly TokenName[], values: TokenValues): TokenR
   }))
 }
 
-export function filterTokenGroups(values: TokenValues, filterQuery: string): TokenGroupModel[] {
-  return TOKEN_GROUPS.map((group) => ({
-    id: group.id,
-    label: group.label,
-    rows: mapTokenRows(
-      group.tokens.filter((token) => matchesFilter(token, group.label, filterQuery)),
-      values,
-    ),
-  })).filter((group) => group.rows.length > 0)
+export function filterTokenGroups(
+  values: TokenValues,
+  filterQuery: string,
+  tab?: TokenTab,
+): TokenGroupModel[] {
+  const sourceGroups = tab ? TOKEN_GROUPS.filter((group) => group.tab === tab) : TOKEN_GROUPS
+
+  return sourceGroups
+    .map((group) => ({
+      id: group.id,
+      label: group.label,
+      rows: mapTokenRows(
+        group.tokens.filter((token) => matchesFilter(token, group.label, filterQuery)),
+        values,
+      ),
+    }))
+    .filter((group) => group.rows.length > 0)
 }

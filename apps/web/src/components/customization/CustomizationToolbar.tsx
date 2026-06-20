@@ -1,6 +1,5 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import type { PresetVariant } from "./customization-tokens"
 import { Button } from "@glass-ui-kit/glass"
 import { PREVIEW_SCENES, type PreviewSceneId } from "./preview-scenes"
 
@@ -9,7 +8,6 @@ export type PreviewMode = "light" | "dark"
 interface CustomizationToolbarProps {
   previewMode: PreviewMode
   onPreviewModeChange: (mode: PreviewMode) => void
-  onApplyPreset: (variant: PresetVariant) => void
   onReset: () => void
   onCopyExport: () => Promise<boolean>
   activeScene: PreviewSceneId
@@ -25,7 +23,6 @@ function getModeButtonClassName(isActive: boolean) {
 export function CustomizationToolbar({
   previewMode,
   onPreviewModeChange,
-  onApplyPreset,
   onReset,
   onCopyExport,
   activeScene,
@@ -57,6 +54,9 @@ export function CustomizationToolbar({
 
   return (
     <div className="glass glass-soft flex items-center justify-between rounded-glass-md h-15 px-4">
+      <p role="status" className="sr-only">
+        {copyMessage}
+      </p>
       <div role="tablist" aria-label="Preview scenes" className="flex flex-wrap gap-3">
         {PREVIEW_SCENES.map((item) => {
           const isActive = item.id === scene.id

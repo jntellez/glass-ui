@@ -8,6 +8,7 @@ import {
   DEFAULT_DARK_TOKENS,
   DEFAULT_LIGHT_TOKENS,
   getEditorTokenValues,
+  getGroupsForTab,
   TOKEN_GROUPS,
 } from "./customization-tokens"
 
@@ -29,27 +30,29 @@ describe("customization tokens", () => {
     expect(TOKEN_GROUPS).toContainEqual({
       id: "accent",
       label: "Accent",
+      tab: "colors",
       tokens: ["--accent", "--accent-foreground"],
     })
     expect(TOKEN_GROUPS).toContainEqual({
       id: "status",
       label: "Status",
+      tab: "colors",
       tokens: ["--destructive", "--destructive-foreground"],
     })
   })
 
   it("keeps light and dark semantic color defaults aligned with the package token source", () => {
-    expect(DEFAULT_LIGHT_TOKENS["--accent"]).toBe("#d946ef")
+    expect(DEFAULT_LIGHT_TOKENS["--accent"]).toBe("#3f3f46")
     expect(DEFAULT_LIGHT_TOKENS["--accent-foreground"]).toBe("#ffffff")
-    expect(DEFAULT_DARK_TOKENS["--accent"]).toBe("#c084fc")
+    expect(DEFAULT_DARK_TOKENS["--accent"]).toBe("#d4d4d8")
     expect(DEFAULT_DARK_TOKENS["--accent-foreground"]).toBe("#18181b")
     expect(DEFAULT_LIGHT_TOKENS["--destructive"]).toBe("#dc2626")
     expect(DEFAULT_LIGHT_TOKENS["--destructive-foreground"]).toBe("#ffffff")
     expect(DEFAULT_DARK_TOKENS["--destructive"]).toBe("#f87171")
     expect(DEFAULT_DARK_TOKENS["--destructive-foreground"]).toBe("#18181b")
-    expect(packageTokensCss).toContain("--accent: #d946ef;")
+    expect(packageTokensCss).toContain("--accent: #3f3f46;")
     expect(packageTokensCss).toContain("--accent-foreground: #ffffff;")
-    expect(packageTokensCss).toContain("--accent: #c084fc;")
+    expect(packageTokensCss).toContain("--accent: #d4d4d8;")
     expect(packageTokensCss).toContain("--accent-foreground: #18181b;")
     expect(packageTokensCss).toContain("--destructive: #dc2626;")
     expect(packageTokensCss).toContain("--destructive-foreground: #ffffff;")
@@ -87,6 +90,29 @@ describe("customization tokens", () => {
     expect(getEditorTokenValues(DEFAULT_DARK_TOKENS, sharedRadius)["--foreground"]).toBe(
       DEFAULT_DARK_TOKENS["--foreground"],
     )
+  })
+
+  it("groups color tokens separately from non-color tokens", () => {
+    const colorGroupIds = getGroupsForTab("colors").map((group) => group.id)
+    const otherGroupIds = getGroupsForTab("other").map((group) => group.id)
+
+    expect(colorGroupIds).toEqual(["text", "accent", "status", "base", "variants"])
+    expect(otherGroupIds).toEqual(["shadows", "radius", "blur"])
+    expect(getGroupsForTab("typography")).toEqual([])
+
+    const baseGroup = TOKEN_GROUPS.find((group) => group.id === "base")
+    expect(baseGroup?.tokens).not.toContain("--glass-shadow")
+    expect(baseGroup?.tokens).not.toContain("--glass-blur")
+
+    const blurGroup = TOKEN_GROUPS.find((group) => group.id === "blur")
+    expect(blurGroup?.tokens).toEqual(["--glass-blur", "--glass-blur-strong", "--glass-blur-soft"])
+
+    const shadowGroup = TOKEN_GROUPS.find((group) => group.id === "shadows")
+    expect(shadowGroup?.tokens).toEqual([
+      "--glass-shadow-sm",
+      "--glass-shadow-md",
+      "--glass-shadow-lg",
+    ])
   })
 })
 

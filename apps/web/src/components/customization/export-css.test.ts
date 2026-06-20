@@ -9,7 +9,7 @@ import { serializeCss } from "./export-css"
 const expectedDefaultCss = `:root {
   --foreground: #18181b;
   --muted-foreground: #3f3f46;
-  --accent: #d946ef;
+  --accent: #3f3f46;
   --accent-foreground: #ffffff;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
@@ -35,7 +35,7 @@ const expectedDefaultCss = `:root {
 .dark {
   --foreground: #fafafa;
   --muted-foreground: #d4d4d8;
-  --accent: #c084fc;
+  --accent: #d4d4d8;
   --accent-foreground: #18181b;
   --destructive: #f87171;
   --destructive-foreground: #18181b;

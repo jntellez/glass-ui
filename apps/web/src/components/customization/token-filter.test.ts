@@ -15,16 +15,6 @@ describe("filterTokenGroups", () => {
 
     expect(filteredGroups).toEqual([
       {
-        id: "base",
-        label: "Base glass",
-        rows: [
-          {
-            token: "--glass-shadow",
-            value: DEFAULT_LIGHT_TOKENS["--glass-shadow"],
-          },
-        ],
-      },
-      {
         id: "shadows",
         label: "Shadows",
         rows: [
@@ -45,7 +35,7 @@ describe("filterTokenGroups", () => {
     ])
   })
 
-  it("matches trimmed queries against token and group labels without changing values", () => {
+  it("matches trimmed queries against token, label, and group labels without changing values", () => {
     const filteredGroups = filterTokenGroups(
       getEditorTokenValues(DEFAULT_LIGHT_TOKENS, DEFAULT_RADIUS_TOKENS),
       "  TEXT  ",
@@ -63,6 +53,49 @@ describe("filterTokenGroups", () => {
           {
             token: "--muted-foreground",
             value: DEFAULT_LIGHT_TOKENS["--muted-foreground"],
+          },
+        ],
+      },
+    ])
+  })
+
+  it("can restrict filtering to a single tab", () => {
+    const colorGroups = filterTokenGroups(
+      getEditorTokenValues(DEFAULT_LIGHT_TOKENS, DEFAULT_RADIUS_TOKENS),
+      "",
+      "colors",
+    )
+    const otherGroups = filterTokenGroups(
+      getEditorTokenValues(DEFAULT_LIGHT_TOKENS, DEFAULT_RADIUS_TOKENS),
+      "",
+      "other",
+    )
+
+    expect(colorGroups.map((group) => group.id)).toEqual([
+      "text",
+      "accent",
+      "status",
+      "base",
+      "variants",
+    ])
+    expect(otherGroups.map((group) => group.id)).toEqual(["shadows", "radius", "blur"])
+  })
+
+  it("matches token labels when filtering by tab", () => {
+    const filteredGroups = filterTokenGroups(
+      getEditorTokenValues(DEFAULT_LIGHT_TOKENS, DEFAULT_RADIUS_TOKENS),
+      "strong background",
+      "colors",
+    )
+
+    expect(filteredGroups).toEqual([
+      {
+        id: "variants",
+        label: "Variant tokens",
+        rows: [
+          {
+            token: "--glass-bg-strong",
+            value: DEFAULT_LIGHT_TOKENS["--glass-bg-strong"],
           },
         ],
       },

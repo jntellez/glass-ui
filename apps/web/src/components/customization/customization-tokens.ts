@@ -37,6 +37,7 @@ export type RadiusTokenValues = Record<RadiusTokenName, string>
 export type ThemeTokenName = Exclude<TokenName, RadiusTokenName>
 export type ThemeTokenValues = Record<ThemeTokenName, string>
 export type PresetVariant = "soft" | "strong"
+export type TokenTab = "colors" | "typography" | "other"
 
 export const DEFAULT_RADIUS_TOKENS: RadiusTokenValues = {
   "--glass-radius-sm": "0.375rem",
@@ -48,7 +49,7 @@ export const DEFAULT_RADIUS_TOKENS: RadiusTokenValues = {
 export const DEFAULT_LIGHT_TOKENS: ThemeTokenValues = {
   "--foreground": "#18181b",
   "--muted-foreground": "#3f3f46",
-  "--accent": "#d946ef",
+  "--accent": "#3f3f46",
   "--accent-foreground": "#ffffff",
   "--destructive": "#dc2626",
   "--destructive-foreground": "#ffffff",
@@ -70,7 +71,7 @@ export const DEFAULT_LIGHT_TOKENS: ThemeTokenValues = {
 export const DEFAULT_DARK_TOKENS: ThemeTokenValues = {
   "--foreground": "#fafafa",
   "--muted-foreground": "#d4d4d8",
-  "--accent": "#c084fc",
+  "--accent": "#d4d4d8",
   "--accent-foreground": "#18181b",
   "--destructive": "#f87171",
   "--destructive-foreground": "#18181b",
@@ -89,52 +90,90 @@ export const DEFAULT_DARK_TOKENS: ThemeTokenValues = {
   "--glass-blur-soft": "2px",
 }
 
+export const TOKEN_LABELS: Record<TokenName, string> = {
+  "--foreground": "Foreground",
+  "--muted-foreground": "Muted foreground",
+  "--accent": "Accent",
+  "--accent-foreground": "Accent foreground",
+  "--destructive": "Destructive",
+  "--destructive-foreground": "Destructive foreground",
+  "--glass-bg": "Background",
+  "--glass-border": "Border",
+  "--glass-shadow": "Shadow",
+  "--glass-blur": "Blur",
+  "--glass-shadow-sm": "Shadow small",
+  "--glass-shadow-md": "Shadow medium",
+  "--glass-shadow-lg": "Shadow large",
+  "--glass-radius-sm": "Radius small",
+  "--glass-radius-md": "Radius medium",
+  "--glass-radius-lg": "Radius large",
+  "--glass-radius-xl": "Radius extra large",
+  "--glass-bg-strong": "Strong background",
+  "--glass-border-strong": "Strong border",
+  "--glass-blur-strong": "Strong blur",
+  "--glass-bg-soft": "Soft background",
+  "--glass-border-soft": "Soft border",
+  "--glass-blur-soft": "Soft blur",
+}
+
 export const TOKEN_GROUPS = [
   {
     id: "text",
     label: "Text",
+    tab: "colors",
     tokens: ["--foreground", "--muted-foreground"],
   },
   {
     id: "accent",
     label: "Accent",
+    tab: "colors",
     tokens: ["--accent", "--accent-foreground"],
   },
   {
     id: "status",
     label: "Status",
+    tab: "colors",
     tokens: ["--destructive", "--destructive-foreground"],
   },
   {
     id: "base",
     label: "Base glass",
-    tokens: ["--glass-bg", "--glass-border", "--glass-shadow", "--glass-blur"],
+    tab: "colors",
+    tokens: ["--glass-bg", "--glass-border"],
+  },
+  {
+    id: "variants",
+    label: "Variant tokens",
+    tab: "colors",
+    tokens: [
+      "--glass-bg-strong",
+      "--glass-border-strong",
+      "--glass-bg-soft",
+      "--glass-border-soft",
+    ],
   },
   {
     id: "shadows",
     label: "Shadows",
+    tab: "other",
     tokens: ["--glass-shadow-sm", "--glass-shadow-md", "--glass-shadow-lg"],
   },
   {
     id: "radius",
     label: "Radius",
+    tab: "other",
     tokens: ["--glass-radius-sm", "--glass-radius-md", "--glass-radius-lg", "--glass-radius-xl"],
   },
   {
-    id: "variants",
-    label: "Variant tokens",
-    tokens: [
-      "--glass-bg-strong",
-      "--glass-border-strong",
-      "--glass-blur-strong",
-      "--glass-bg-soft",
-      "--glass-border-soft",
-      "--glass-blur-soft",
-    ],
+    id: "blur",
+    label: "Blur",
+    tab: "other",
+    tokens: ["--glass-blur", "--glass-blur-strong", "--glass-blur-soft"],
   },
 ] as const satisfies ReadonlyArray<{
   id: string
   label: string
+  tab: TokenTab
   tokens: readonly TokenName[]
 }>
 
@@ -177,4 +216,8 @@ export function applyPreset(values: ThemeTokenValues, variant: PresetVariant): T
     "--glass-border": values[preset["--glass-border"]],
     "--glass-blur": values[preset["--glass-blur"]],
   }
+}
+
+export function getGroupsForTab(tab: TokenTab) {
+  return tab === "typography" ? [] : TOKEN_GROUPS.filter((group) => group.tab === tab)
 }
