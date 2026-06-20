@@ -12,6 +12,7 @@ import { labelExamples } from "./label"
 import { nativeSelectExamples } from "./native-select"
 import { popoverExamples } from "./popover"
 import { selectExamples } from "./select"
+import { sliderExamples } from "./slider"
 import { tabsExamples } from "./tabs"
 import { textareaExamples } from "./textarea"
 
@@ -30,6 +31,7 @@ export const examples = {
   ...nativeSelectExamples,
   ...popoverExamples,
   ...selectExamples,
+  ...sliderExamples,
   ...tabsExamples,
   ...textareaExamples,
 } as const

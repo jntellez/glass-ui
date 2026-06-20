@@ -17,6 +17,7 @@ const expectedNames = [
   "native-select",
   "popover",
   "select",
+  "slider",
   "tabs",
   "textarea",
 ] as const
@@ -39,6 +40,7 @@ const expectedDependenciesByName = {
   ],
   popover: ["@radix-ui/react-popover", "class-variance-authority", "clsx", "tailwind-merge"],
   select: ["@radix-ui/react-select", "class-variance-authority", "clsx", "tailwind-merge"],
+  slider: ["@radix-ui/react-slider", "class-variance-authority", "clsx", "tailwind-merge"],
   tabs: ["@radix-ui/react-tabs", "class-variance-authority", "clsx", "tailwind-merge"],
 } satisfies Partial<Record<(typeof expectedNames)[number], string[]>>
 

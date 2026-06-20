@@ -36,6 +36,7 @@ export const sidebarNav: SidebarSection[] = [
       { title: "Native Select", href: "/docs/components/native-select" },
       { title: "Popover", href: "/docs/components/popover" },
       { title: "Select", href: "/docs/components/select" },
+      { title: "Slider", href: "/docs/components/slider" },
       { title: "Tabs", href: "/docs/components/tabs" },
       { title: "Textarea", href: "/docs/components/textarea" },
     ],

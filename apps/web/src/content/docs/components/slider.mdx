@@ -1,0 +1,77 @@
+---
+title: Slider
+description: Accessible range input for numeric adjustments with glassmorphism styling.
+---
+
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="slider-demo" client:load />
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add slider"
+  pnpm="pnpm dlx @glass-ui-kit/cli add slider"
+  yarn="yarn dlx @glass-ui-kit/cli add slider"
+  bun="bunx @glass-ui-kit/cli add slider"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { Slider } from "@/components/ui/slider"
+
+  export default function App() {
+    return <Slider defaultValue={[50]} min={0} max={100} step={1} aria-label="Volume" />
+  }`}
+/>
+
+## Examples
+
+### Sizes
+
+Use the `size` prop for the standard slider scale. `md` is the default.
+
+<ComponentPreview name="slider-sizes" client:load />
+
+### Variants
+
+Use `variant` to match the control surface with the surrounding UI.
+
+<ComponentPreview name="slider-variants" client:load />
+
+## Styling
+
+Slider follows the same prop-first pattern as the other form controls. Reach for `variant` and `size` first, then use `className` as an escape hatch.
+
+<CodeBlock
+  lang="tsx"
+  code={`<Slider defaultValue={[24]} aria-label="Volume" />
+  <Slider variant="soft" defaultValue={[32]} aria-label="Brightness" />
+  <Slider variant="strong" size="lg" defaultValue={[48]} aria-label="Contrast" />
+  <Slider variant="transparent" className="max-w-xs" defaultValue={[12]} aria-label="Blur" />
+
+  /* Controlled */
+  <Slider value={[value]} onValueChange={(nextValue) => setValue(nextValue[0])} aria-label="Opacity" />`}
+/>
+
+## API Reference
+
+Accepts all Radix `Slider.Root` props.
+
+| Prop | Type |
+| --- | --- |
+| `variant` | `"default" \| "soft" \| "strong" \| "transparent"` |
+| `size` | `"sm" \| "md" \| "lg"` |
+| `value` | `number[]` |
+| `defaultValue` | `number[]` |
+| `onValueChange` | `(value: number[]) => void` |
+| `min` | `number` |
+| `max` | `number` |
+| `step` | `number` |
+| `disabled` | `boolean` |
+| `className` | `string` |

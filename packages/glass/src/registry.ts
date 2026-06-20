@@ -176,6 +176,17 @@ export const registry: RegistryIndex = [
     ],
   },
   {
+    name: "slider",
+    type: "registry:ui",
+    dependencies: ["@radix-ui/react-slider", "class-variance-authority", "clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/slider/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "tabs",
     type: "registry:ui",
     dependencies: ["@radix-ui/react-tabs", "class-variance-authority", "clsx", "tailwind-merge"],
