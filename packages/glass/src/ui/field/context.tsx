@@ -4,10 +4,13 @@ type FieldContextValue = {
   invalid: boolean
   defaultControlId: string
   controlId: string | null
+  defaultLabelId: string
+  labelId: string | null
   defaultDescriptionId: string
   descriptionId: string | null
   defaultErrorId: string
   errorId: string | null
+  setLabelId: (id: string | null) => void
   setControlId: (id: string | null) => void
   setDescriptionId: (id: string | null) => void
   setErrorId: (id: string | null) => void

@@ -11,6 +11,7 @@ const Field = React.forwardRef<HTMLDivElement, FieldProps>(
     const generatedId = React.useId()
     const fieldId = id ?? `field-${sanitizeId(generatedId)}`
     const [controlId, setControlId] = React.useState<string | null>(null)
+    const [labelId, setLabelId] = React.useState<string | null>(null)
     const [descriptionId, setDescriptionId] = React.useState<string | null>(null)
     const [errorId, setErrorId] = React.useState<string | null>(null)
 
@@ -19,15 +20,18 @@ const Field = React.forwardRef<HTMLDivElement, FieldProps>(
         invalid,
         defaultControlId: `${fieldId}-control`,
         controlId,
+        defaultLabelId: `${fieldId}-label`,
+        labelId,
         defaultDescriptionId: `${fieldId}-description`,
         descriptionId,
         defaultErrorId: `${fieldId}-error`,
         errorId,
+        setLabelId,
         setControlId,
         setDescriptionId,
         setErrorId,
       }),
-      [controlId, descriptionId, errorId, fieldId, invalid],
+      [controlId, descriptionId, errorId, fieldId, invalid, labelId],
     )
 
     return (
