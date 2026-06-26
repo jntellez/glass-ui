@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import { CUSTOMIZATION_STORAGE_KEY, readPersistedEditorState } from "./customization-storage"
 import {
   DEFAULT_DARK_TOKENS,
   DEFAULT_LIGHT_TOKENS,
@@ -190,8 +191,8 @@ describe("CustomizationApp", () => {
     const categoryTabs = within(controlsRegion).getByRole("tablist", { name: /token categories/i })
 
     expect(within(categoryTabs).getByRole("tab", { name: "Colors" })).toBeInTheDocument()
-    expect(within(categoryTabs).getByRole("tab", { name: "Typography" })).toBeInTheDocument()
     expect(within(categoryTabs).getByRole("tab", { name: "Other" })).toBeInTheDocument()
+    expect(within(categoryTabs).queryByRole("tab", { name: "Typography" })).not.toBeInTheDocument()
 
     expect(
       within(controlsRegion).getByRole("searchbox", { name: /search colors/i }),
@@ -308,16 +309,6 @@ describe("CustomizationApp", () => {
     expect(previewScope.style.getPropertyValue("--glass-shadow-md")).toBe(
       "0px 4px 31px 0px rgba(0, 0, 0, 0.1)",
     )
-  })
-
-  it("shows an empty state on the Typography tab", async () => {
-    const user = userEvent.setup()
-
-    render(<CustomizationApp />)
-
-    await user.click(screen.getByRole("tab", { name: "Typography" }))
-
-    expect(screen.getByText("Typography tokens coming soon.")).toBeInTheDocument()
   })
 
   it("shows accent controls and updates preview samples with accent tokens in the active mode", async () => {
@@ -531,6 +522,12 @@ describe("CustomizationApp", () => {
     expect(contentTab).toHaveAttribute("aria-selected", "false")
     expect(screen.getByRole("tabpanel", { name: /components/i })).toBeInTheDocument()
     expect(screen.getByText("Team inbox")).toBeInTheDocument()
+    expect(screen.queryByText("Component surfaces")).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(
+        "Inspect interactive controls, density, and glass treatments with the active tokens.",
+      ),
+    ).not.toBeInTheDocument()
     expect(screen.getByRole("button", { name: /publish changes/i })).toBeInTheDocument()
     expect(screen.queryByText("Revenue snapshot")).not.toBeInTheDocument()
 
@@ -539,8 +536,117 @@ describe("CustomizationApp", () => {
     expect(componentsTab).toHaveAttribute("aria-selected", "false")
     expect(contentTab).toHaveAttribute("aria-selected", "true")
     expect(screen.getByRole("tabpanel", { name: /content/i })).toBeInTheDocument()
+    expect(screen.queryByText("Content density")).not.toBeInTheDocument()
     expect(screen.getByText("Weekly sync notes")).toBeInTheDocument()
     expect(screen.getByRole("article", { name: /default sample/i })).toBeInTheDocument()
+  })
+
+  it("persists customized tokens, preview mode, active scene, and presets in local storage", async () => {
+    const user = userEvent.setup()
+
+    const { unmount } = render(<CustomizationApp />)
+
+    fireEvent.change(screen.getByRole("textbox", { name: "Background" }), {
+      target: { value: "rgba(12, 34, 56, 0.7)" },
+    })
+    await user.click(screen.getByRole("button", { name: "Dark" }))
+    await user.click(screen.getByRole("button", { name: /select theme/i }))
+    await user.click(
+      within(screen.getByLabelText("Themes")).getByRole("button", { name: /strong/i }),
+    )
+    fireEvent.change(screen.getByRole("textbox", { name: "Border" }), {
+      target: { value: "rgba(90, 87, 210, 0.3)" },
+    })
+    await user.click(screen.getByRole("tab", { name: "Other" }))
+    fireEvent.change(screen.getByRole("textbox", { name: "Radius medium" }), {
+      target: { value: "1.25" },
+    })
+    await user.click(screen.getByRole("tab", { name: /content/i }))
+
+    expect(readPersistedEditorState("light")).toMatchObject({
+      previewMode: "dark",
+      activeScene: "content",
+      activePreset: {
+        light: null,
+        dark: null,
+      },
+    })
+
+    unmount()
+    render(<CustomizationApp />)
+
+    expect(screen.getByTestId("preview-scope")).toHaveAttribute("data-preview-mode", "dark")
+    expect(screen.getByRole("tab", { name: /content/i })).toHaveAttribute("aria-selected", "true")
+    expect(screen.getByRole("textbox", { name: "Border" })).toHaveValue("rgba(90, 87, 210, 0.3)")
+    expect(screen.getByRole("button", { name: "Select theme: Default" })).toBeInTheDocument()
+
+    await user.click(screen.getByRole("button", { name: "Light" }))
+
+    expect(screen.getByRole("textbox", { name: "Background" })).toHaveValue("rgba(12, 34, 56, 0.7)")
+
+    await user.click(screen.getByRole("tab", { name: "Other" }))
+
+    expect(screen.getByRole("textbox", { name: "Radius medium" })).toHaveValue("1.25")
+  })
+
+  it("falls back to defaults when persisted customization storage is corrupted", () => {
+    localStorage.setItem(CUSTOMIZATION_STORAGE_KEY, "{not-json")
+
+    render(<CustomizationApp />)
+
+    expect(screen.getByRole("textbox", { name: "Background" })).toHaveValue(
+      DEFAULT_LIGHT_TOKENS["--glass-bg"],
+    )
+    expect(screen.getByTestId("preview-scope")).toHaveAttribute("data-preview-mode", "light")
+  })
+
+  it("returns null when localStorage is unavailable", () => {
+    const originalDescriptor = Object.getOwnPropertyDescriptor(window, "localStorage")
+
+    Object.defineProperty(window, "localStorage", {
+      configurable: true,
+      get() {
+        throw new Error("blocked")
+      },
+    })
+
+    try {
+      expect(readPersistedEditorState("light")).toBeNull()
+    } finally {
+      if (originalDescriptor) {
+        Object.defineProperty(window, "localStorage", originalDescriptor)
+      }
+    }
+  })
+
+  it("renders and applies preview theme changes when localStorage is unavailable", () => {
+    const originalDescriptor = Object.getOwnPropertyDescriptor(window, "localStorage")
+
+    Object.defineProperty(window, "localStorage", {
+      configurable: true,
+      get() {
+        throw new Error("blocked")
+      },
+    })
+
+    try {
+      render(<CustomizationApp />)
+
+      expect(screen.getByRole("textbox", { name: "Background" })).toHaveValue(
+        DEFAULT_LIGHT_TOKENS["--glass-bg"],
+      )
+      expect(screen.getByTestId("preview-scope")).toHaveAttribute("data-preview-mode", "light")
+
+      fireEvent.click(screen.getByRole("button", { name: "Dark" }))
+
+      expect(document.documentElement.className).toBe("dark")
+      expect(document.documentElement.style.colorScheme).toBe("dark")
+      expect(screen.getByTestId("preview-scope")).toHaveAttribute("data-preview-mode", "dark")
+    } finally {
+      if (originalDescriptor) {
+        Object.defineProperty(window, "localStorage", originalDescriptor)
+      }
+    }
   })
 
   it("updates the active preview scene immediately for token edits and preview-mode switches", async () => {

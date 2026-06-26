@@ -19,7 +19,7 @@ export function PreviewPanel({
   const scene = PREVIEW_SCENES.find((item) => item.id === activeScene) ?? PREVIEW_SCENES[0]
 
   return (
-    <aside aria-label="Preview" className="flex min-h-0 flex-1 flex-col space-y-4 overflow-hidden">
+    <aside aria-label="Preview" className="flex min-h-0 flex-1 flex-col overflow-hidden">
       <div
         data-testid="preview-scope"
         data-preview-mode={previewMode}

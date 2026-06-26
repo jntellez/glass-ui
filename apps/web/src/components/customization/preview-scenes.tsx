@@ -13,8 +13,6 @@ export interface PreviewSceneDefinition {
   id: PreviewSceneId
   label: string
   panelLabel: string
-  title: string
-  description: string
   render: (props: PreviewSceneRenderProps) => React.ReactNode
 }
 
@@ -105,8 +103,6 @@ export const PREVIEW_SCENES: readonly PreviewSceneDefinition[] = [
     id: "overview",
     label: "Overview",
     panelLabel: "Overview scene",
-    title: "Workspace overview",
-    description: "Compare dashboard cards, primary actions, and dense stats before exporting CSS.",
     render: ({ previewMode }) => (
       <Card className="space-y-4 p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -140,9 +136,6 @@ export const PREVIEW_SCENES: readonly PreviewSceneDefinition[] = [
     id: "components",
     label: "Components",
     panelLabel: "Components scene",
-    title: "Component surfaces",
-    description:
-      "Inspect interactive controls, density, and glass treatments with the active tokens.",
     render: () => (
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="space-y-4 p-5">
@@ -184,8 +177,6 @@ export const PREVIEW_SCENES: readonly PreviewSceneDefinition[] = [
     id: "content",
     label: "Content",
     panelLabel: "Content scene",
-    title: "Content density",
-    description: "Review stacked reading surfaces and token summaries without leaving the editor.",
     render: ({ values }) => (
       <div className="space-y-4">
         <Card className="glass-soft space-y-4 p-5">

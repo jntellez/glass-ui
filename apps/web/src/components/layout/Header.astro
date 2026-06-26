@@ -1,10 +1,11 @@
 ---
 import ThemeToggle from "@/components/theme/ThemeToggle.tsx"
-import { getNavAriaCurrent } from "@/components/layout/nav"
+import { getHeaderNavigation, HEADER_NAV_BUTTON_CLASS_NAME } from "@/components/layout/nav"
 import Button from "@/components/ui/Button.astro"
 import { SiGithub } from "@icons-pack/react-simple-icons"
 
 const pathname = Astro.url.pathname
+const navigation = getHeaderNavigation(pathname)
 ---
 
 <header class="glass glass-soft top-2 sticky rounded-glass-md mx-2 z-50">
@@ -18,18 +19,28 @@ const pathname = Astro.url.pathname
         <a href="/">Glass UI</a>
       </Button>
 
-      <nav class="hidden sm:flex items-center font-medium text-foreground">
-        <Button asChild variant="ghost" className="hover:border-transparent hover:glass px-3">
-          <a href="/docs">Docs</a>
-        </Button>
-        <Button asChild variant="ghost" className="hover:border-transparent hover:glass px-3">
-          <a href="/docs/components">Components</a>
-        </Button>
-        <Button asChild variant="ghost" className="hover:border-transparent hover:glass px-3">
-          <a href="/customization" aria-current={getNavAriaCurrent(pathname, "/customization")}
-            >Customization</a
-          >
-        </Button>
+      <nav class={navigation.mobile.className}>
+        {
+          navigation.mobile.links.map((item) => (
+            <Button asChild variant="ghost" className={HEADER_NAV_BUTTON_CLASS_NAME}>
+              <a href={item.href} aria-current={item.ariaCurrent}>
+                {item.label}
+              </a>
+            </Button>
+          ))
+        }
+      </nav>
+
+      <nav class={navigation.desktop.className}>
+        {
+          navigation.desktop.links.map((item) => (
+            <Button asChild variant="ghost" className={HEADER_NAV_BUTTON_CLASS_NAME}>
+              <a href={item.href} aria-current={item.ariaCurrent}>
+                {item.label}
+              </a>
+            </Button>
+          ))
+        }
       </nav>
     </div>
 

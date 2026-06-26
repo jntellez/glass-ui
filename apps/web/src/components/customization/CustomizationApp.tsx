@@ -17,6 +17,11 @@ import { PreviewPanel } from "./PreviewPanel"
 import type { PreviewSceneId } from "./preview-scenes"
 import { applyTheme, getInitialResolvedTheme } from "../theme/theme"
 import { getPresetVariant } from "./theme-presets"
+import {
+  clearPersistedEditorState,
+  persistEditorState,
+  readPersistedEditorState,
+} from "./customization-storage"
 
 interface EditorState {
   light: ThemeTokenValues
@@ -30,6 +35,19 @@ interface EditorState {
 
 function createInitialState(): EditorState {
   const previewMode = getInitialResolvedTheme()
+  const persistedState = readPersistedEditorState(previewMode)
+
+  if (persistedState) {
+    return {
+      light: persistedState.light,
+      dark: persistedState.dark,
+      radius: persistedState.radius,
+      previewMode: persistedState.previewMode,
+      filterQuery: "",
+      activeScene: persistedState.activeScene,
+      activePreset: persistedState.activePreset,
+    }
+  }
 
   return {
     light: { ...DEFAULT_LIGHT_TOKENS },
@@ -44,6 +62,30 @@ function createInitialState(): EditorState {
 
 export function CustomizationApp() {
   const [editorState, setEditorState] = React.useState<EditorState>(() => createInitialState())
+
+  React.useEffect(() => {
+    if (getInitialResolvedTheme() !== editorState.previewMode) {
+      applyTheme(editorState.previewMode)
+    }
+  }, [editorState.previewMode])
+
+  React.useEffect(() => {
+    persistEditorState({
+      light: editorState.light,
+      dark: editorState.dark,
+      radius: editorState.radius,
+      previewMode: editorState.previewMode,
+      activeScene: editorState.activeScene,
+      activePreset: editorState.activePreset,
+    })
+  }, [
+    editorState.activePreset,
+    editorState.activeScene,
+    editorState.dark,
+    editorState.light,
+    editorState.previewMode,
+    editorState.radius,
+  ])
 
   const activeValues = getEditorTokenValues(
     editorState[editorState.previewMode],
@@ -77,6 +119,7 @@ export function CustomizationApp() {
   }, [])
 
   const handleReset = React.useCallback(() => {
+    clearPersistedEditorState()
     setEditorState(createInitialState())
   }, [])
 

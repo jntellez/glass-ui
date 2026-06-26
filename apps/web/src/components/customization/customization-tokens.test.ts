@@ -98,7 +98,6 @@ describe("customization tokens", () => {
 
     expect(colorGroupIds).toEqual(["text", "accent", "status", "base", "variants"])
     expect(otherGroupIds).toEqual(["shadows", "radius", "blur"])
-    expect(getGroupsForTab("typography")).toEqual([])
 
     const baseGroup = TOKEN_GROUPS.find((group) => group.id === "base")
     expect(baseGroup?.tokens).not.toContain("--glass-shadow")

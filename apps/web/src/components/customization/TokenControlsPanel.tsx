@@ -66,9 +66,6 @@ export function TokenControlsPanel({
             <TabsTrigger value="colors" size="lg">
               Colors
             </TabsTrigger>
-            <TabsTrigger value="typography" size="lg">
-              Typography
-            </TabsTrigger>
             <TabsTrigger value="other" size="lg">
               Other
             </TabsTrigger>
@@ -112,18 +109,6 @@ export function TokenControlsPanel({
                   </CollapsibleContent>
                 </Collapsible>
               ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent
-            value="typography"
-            className="mt-0 flex min-h-0 flex-1 flex-col items-center justify-center overflow-hidden rounded-none border-0 bg-transparent p-0 text-foreground shadow-none backdrop-blur-none"
-          >
-            <div className="max-w-xs text-center">
-              <p className="text-sm font-medium text-foreground">Typography tokens coming soon.</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                This space is reserved for future type scale controls.
-              </p>
             </div>
           </TabsContent>
 

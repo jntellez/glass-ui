@@ -37,7 +37,7 @@ export type RadiusTokenValues = Record<RadiusTokenName, string>
 export type ThemeTokenName = Exclude<TokenName, RadiusTokenName>
 export type ThemeTokenValues = Record<ThemeTokenName, string>
 export type PresetVariant = "soft" | "strong"
-export type TokenTab = "colors" | "typography" | "other"
+export type TokenTab = "colors" | "other"
 
 export const DEFAULT_RADIUS_TOKENS: RadiusTokenValues = {
   "--glass-radius-sm": "0.375rem",
@@ -219,5 +219,5 @@ export function applyPreset(values: ThemeTokenValues, variant: PresetVariant): T
 }
 
 export function getGroupsForTab(tab: TokenTab) {
-  return tab === "typography" ? [] : TOKEN_GROUPS.filter((group) => group.tab === tab)
+  return TOKEN_GROUPS.filter((group) => group.tab === tab)
 }
