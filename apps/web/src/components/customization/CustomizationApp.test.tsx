@@ -9,6 +9,7 @@ import {
 } from "./customization-tokens"
 import { serializeCss } from "./export-css"
 import { CustomizationApp } from "./CustomizationApp"
+import ThemeToggle from "../theme/ThemeToggle"
 
 describe("CustomizationApp", () => {
   const matchMedia = vi.fn()
@@ -109,17 +110,26 @@ describe("CustomizationApp", () => {
     expect(previewScope).toHaveAttribute("data-preview-mode", "dark")
   })
 
-  it("persists explicit toolbar theme changes and overrides a previous system choice", async () => {
+  it("persists explicit toolbar theme changes and synchronizes the global header toggle", async () => {
     const user = userEvent.setup()
     localStorage.setItem("theme", "system")
     matchMedia.mockReturnValue({ matches: true })
 
-    render(<CustomizationApp />)
+    render(
+      <>
+        <ThemeToggle />
+        <CustomizationApp />
+      </>,
+    )
 
     const previewScope = screen.getByTestId("preview-scope")
 
     expect(previewScope).toHaveAttribute("data-preview-mode", "dark")
     expect(localStorage.getItem("theme")).toBe("system")
+    expect(screen.getByRole("radio", { name: /system theme/i })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    )
 
     await user.click(screen.getByRole("button", { name: "Light" }))
 
@@ -127,6 +137,47 @@ describe("CustomizationApp", () => {
     expect(document.documentElement.className).toBe("light")
     expect(document.documentElement.style.colorScheme).toBe("light")
     expect(localStorage.getItem("theme")).toBe("light")
+    expect(screen.getByRole("button", { name: "Light" })).toHaveAttribute("aria-pressed", "true")
+    expect(screen.getByRole("radio", { name: /light theme/i })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    )
+
+    await user.click(screen.getByRole("button", { name: "Dark" }))
+
+    expect(previewScope).toHaveAttribute("data-preview-mode", "dark")
+    expect(document.documentElement.className).toBe("dark")
+    expect(document.documentElement.style.colorScheme).toBe("dark")
+    expect(localStorage.getItem("theme")).toBe("dark")
+    expect(screen.getByRole("button", { name: "Dark" })).toHaveAttribute("aria-pressed", "true")
+    expect(screen.getByRole("radio", { name: /dark theme/i })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    )
+  })
+
+  it("updates the customization active mode when the header toggle changes the global theme", async () => {
+    const user = userEvent.setup()
+
+    render(
+      <>
+        <ThemeToggle />
+        <CustomizationApp />
+      </>,
+    )
+
+    const previewScope = screen.getByTestId("preview-scope")
+
+    expect(previewScope).toHaveAttribute("data-preview-mode", "light")
+
+    await user.click(screen.getByRole("radio", { name: /dark theme/i }))
+
+    await waitFor(() => {
+      expect(previewScope).toHaveAttribute("data-preview-mode", "dark")
+    })
+
+    expect(screen.getByRole("button", { name: "Dark" })).toHaveAttribute("aria-pressed", "true")
+    expect(localStorage.getItem("theme")).toBe("dark")
   })
 
   it("copies the deterministic css export for the current editor state", async () => {

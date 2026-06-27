@@ -15,7 +15,7 @@ import { CustomizationToolbar, type PreviewMode } from "./CustomizationToolbar"
 import { TokenControlsPanel } from "./TokenControlsPanel"
 import { PreviewPanel } from "./PreviewPanel"
 import type { PreviewSceneId } from "./preview-scenes"
-import { applyTheme, getInitialResolvedTheme } from "../theme/theme"
+import { applyTheme, getInitialResolvedTheme, subscribeToThemeChange } from "../theme/theme"
 import { getPresetVariant } from "./theme-presets"
 import {
   clearPersistedEditorState,
@@ -68,6 +68,16 @@ export function CustomizationApp() {
       applyTheme(editorState.previewMode)
     }
   }, [editorState.previewMode])
+
+  React.useEffect(() => {
+    return subscribeToThemeChange(({ resolvedTheme }) => {
+      setEditorState((current) =>
+        current.previewMode === resolvedTheme
+          ? current
+          : { ...current, previewMode: resolvedTheme },
+      )
+    })
+  }, [])
 
   React.useEffect(() => {
     persistEditorState({

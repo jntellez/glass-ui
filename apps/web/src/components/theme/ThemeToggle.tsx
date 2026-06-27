@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Sun, Monitor, Moon } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { applyTheme, getStoredTheme, type Theme } from "./theme"
+import { applyTheme, getStoredTheme, subscribeToThemeChange, type Theme } from "./theme"
 
 const LENS_POSITIONS: Record<Theme, string> = {
   light: "translate-x-0",
@@ -18,6 +18,7 @@ const THEME_OPTIONS = [
 export default function ThemeToggle({ className }: { className?: string }) {
   const [mounted, setMounted] = useState(false)
   const [theme, setTheme] = useState<Theme>("system")
+  const syncedThemeRef = useRef<Theme | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -25,10 +26,20 @@ export default function ThemeToggle({ className }: { className?: string }) {
     if (stored) {
       setTheme(stored)
     }
+
+    return subscribeToThemeChange(({ theme }) => {
+      syncedThemeRef.current = theme
+      setTheme(theme)
+    })
   }, [])
 
   useEffect(() => {
     if (!mounted) return
+
+    if (syncedThemeRef.current === theme) {
+      syncedThemeRef.current = null
+      return
+    }
 
     applyTheme(theme)
   }, [theme, mounted])
