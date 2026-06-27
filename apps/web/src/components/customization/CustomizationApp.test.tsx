@@ -323,7 +323,7 @@ describe("CustomizationApp", () => {
 
     await user.click(screen.getByRole("tab", { name: /content/i }))
 
-    const defaultSample = screen.getByRole("article", { name: /default sample/i })
+    const defaultSample = screen.getByRole("article", { name: /review checklist sample/i })
 
     expect(
       within(defaultSample).getByText(`Accent ${DEFAULT_LIGHT_TOKENS["--accent"]}`),
@@ -462,9 +462,9 @@ describe("CustomizationApp", () => {
 
     await user.click(screen.getByRole("tab", { name: /content/i }))
 
-    const defaultSample = screen.getByRole("article", { name: /default sample/i })
-    const softSample = screen.getByRole("article", { name: /soft sample/i })
-    const strongSample = screen.getByRole("article", { name: /strong sample/i })
+    const defaultSample = screen.getByRole("article", { name: /review checklist sample/i })
+    const softSample = screen.getByRole("article", { name: /inline callout sample/i })
+    const strongSample = screen.getByRole("article", { name: /publication blocker sample/i })
 
     expect(within(defaultSample).getByText(DEFAULT_LIGHT_TOKENS["--glass-bg"])).toBeInTheDocument()
     expect(
@@ -488,18 +488,19 @@ describe("CustomizationApp", () => {
 
     const previewRegion = screen.getByRole("complementary", { name: /preview/i })
     const tablist = screen.getByRole("tablist", { name: /preview scenes/i })
-    const overviewTab = within(tablist).getByRole("tab", { name: /overview/i })
-    const componentsTab = within(tablist).getByRole("tab", { name: /components/i })
+    const overviewTab = within(tablist).getByRole("tab", { name: /dashboard/i })
+    const settingsTab = within(tablist).getByRole("tab", { name: /settings/i })
     const contentTab = within(tablist).getByRole("tab", { name: /content/i })
-    const activePanel = within(previewRegion).getByRole("tabpanel", { name: /overview/i })
+    const activePanel = within(previewRegion).getByRole("tabpanel", { name: /dashboard/i })
 
     expect(overviewTab).toHaveAttribute("aria-selected", "true")
-    expect(componentsTab).toHaveAttribute("aria-selected", "false")
+    expect(settingsTab).toHaveAttribute("aria-selected", "false")
     expect(contentTab).toHaveAttribute("aria-selected", "false")
-    expect(within(activePanel).getByText("Revenue snapshot")).toBeInTheDocument()
-    expect(within(activePanel).getByRole("button", { name: /share preview/i })).toBeInTheDocument()
-    expect(within(activePanel).queryByText("Team inbox")).not.toBeInTheDocument()
-    expect(within(activePanel).queryByText("Weekly sync notes")).not.toBeInTheDocument()
+    expect(within(activePanel).getByText("Revenue command center")).toBeInTheDocument()
+    expect(within(activePanel).getByRole("button", { name: /share report/i })).toBeInTheDocument()
+    expect(within(activePanel).getByText("Traffic mix")).toBeInTheDocument()
+    expect(within(activePanel).queryByText("Workspace administration")).not.toBeInTheDocument()
+    expect(within(activePanel).queryByText("Launch narrative workspace")).not.toBeInTheDocument()
   })
 
   it("switches preview scenes with accessible tab semantics", async () => {
@@ -509,36 +510,31 @@ describe("CustomizationApp", () => {
 
     const previewRegion = screen.getByRole("complementary", { name: /preview/i })
     const tablist = screen.getByRole("tablist", { name: /preview scenes/i })
-    const overviewTab = within(tablist).getByRole("tab", { name: /overview/i })
-    const componentsTab = within(tablist).getByRole("tab", { name: /components/i })
+    const overviewTab = within(tablist).getByRole("tab", { name: /dashboard/i })
+    const settingsTab = within(tablist).getByRole("tab", { name: /settings/i })
     const contentTab = within(tablist).getByRole("tab", { name: /content/i })
 
-    expect(screen.getByRole("tabpanel", { name: /overview/i })).toBeInTheDocument()
+    expect(screen.getByRole("tabpanel", { name: /dashboard/i })).toBeInTheDocument()
 
-    await user.click(componentsTab)
+    await user.click(settingsTab)
 
     expect(overviewTab).toHaveAttribute("aria-selected", "false")
-    expect(componentsTab).toHaveAttribute("aria-selected", "true")
+    expect(settingsTab).toHaveAttribute("aria-selected", "true")
     expect(contentTab).toHaveAttribute("aria-selected", "false")
-    expect(screen.getByRole("tabpanel", { name: /components/i })).toBeInTheDocument()
-    expect(screen.getByText("Team inbox")).toBeInTheDocument()
-    expect(screen.queryByText("Component surfaces")).not.toBeInTheDocument()
-    expect(
-      screen.queryByText(
-        "Inspect interactive controls, density, and glass treatments with the active tokens.",
-      ),
-    ).not.toBeInTheDocument()
-    expect(screen.getByRole("button", { name: /publish changes/i })).toBeInTheDocument()
-    expect(screen.queryByText("Revenue snapshot")).not.toBeInTheDocument()
+    expect(screen.getByRole("tabpanel", { name: /settings/i })).toBeInTheDocument()
+    expect(screen.getByText("Workspace administration")).toBeInTheDocument()
+    expect(screen.getByText("Connected destinations")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /save changes/i })).toBeInTheDocument()
+    expect(screen.queryByText("Revenue command center")).not.toBeInTheDocument()
 
     await user.click(contentTab)
 
-    expect(componentsTab).toHaveAttribute("aria-selected", "false")
+    expect(settingsTab).toHaveAttribute("aria-selected", "false")
     expect(contentTab).toHaveAttribute("aria-selected", "true")
     expect(screen.getByRole("tabpanel", { name: /content/i })).toBeInTheDocument()
-    expect(screen.queryByText("Content density")).not.toBeInTheDocument()
-    expect(screen.getByText("Weekly sync notes")).toBeInTheDocument()
-    expect(screen.getByRole("article", { name: /default sample/i })).toBeInTheDocument()
+    expect(screen.getByText("Launch narrative workspace")).toBeInTheDocument()
+    expect(screen.getByText("Publishing queue")).toBeInTheDocument()
+    expect(screen.getByRole("article", { name: /review checklist sample/i })).toBeInTheDocument()
   })
 
   it("persists customized tokens, preview mode, active scene, and presets in local storage", async () => {
@@ -656,7 +652,7 @@ describe("CustomizationApp", () => {
 
     await user.click(screen.getByRole("tab", { name: /content/i }))
 
-    const defaultSample = screen.getByRole("article", { name: /default sample/i })
+    const defaultSample = screen.getByRole("article", { name: /review checklist sample/i })
 
     expect(
       within(defaultSample).getByText(`Background ${DEFAULT_LIGHT_TOKENS["--glass-bg"]}`),
@@ -682,7 +678,7 @@ describe("CustomizationApp", () => {
 
     await user.click(screen.getByRole("tab", { name: /content/i }))
 
-    const defaultSample = screen.getByRole("article", { name: /default sample/i })
+    const defaultSample = screen.getByRole("article", { name: /review checklist sample/i })
 
     await user.click(screen.getByRole("button", { name: /select theme/i }))
     await user.click(
@@ -822,20 +818,20 @@ describe("CustomizationApp", () => {
     const previewRegion = screen.getByRole("complementary", { name: /preview/i })
     const tablist = screen.getByRole("tablist", { name: /preview scenes/i })
 
-    expect(within(tablist).getByRole("tab", { name: /overview/i })).toHaveAttribute(
+    expect(within(tablist).getByRole("tab", { name: /dashboard/i })).toHaveAttribute(
       "aria-selected",
       "true",
     )
-    expect(within(previewRegion).getByRole("tabpanel", { name: /overview/i })).toBeInTheDocument()
+    expect(within(previewRegion).getByRole("tabpanel", { name: /dashboard/i })).toBeInTheDocument()
 
     await user.type(screen.getByRole("searchbox", { name: /search colors/i }), "accent")
-    await user.click(screen.getByRole("tab", { name: /components/i }))
+    await user.click(screen.getByRole("tab", { name: /settings/i }))
 
-    expect(within(tablist).getByRole("tab", { name: /components/i })).toHaveAttribute(
+    expect(within(tablist).getByRole("tab", { name: /settings/i })).toHaveAttribute(
       "aria-selected",
       "true",
     )
-    expect(within(previewRegion).getByRole("tabpanel", { name: /components/i })).toBeInTheDocument()
+    expect(within(previewRegion).getByRole("tabpanel", { name: /settings/i })).toBeInTheDocument()
   })
 
   it("announces copy feedback in a live region", async () => {
@@ -861,6 +857,6 @@ describe("CustomizationApp", () => {
     expect(screen.getByRole("complementary", { name: /preview/i })).toBeInTheDocument()
     expect(screen.getByRole("tablist", { name: /preview scenes/i })).toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Foreground" })).toBeInTheDocument()
-    expect(screen.getByRole("tab", { name: /overview/i })).toBeInTheDocument()
+    expect(screen.getByRole("tab", { name: /dashboard/i })).toBeInTheDocument()
   })
 })
