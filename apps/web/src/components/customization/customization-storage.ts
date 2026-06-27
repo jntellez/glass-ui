@@ -7,6 +7,7 @@ import {
   type ThemeTokenValues,
 } from "./customization-tokens"
 import type { PreviewSceneId } from "./preview-scenes"
+import { normalizeThemePresetId, resolveThemePresetTokens } from "./theme-presets"
 
 const CUSTOMIZATION_STORAGE_VERSION = 1
 export const CUSTOMIZATION_STORAGE_KEY = `glass-ui.customization.v${CUSTOMIZATION_STORAGE_VERSION}`
@@ -55,7 +56,7 @@ function resolveScene(value: unknown): PreviewSceneId {
 }
 
 function resolvePreset(value: unknown): string | null {
-  return typeof value === "string" || value === null ? value : "default"
+  return normalizeThemePresetId(value)
 }
 
 function getSafeStorage(): Pick<Storage, "getItem" | "setItem" | "removeItem"> | null {
@@ -89,16 +90,25 @@ export function readPersistedEditorState(
 
     const activePreset = isRecord(parsed.activePreset) ? parsed.activePreset : null
 
+    const lightPreset = resolvePreset(activePreset?.light)
+    const darkPreset = resolvePreset(activePreset?.dark)
+
     return {
       version: CUSTOMIZATION_STORAGE_VERSION,
-      light: mergeStoredTokens(DEFAULT_LIGHT_TOKENS, parsed.light),
-      dark: mergeStoredTokens(DEFAULT_DARK_TOKENS, parsed.dark),
+      light:
+        lightPreset === null
+          ? mergeStoredTokens(DEFAULT_LIGHT_TOKENS, parsed.light)
+          : resolveThemePresetTokens(lightPreset, "light"),
+      dark:
+        darkPreset === null
+          ? mergeStoredTokens(DEFAULT_DARK_TOKENS, parsed.dark)
+          : resolveThemePresetTokens(darkPreset, "dark"),
       radius: mergeStoredTokens(DEFAULT_RADIUS_TOKENS, parsed.radius),
       previewMode: resolvePreviewMode(parsed.previewMode, fallbackPreviewMode),
       activeScene: resolveScene(parsed.activeScene),
       activePreset: {
-        light: resolvePreset(activePreset?.light),
-        dark: resolvePreset(activePreset?.dark),
+        light: lightPreset,
+        dark: darkPreset,
       },
     }
   } catch {

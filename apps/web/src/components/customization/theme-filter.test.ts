@@ -9,19 +9,21 @@ describe("filterThemePresets", () => {
   })
 
   it("matches preset names case-insensitively", () => {
-    expect(filterThemePresets(BUILT_IN_THEME_PRESETS, "SOFT")).toEqual([BUILT_IN_THEME_PRESETS[1]])
+    expect(filterThemePresets(BUILT_IN_THEME_PRESETS, "GRAPHITE")).toEqual([
+      BUILT_IN_THEME_PRESETS[5],
+    ])
   })
 
   it("matches preset descriptions", () => {
-    const results = filterThemePresets(BUILT_IN_THEME_PRESETS, "subtle")
+    const results = filterThemePresets(BUILT_IN_THEME_PRESETS, "neutral")
 
     expect(results).toHaveLength(1)
-    expect(results[0].id).toBe("soft")
+    expect(results[0].id).toBe("clean-slate")
   })
 
   it("trims whitespace from queries", () => {
-    expect(filterThemePresets(BUILT_IN_THEME_PRESETS, "  strong  ")).toEqual([
-      BUILT_IN_THEME_PRESETS[2],
+    expect(filterThemePresets(BUILT_IN_THEME_PRESETS, "  caffeine  ")).toEqual([
+      BUILT_IN_THEME_PRESETS[3],
     ])
   })
 

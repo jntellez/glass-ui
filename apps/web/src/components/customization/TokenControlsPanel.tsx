@@ -10,6 +10,7 @@ import {
 } from "@glass-ui-kit/glass"
 import * as React from "react"
 import { type TokenName, type TokenTab, type TokenValues } from "./customization-tokens"
+import type { PreviewMode } from "./CustomizationToolbar"
 import { ThemeSelector } from "./ThemeSelector"
 import { filterTokenGroups } from "./token-filter"
 import { parseShadowValue } from "./token-shadow"
@@ -21,6 +22,7 @@ import { TokenSliderRow } from "./TokenSliderRow"
 interface TokenControlsPanelProps {
   filterQuery: string
   presetValue: string | null
+  previewMode: PreviewMode
   values: TokenValues
   onFilterQueryChange: (value: string) => void
   onPresetChange: (presetId: string) => void
@@ -30,6 +32,7 @@ interface TokenControlsPanelProps {
 export function TokenControlsPanel({
   filterQuery,
   presetValue,
+  previewMode,
   values,
   onFilterQueryChange,
   onPresetChange,
@@ -44,7 +47,7 @@ export function TokenControlsPanel({
       <section>
         <ThemeSelector
           value={presetValue ?? "default"}
-          values={values}
+          previewMode={previewMode}
           onPresetChange={onPresetChange}
         />
       </section>

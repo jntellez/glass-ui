@@ -1,6 +1,5 @@
 import * as React from "react"
 import {
-  applyPreset,
   DEFAULT_DARK_TOKENS,
   DEFAULT_LIGHT_TOKENS,
   DEFAULT_RADIUS_TOKENS,
@@ -16,7 +15,7 @@ import { TokenControlsPanel } from "./TokenControlsPanel"
 import { PreviewPanel } from "./PreviewPanel"
 import type { PreviewSceneId } from "./preview-scenes"
 import { applyTheme, getInitialResolvedTheme, subscribeToThemeChange } from "../theme/theme"
-import { getPresetVariant } from "./theme-presets"
+import { resolveThemePresetTokens } from "./theme-presets"
 import {
   clearPersistedEditorState,
   persistEditorState,
@@ -140,21 +139,7 @@ export function CustomizationApp() {
 
   const handlePresetChange = React.useCallback((presetId: string) => {
     setEditorState((current) => {
-      const variant = getPresetVariant(presetId)
-      const modeValues = current[current.previewMode]
-      let nextValues = modeValues
-
-      if (variant === null) {
-        const defaults = current.previewMode === "dark" ? DEFAULT_DARK_TOKENS : DEFAULT_LIGHT_TOKENS
-        nextValues = {
-          ...modeValues,
-          "--glass-bg": defaults["--glass-bg"],
-          "--glass-border": defaults["--glass-border"],
-          "--glass-blur": defaults["--glass-blur"],
-        }
-      } else {
-        nextValues = applyPreset(modeValues, variant)
-      }
+      const nextValues = resolveThemePresetTokens(presetId, current.previewMode)
 
       return {
         ...current,
@@ -195,6 +180,7 @@ export function CustomizationApp() {
         <TokenControlsPanel
           filterQuery={editorState.filterQuery}
           presetValue={editorState.activePreset[editorState.previewMode]}
+          previewMode={editorState.previewMode}
           values={activeValues}
           onFilterQueryChange={handleFilterQueryChange}
           onPresetChange={handlePresetChange}

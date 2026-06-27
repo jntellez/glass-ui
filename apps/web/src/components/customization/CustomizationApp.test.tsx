@@ -599,7 +599,7 @@ describe("CustomizationApp", () => {
     await user.click(screen.getByRole("button", { name: "Dark" }))
     await user.click(screen.getByRole("button", { name: /select theme/i }))
     await user.click(
-      within(screen.getByLabelText("Themes")).getByRole("button", { name: /strong/i }),
+      within(screen.getByLabelText("Themes")).getByRole("button", { name: /cosmic night/i }),
     )
     fireEvent.change(screen.getByRole("textbox", { name: "Border" }), {
       target: { value: "rgba(90, 87, 210, 0.3)" },
@@ -645,6 +645,81 @@ describe("CustomizationApp", () => {
       DEFAULT_LIGHT_TOKENS["--glass-bg"],
     )
     expect(screen.getByTestId("preview-scope")).toHaveAttribute("data-preview-mode", "light")
+  })
+
+  it("migrates legacy persisted preset ids to the default preset tokens", async () => {
+    const user = userEvent.setup()
+
+    localStorage.setItem(
+      CUSTOMIZATION_STORAGE_KEY,
+      JSON.stringify({
+        version: 1,
+        light: {
+          ...DEFAULT_LIGHT_TOKENS,
+          "--glass-bg": "rgba(255, 255, 255, 0.35)",
+        },
+        dark: {
+          ...DEFAULT_DARK_TOKENS,
+          "--glass-bg": "rgba(17, 24, 39, 0.92)",
+        },
+        radius: DEFAULT_RADIUS_TOKENS,
+        previewMode: "light",
+        activeScene: "overview",
+        activePreset: {
+          light: "soft",
+          dark: "strong",
+        },
+      }),
+    )
+
+    render(<CustomizationApp />)
+
+    expect(screen.getByRole("button", { name: "Select theme: Default" })).toBeInTheDocument()
+    expect(screen.getByRole("textbox", { name: "Background" })).toHaveValue(
+      DEFAULT_LIGHT_TOKENS["--glass-bg"],
+    )
+
+    await user.click(screen.getByRole("button", { name: "Dark" }))
+
+    expect(screen.getByRole("textbox", { name: "Background" })).toHaveValue(
+      DEFAULT_DARK_TOKENS["--glass-bg"],
+    )
+    expect(readPersistedEditorState("light")?.activePreset).toEqual({
+      light: "default",
+      dark: "default",
+    })
+  })
+
+  it("normalizes invalid persisted preset ids to default before reuse", () => {
+    localStorage.setItem(
+      CUSTOMIZATION_STORAGE_KEY,
+      JSON.stringify({
+        version: 1,
+        light: {
+          ...DEFAULT_LIGHT_TOKENS,
+          "--accent": "#ff00aa",
+        },
+        dark: DEFAULT_DARK_TOKENS,
+        radius: DEFAULT_RADIUS_TOKENS,
+        previewMode: "light",
+        activeScene: "overview",
+        activePreset: {
+          light: "totally-invalid",
+          dark: null,
+        },
+      }),
+    )
+
+    render(<CustomizationApp />)
+
+    expect(screen.getByRole("button", { name: "Select theme: Default" })).toBeInTheDocument()
+    expect(screen.getByRole("textbox", { name: "Accent" })).toHaveValue(
+      DEFAULT_LIGHT_TOKENS["--accent"],
+    )
+    expect(readPersistedEditorState("light")?.activePreset).toEqual({
+      light: "default",
+      dark: null,
+    })
   })
 
   it("returns null when localStorage is unavailable", () => {
@@ -733,15 +808,16 @@ describe("CustomizationApp", () => {
 
     await user.click(screen.getByRole("button", { name: /select theme/i }))
     await user.click(
-      within(screen.getByLabelText("Themes")).getByRole("button", { name: /strong/i }),
+      within(screen.getByLabelText("Themes")).getByRole("button", { name: /midnight bloom/i }),
     )
 
+    expect(screen.getByRole("textbox", { name: "Background" })).toHaveValue(
+      "rgba(245, 240, 255, 0.76)",
+    )
     expect(
-      within(defaultSample).getByText(`Background ${DEFAULT_LIGHT_TOKENS["--glass-bg-strong"]}`),
+      within(defaultSample).getByText("Background rgba(245, 240, 255, 0.76)"),
     ).toBeInTheDocument()
-    expect(
-      within(defaultSample).getByText(`Blur ${DEFAULT_LIGHT_TOKENS["--glass-blur-strong"]}`),
-    ).toBeInTheDocument()
+    expect(within(defaultSample).getByText("Blur 16px")).toBeInTheDocument()
 
     await user.click(screen.getByRole("button", { name: /select theme/i }))
     await user.click(
@@ -762,9 +838,11 @@ describe("CustomizationApp", () => {
     render(<CustomizationApp />)
 
     await user.click(screen.getByRole("button", { name: /select theme/i }))
-    await user.click(within(screen.getByLabelText("Themes")).getByRole("button", { name: /soft/i }))
+    await user.click(
+      within(screen.getByLabelText("Themes")).getByRole("button", { name: /clean slate/i }),
+    )
 
-    expect(screen.getByRole("button", { name: "Select theme: Soft" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Select theme: Clean Slate" })).toBeInTheDocument()
 
     await user.click(screen.getByRole("button", { name: "Dark" }))
 
@@ -772,14 +850,14 @@ describe("CustomizationApp", () => {
 
     await user.click(screen.getByRole("button", { name: /select theme/i }))
     await user.click(
-      within(screen.getByLabelText("Themes")).getByRole("button", { name: /strong/i }),
+      within(screen.getByLabelText("Themes")).getByRole("button", { name: /cosmic night/i }),
     )
 
-    expect(screen.getByRole("button", { name: "Select theme: Strong" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Select theme: Cosmic Night" })).toBeInTheDocument()
 
     await user.click(screen.getByRole("button", { name: "Light" }))
 
-    expect(screen.getByRole("button", { name: "Select theme: Soft" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Select theme: Clean Slate" })).toBeInTheDocument()
   })
 
   it("resets the active preset for the current mode when a token is edited manually", async () => {
@@ -789,10 +867,10 @@ describe("CustomizationApp", () => {
 
     await user.click(screen.getByRole("button", { name: /select theme/i }))
     await user.click(
-      within(screen.getByLabelText("Themes")).getByRole("button", { name: /strong/i }),
+      within(screen.getByLabelText("Themes")).getByRole("button", { name: /graphite/i }),
     )
 
-    expect(screen.getByRole("button", { name: "Select theme: Strong" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Select theme: Graphite" })).toBeInTheDocument()
 
     fireEvent.change(screen.getByRole("textbox", { name: "Background" }), {
       target: { value: "rgba(12, 34, 56, 0.7)" },

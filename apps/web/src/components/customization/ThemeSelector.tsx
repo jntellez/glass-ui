@@ -1,28 +1,32 @@
 import { Button, Input, Popover, PopoverContent, PopoverTrigger } from "@glass-ui-kit/glass"
 import { CheckIcon, ChevronDownIcon } from "lucide-react"
 import * as React from "react"
-import { DEFAULT_LIGHT_TOKENS, type ThemeTokenValues } from "./customization-tokens"
 import { filterThemePresets } from "./theme-filter"
-import { BUILT_IN_THEME_PRESETS, resolvePresetSwatches, type ThemePreset } from "./theme-presets"
+import {
+  BUILT_IN_THEME_PRESETS,
+  resolvePresetSwatches,
+  type ThemePreset,
+  type ThemePresetMode,
+} from "./theme-presets"
 
 interface ThemeSelectorProps {
   value: string
+  previewMode: ThemePresetMode
   onPresetChange: (presetId: string) => void
   themes?: ThemePreset[]
-  values?: ThemeTokenValues
 }
 
 export function ThemeSelector({
   value,
+  previewMode,
   onPresetChange,
   themes = BUILT_IN_THEME_PRESETS,
-  values = DEFAULT_LIGHT_TOKENS,
 }: ThemeSelectorProps) {
   const [open, setOpen] = React.useState(false)
   const [query, setQuery] = React.useState("")
   const currentPreset = themes.find((preset) => preset.id === value) ?? themes[0]
   const visiblePresets = filterThemePresets(themes, query)
-  const currentSwatches = resolvePresetSwatches(currentPreset, values)
+  const currentSwatches = resolvePresetSwatches(currentPreset, previewMode)
 
   const handleSelect = React.useCallback(
     (presetId: string) => {
@@ -70,7 +74,7 @@ export function ThemeSelector({
             ) : (
               <ul className="space-y-1">
                 {visiblePresets.map((preset) => {
-                  const swatches = resolvePresetSwatches(preset, values)
+                  const swatches = resolvePresetSwatches(preset, previewMode)
                   const isSelected = preset.id === currentPreset.id
 
                   return (
