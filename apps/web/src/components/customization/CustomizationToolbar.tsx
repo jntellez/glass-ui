@@ -1,9 +1,13 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@glass-ui-kit/glass"
+import { Maximize2, Minimize2 } from "lucide-react"
 import { PREVIEW_SCENES, type PreviewSceneId } from "./preview-scenes"
+import { getPreviewPanelId, getPreviewTabId } from "./preview-dom-ids"
 
 export type PreviewMode = "light" | "dark"
+
+type CustomizationToolbarVariant = "default" | "fullscreen"
 
 interface CustomizationToolbarProps {
   previewMode: PreviewMode
@@ -12,9 +16,21 @@ interface CustomizationToolbarProps {
   onCopyExport: () => Promise<boolean>
   activeScene: PreviewSceneId
   onSceneChange: (scene: PreviewSceneId) => void
+  onFullscreenToggle: () => void
+  variant?: CustomizationToolbarVariant
+  idNamespace?: string
 }
 
 type CopyStatus = "idle" | "success" | "error"
+
+const SCENE_KEYBOARD_NAVIGATION_KEYS = new Set([
+  "ArrowRight",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowUp",
+  "Home",
+  "End",
+])
 
 function getModeButtonClassName(isActive: boolean) {
   return cn(isActive && "glass glass-soft text-foreground")
@@ -27,9 +43,13 @@ export function CustomizationToolbar({
   onCopyExport,
   activeScene,
   onSceneChange,
+  onFullscreenToggle,
+  variant = "default",
+  idNamespace = "workspace",
 }: CustomizationToolbarProps) {
   const [copyStatus, setCopyStatus] = React.useState<CopyStatus>("idle")
   const scene = PREVIEW_SCENES.find((item) => item.id === activeScene) ?? PREVIEW_SCENES[0]
+  const isFullscreen = variant === "fullscreen"
 
   React.useEffect(() => {
     if (copyStatus !== "success") {
@@ -45,6 +65,52 @@ export function CustomizationToolbar({
     setCopyStatus(didCopy ? "success" : "error")
   }, [onCopyExport])
 
+  const handleSceneTabKeyDown = React.useCallback(
+    (event: React.KeyboardEvent<HTMLButtonElement>, sceneId: PreviewSceneId) => {
+      if (!SCENE_KEYBOARD_NAVIGATION_KEYS.has(event.key)) {
+        return
+      }
+
+      const currentSceneIndex = PREVIEW_SCENES.findIndex((item) => item.id === sceneId)
+
+      if (currentSceneIndex === -1) {
+        return
+      }
+
+      event.preventDefault()
+
+      let targetSceneIndex = currentSceneIndex
+
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        targetSceneIndex = (currentSceneIndex + 1) % PREVIEW_SCENES.length
+      }
+
+      if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        targetSceneIndex = (currentSceneIndex - 1 + PREVIEW_SCENES.length) % PREVIEW_SCENES.length
+      }
+
+      if (event.key === "Home") {
+        targetSceneIndex = 0
+      }
+
+      if (event.key === "End") {
+        targetSceneIndex = PREVIEW_SCENES.length - 1
+      }
+
+      const targetScene = PREVIEW_SCENES[targetSceneIndex]
+      const targetTab = event.currentTarget.ownerDocument.getElementById(
+        getPreviewTabId(idNamespace, targetScene.id),
+      )
+
+      if (targetTab instanceof HTMLElement) {
+        targetTab.focus()
+      }
+
+      onSceneChange(targetScene.id)
+    },
+    [idNamespace, onSceneChange],
+  )
+
   const copyMessage =
     copyStatus === "success"
       ? "CSS export copied to clipboard."
@@ -53,7 +119,7 @@ export function CustomizationToolbar({
         : ""
 
   return (
-    <div className="glass glass-soft flex items-center justify-between rounded-glass-md h-15 px-4">
+    <div className="glass glass-soft flex min-h-15 flex-wrap items-center justify-between gap-3 rounded-glass-md px-4 py-3">
       <p role="status" className="sr-only">
         {copyMessage}
       </p>
@@ -64,13 +130,14 @@ export function CustomizationToolbar({
           return (
             <Button
               key={item.id}
-              id={`preview-tab-${item.id}`}
+              id={getPreviewTabId(idNamespace, item.id)}
               type="button"
               role="tab"
               aria-selected={isActive}
-              aria-controls={`preview-panel-${item.id}`}
+              aria-controls={getPreviewPanelId(idNamespace, item.id)}
               tabIndex={isActive ? 0 : -1}
               onClick={() => onSceneChange(item.id)}
+              onKeyDown={(event) => handleSceneTabKeyDown(event, item.id)}
             >
               {item.label}
             </Button>
@@ -99,12 +166,34 @@ export function CustomizationToolbar({
         >
           Dark
         </Button>
-        <Button type="button" onClick={onReset} className="">
-          Reset
-        </Button>
-        <Button type="button" onClick={handleCopy} aria-label="Copy export" className="">
-          {copyStatus === "success" ? "Copied" : "Copy export"}
-        </Button>
+        {isFullscreen ? (
+          <Button
+            type="button"
+            size="icon"
+            onClick={onFullscreenToggle}
+            aria-label="Exit fullscreen preview"
+            autoFocus
+          >
+            <Minimize2 aria-hidden="true" />
+          </Button>
+        ) : (
+          <>
+            <Button type="button" onClick={onReset} className="">
+              Reset
+            </Button>
+            <Button type="button" onClick={handleCopy} aria-label="Copy export" className="">
+              {copyStatus === "success" ? "Copied" : "Copy export"}
+            </Button>
+            <Button
+              type="button"
+              size="icon"
+              onClick={onFullscreenToggle}
+              aria-label="Enter fullscreen preview"
+            >
+              <Maximize2 aria-hidden="true" />
+            </Button>
+          </>
+        )}
       </div>
     </div>
   )

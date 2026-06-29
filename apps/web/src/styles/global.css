@@ -47,7 +47,8 @@
     --color-background: #09090b;
   }
 
-  body {
+  body,
+  .app-background {
     background-color: var(--color-background);
     color: var(--color-foreground);
     background-image:

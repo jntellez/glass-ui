@@ -1,4 +1,5 @@
 import * as React from "react"
+import { createPortal } from "react-dom"
 import {
   DEFAULT_DARK_TOKENS,
   DEFAULT_LIGHT_TOKENS,
@@ -32,6 +33,50 @@ interface EditorState {
   activePreset: { light: string | null; dark: string | null }
 }
 
+const FOCUSABLE_SELECTOR = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"])',
+].join(",")
+
+function getFocusableElements(container: HTMLElement) {
+  return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+    (element) => {
+      if (element.hidden || element.closest("[hidden]")) {
+        return false
+      }
+
+      return (
+        element.tabIndex >= 0 &&
+        !element.hasAttribute("disabled") &&
+        element.getAttribute("aria-hidden") !== "true"
+      )
+    },
+  )
+}
+
+function focusDialogElement(dialog: HTMLElement, direction: "forward" | "backward") {
+  const focusableElements = getFocusableElements(dialog)
+
+  if (focusableElements.length === 0) {
+    dialog.focus()
+    return
+  }
+
+  const targetElement =
+    direction === "backward"
+      ? focusableElements[focusableElements.length - 1]
+      : focusableElements[0]
+
+  targetElement.focus()
+}
+
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? React.useEffect : React.useLayoutEffect
+
 function createInitialState(): EditorState {
   const previewMode = getInitialResolvedTheme()
   const persistedState = readPersistedEditorState(previewMode)
@@ -61,6 +106,38 @@ function createInitialState(): EditorState {
 
 export function CustomizationApp() {
   const [editorState, setEditorState] = React.useState<EditorState>(() => createInitialState())
+  const [isFullscreenPreview, setIsFullscreenPreview] = React.useState(false)
+  const workspaceRef = React.useRef<HTMLElement | null>(null)
+  const fullscreenDialogRef = React.useRef<HTMLDivElement | null>(null)
+  const lastFocusedElementRef = React.useRef<HTMLElement | null>(null)
+  const lastTabDirectionRef = React.useRef<"forward" | "backward">("forward")
+  const fullscreenPortalContainerRef = React.useRef<HTMLDivElement | null>(null)
+
+  React.useEffect(() => {
+    if (typeof document === "undefined") {
+      return
+    }
+
+    const portalContainer = document.createElement("div")
+    portalContainer.setAttribute("data-customization-fullscreen-portal", "")
+    document.body.appendChild(portalContainer)
+    fullscreenPortalContainerRef.current = portalContainer
+
+    return () => {
+      fullscreenPortalContainerRef.current = null
+      portalContainer.remove()
+    }
+  }, [])
+
+  const restoreLastFocusedElement = React.useCallback(() => {
+    const lastFocusedElement = lastFocusedElementRef.current
+
+    if (lastFocusedElement?.isConnected) {
+      lastFocusedElement.focus()
+    }
+
+    lastFocusedElementRef.current = null
+  }, [])
 
   React.useEffect(() => {
     if (getInitialResolvedTheme() !== editorState.previewMode) {
@@ -95,6 +172,141 @@ export function CustomizationApp() {
     editorState.previewMode,
     editorState.radius,
   ])
+
+  useIsomorphicLayoutEffect(() => {
+    if (!isFullscreenPreview) {
+      return
+    }
+
+    const dialog = fullscreenDialogRef.current
+
+    if (!dialog) {
+      return
+    }
+
+    focusDialogElement(dialog, "forward")
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault()
+        setIsFullscreenPreview(false)
+        return
+      }
+
+      if (event.key !== "Tab") {
+        return
+      }
+
+      lastTabDirectionRef.current = event.shiftKey ? "backward" : "forward"
+
+      const focusableElements = getFocusableElements(dialog)
+
+      if (focusableElements.length === 0) {
+        event.preventDefault()
+        dialog.focus()
+        return
+      }
+
+      const firstFocusableElement = focusableElements[0]
+      const lastFocusableElement = focusableElements[focusableElements.length - 1]
+      const activeElement = document.activeElement
+
+      if (!activeElement || !dialog.contains(activeElement)) {
+        event.preventDefault()
+        focusDialogElement(dialog, lastTabDirectionRef.current)
+        return
+      }
+
+      if (!event.shiftKey && activeElement === lastFocusableElement) {
+        event.preventDefault()
+        firstFocusableElement.focus()
+        return
+      }
+
+      if (event.shiftKey && activeElement === firstFocusableElement) {
+        event.preventDefault()
+        lastFocusableElement.focus()
+      }
+    }
+
+    const handleFocusIn = (event: FocusEvent) => {
+      const target = event.target
+
+      if (!(target instanceof Node) || dialog.contains(target)) {
+        return
+      }
+
+      focusDialogElement(dialog, lastTabDirectionRef.current)
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    document.addEventListener("focusin", handleFocusIn)
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown)
+      document.removeEventListener("focusin", handleFocusIn)
+    }
+  }, [isFullscreenPreview])
+
+  React.useEffect(() => {
+    if (!isFullscreenPreview) {
+      return
+    }
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [isFullscreenPreview])
+
+  React.useEffect(() => {
+    const workspace = workspaceRef.current
+    const portalContainer = fullscreenPortalContainerRef.current
+
+    if (!workspace || !portalContainer || !isFullscreenPreview) {
+      return
+    }
+
+    const affectedElements = Array.from(document.body.children).filter(
+      (element) => element !== portalContainer,
+    ) as HTMLElement[]
+
+    const previousStates = affectedElements.map((element) => ({
+      element,
+      inert: element.inert,
+      hasAriaHidden: element.hasAttribute("aria-hidden"),
+      ariaHidden: element.getAttribute("aria-hidden"),
+    }))
+
+    for (const element of affectedElements) {
+      element.inert = true
+      element.setAttribute("aria-hidden", "true")
+    }
+
+    return () => {
+      for (const previousState of previousStates) {
+        previousState.element.inert = previousState.inert
+
+        if (previousState.hasAriaHidden) {
+          previousState.element.setAttribute("aria-hidden", previousState.ariaHidden ?? "true")
+        } else {
+          previousState.element.removeAttribute("aria-hidden")
+        }
+      }
+    }
+  }, [isFullscreenPreview])
+
+  React.useEffect(() => {
+    if (isFullscreenPreview) {
+      return
+    }
+
+    restoreLastFocusedElement()
+  }, [isFullscreenPreview, restoreLastFocusedElement])
+
+  React.useEffect(() => restoreLastFocusedElement, [restoreLastFocusedElement])
 
   const activeValues = getEditorTokenValues(
     editorState[editorState.previewMode],
@@ -171,42 +383,93 @@ export function CustomizationApp() {
     }
   }, [editorState.dark, editorState.light, editorState.radius])
 
-  return (
-    <section
-      aria-label="Customization workspace"
-      className="flex h-full min-h-0 flex-row gap-4 overflow-hidden"
-    >
-      <div className="flex h-full min-h-0 w-100 shrink-0 overflow-hidden">
-        <TokenControlsPanel
-          filterQuery={editorState.filterQuery}
-          presetValue={editorState.activePreset[editorState.previewMode]}
-          previewMode={editorState.previewMode}
-          values={activeValues}
-          onFilterQueryChange={handleFilterQueryChange}
-          onPresetChange={handlePresetChange}
-          onTokenChange={handleTokenChange}
-        />
-      </div>
+  const handleOpenFullscreen = React.useCallback(() => {
+    const activeElement = document.activeElement
+    lastFocusedElementRef.current = activeElement instanceof HTMLElement ? activeElement : null
+    setIsFullscreenPreview(true)
+  }, [])
 
-      <div className="flex min-h-0 w-full flex-1 flex-col gap-4 overflow-hidden">
-        <div className="shrink-0">
-          <CustomizationToolbar
+  const handleCloseFullscreen = React.useCallback(() => {
+    setIsFullscreenPreview(false)
+  }, [])
+
+  return (
+    <>
+      <section
+        ref={workspaceRef}
+        aria-label="Customization workspace"
+        className="flex h-full min-h-0 flex-row gap-4 overflow-hidden"
+      >
+        <div className="flex h-full min-h-0 w-100 shrink-0 overflow-hidden">
+          <TokenControlsPanel
+            filterQuery={editorState.filterQuery}
+            presetValue={editorState.activePreset[editorState.previewMode]}
             previewMode={editorState.previewMode}
-            onPreviewModeChange={handlePreviewModeChange}
-            onReset={handleReset}
-            onCopyExport={handleCopyExport}
-            activeScene={editorState.activeScene}
-            onSceneChange={handleSceneChange}
+            values={activeValues}
+            onFilterQueryChange={handleFilterQueryChange}
+            onPresetChange={handlePresetChange}
+            onTokenChange={handleTokenChange}
           />
         </div>
 
-        <PreviewPanel
-          previewMode={editorState.previewMode}
-          values={activeValues}
-          activeScene={editorState.activeScene}
-          onSceneChange={handleSceneChange}
-        />
-      </div>
-    </section>
+        <div className="flex min-h-0 w-full flex-1 flex-col gap-4 overflow-hidden">
+          <div className="shrink-0">
+            <CustomizationToolbar
+              previewMode={editorState.previewMode}
+              onPreviewModeChange={handlePreviewModeChange}
+              onReset={handleReset}
+              onCopyExport={handleCopyExport}
+              activeScene={editorState.activeScene}
+              onSceneChange={handleSceneChange}
+              onFullscreenToggle={handleOpenFullscreen}
+              idNamespace="workspace"
+            />
+          </div>
+
+          <PreviewPanel
+            previewMode={editorState.previewMode}
+            values={activeValues}
+            activeScene={editorState.activeScene}
+            idNamespace="workspace"
+          />
+        </div>
+      </section>
+
+      {isFullscreenPreview && fullscreenPortalContainerRef.current
+        ? createPortal(
+            <div
+              ref={fullscreenDialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Fullscreen preview"
+              tabIndex={-1}
+              className="app-background fixed inset-0 z-50 p-2"
+            >
+              <div className="flex h-full min-h-0 flex-col gap-3">
+                <CustomizationToolbar
+                  previewMode={editorState.previewMode}
+                  onPreviewModeChange={handlePreviewModeChange}
+                  onReset={handleReset}
+                  onCopyExport={handleCopyExport}
+                  activeScene={editorState.activeScene}
+                  onSceneChange={handleSceneChange}
+                  onFullscreenToggle={handleCloseFullscreen}
+                  variant="fullscreen"
+                  idNamespace="fullscreen"
+                />
+
+                <PreviewPanel
+                  previewMode={editorState.previewMode}
+                  values={activeValues}
+                  activeScene={editorState.activeScene}
+                  idNamespace="fullscreen"
+                  previewScopeClassName="h-full rounded-glass-lg border-[var(--glass-border-soft)] !bg-[var(--color-background)] p-4"
+                />
+              </div>
+            </div>,
+            fullscreenPortalContainerRef.current,
+          )
+        : null}
+    </>
   )
 }

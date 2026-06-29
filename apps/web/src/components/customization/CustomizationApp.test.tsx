@@ -15,6 +15,9 @@ describe("CustomizationApp", () => {
   const matchMedia = vi.fn()
 
   beforeEach(() => {
+    document.body
+      .querySelectorAll("[data-fullscreen-test-root]")
+      .forEach((element) => element.remove())
     localStorage.clear()
     document.documentElement.className = ""
     document.documentElement.style.colorScheme = ""
@@ -483,6 +486,7 @@ describe("CustomizationApp", () => {
     expect(screen.getByRole("button", { name: "Dark" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /^reset$/i })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /copy export/i })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /enter fullscreen preview/i })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /select theme/i })).toBeInTheDocument()
 
     await user.tab()
@@ -491,7 +495,254 @@ describe("CustomizationApp", () => {
     await tabTo(screen.getByRole("tab", { name: "Colors" }))
     await tabTo(screen.getByRole("button", { name: "Light" }))
     await tabTo(screen.getByRole("button", { name: /copy export/i }))
+    await tabTo(screen.getByRole("button", { name: /enter fullscreen preview/i }))
     await tabTo(screen.getByRole("textbox", { name: "Foreground" }))
+  })
+
+  it("opens fullscreen preview with inspection-only controls and syncs changes back to the workspace", async () => {
+    const user = userEvent.setup()
+
+    render(<CustomizationApp />)
+
+    const openFullscreenButton = screen.getByRole("button", { name: /enter fullscreen preview/i })
+    expect(openFullscreenButton.querySelector("svg")).not.toBeNull()
+    expect(openFullscreenButton).toHaveTextContent("")
+
+    await user.click(openFullscreenButton)
+
+    const dialog = screen.getByRole("dialog", { name: /fullscreen preview/i })
+    const dialogToolbar = within(dialog).getByRole("toolbar", { name: /customization actions/i })
+    const dialogTablist = within(dialog).getByRole("tablist", { name: /preview scenes/i })
+
+    expect(dialog).toHaveClass("app-background", "p-2")
+    expect(dialog).not.toHaveClass("backdrop-blur-sm")
+    expect(within(dialog).getByTestId("preview-scope")).toHaveClass(
+      "!bg-[var(--color-background)]",
+      "p-4",
+    )
+    expect(within(dialogToolbar).getByRole("button", { name: "Light" })).toBeInTheDocument()
+    expect(within(dialogToolbar).getByRole("button", { name: "Dark" })).toBeInTheDocument()
+    expect(
+      within(dialogToolbar).getByRole("button", { name: /exit fullscreen preview/i }),
+    ).toBeInTheDocument()
+    expect(
+      within(dialogToolbar).getByRole("button", { name: /exit fullscreen preview/i }),
+    ).toHaveTextContent("")
+    expect(
+      within(dialogToolbar).queryByRole("button", { name: /^reset$/i }),
+    ).not.toBeInTheDocument()
+    expect(
+      within(dialogToolbar).queryByRole("button", { name: /copy export/i }),
+    ).not.toBeInTheDocument()
+    expect(
+      within(dialogToolbar).queryByRole("button", { name: /enter fullscreen preview/i }),
+    ).not.toBeInTheDocument()
+    expect(within(dialogTablist).getByRole("tab", { name: /dashboard/i })).toBeInTheDocument()
+    expect(within(dialogTablist).getByRole("tab", { name: /settings/i })).toBeInTheDocument()
+    expect(within(dialogTablist).getByRole("tab", { name: /content/i })).toBeInTheDocument()
+
+    await user.click(within(dialogTablist).getByRole("tab", { name: /content/i }))
+    await user.click(within(dialogToolbar).getByRole("button", { name: "Dark" }))
+
+    expect(within(dialog).getByRole("tabpanel", { name: /content/i })).toBeInTheDocument()
+    expect(within(dialog).getByTestId("preview-scope")).toHaveAttribute("data-preview-mode", "dark")
+
+    await user.click(
+      within(dialogToolbar).getByRole("button", { name: /exit fullscreen preview/i }),
+    )
+
+    expect(screen.queryByRole("dialog", { name: /fullscreen preview/i })).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByRole("tab", { name: /content/i })).toHaveAttribute("aria-selected", "true")
+      expect(screen.getByRole("button", { name: /enter fullscreen preview/i })).toBeInTheDocument()
+    })
+    expect(screen.getByTestId("preview-scope")).toHaveAttribute("data-preview-mode", "dark")
+  })
+
+  it("closes fullscreen preview when Escape is pressed", async () => {
+    const user = userEvent.setup()
+
+    render(<CustomizationApp />)
+
+    await user.click(screen.getByRole("button", { name: /enter fullscreen preview/i }))
+
+    expect(screen.getByRole("dialog", { name: /fullscreen preview/i })).toBeInTheDocument()
+
+    await user.keyboard("{Escape}")
+
+    expect(screen.queryByRole("dialog", { name: /fullscreen preview/i })).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: /enter fullscreen preview/i })).toBeInTheDocument()
+    })
+  })
+
+  it("traps focus inside the fullscreen dialog and restores focus on close", async () => {
+    const user = userEvent.setup()
+
+    const appContainer = document.createElement("div")
+    appContainer.setAttribute("data-fullscreen-test-root", "")
+    document.body.appendChild(appContainer)
+
+    render(<CustomizationApp />, { container: appContainer })
+
+    const openFullscreenButton = screen.getByRole("button", { name: /enter fullscreen preview/i })
+    const resetButton = screen.getByRole("button", { name: /^reset$/i })
+    const copyExportButton = screen.getByRole("button", { name: /copy export/i })
+
+    await user.click(openFullscreenButton)
+
+    const dialog = screen.getByRole("dialog", { name: /fullscreen preview/i })
+    const exitFullscreenButton = within(dialog).getByRole("button", {
+      name: /exit fullscreen preview/i,
+    })
+
+    expect(dialog.contains(document.activeElement)).toBe(true)
+    expect(appContainer).toHaveAttribute("aria-hidden", "true")
+    expect(appContainer.contains(document.activeElement)).toBe(false)
+
+    for (let index = 0; index < 20; index += 1) {
+      await user.tab()
+      expect(dialog.contains(document.activeElement)).toBe(true)
+      expect(document.activeElement).not.toBe(resetButton)
+      expect(document.activeElement).not.toBe(copyExportButton)
+      expect(document.activeElement).not.toBe(openFullscreenButton)
+    }
+
+    await user.tab({ shift: true })
+    expect(dialog.contains(document.activeElement)).toBe(true)
+
+    await user.click(exitFullscreenButton)
+
+    expect(openFullscreenButton).toHaveFocus()
+    appContainer.remove()
+  })
+
+  it.each(["Settings", "Content"])(
+    "keeps fullscreen focus on tabbable controls when %s is the active scene",
+    async (sceneName) => {
+      const user = userEvent.setup()
+
+      render(<CustomizationApp />)
+
+      await user.click(screen.getByRole("tab", { name: sceneName }))
+      await user.click(screen.getByRole("button", { name: /enter fullscreen preview/i }))
+
+      const dialog = screen.getByRole("dialog", { name: /fullscreen preview/i })
+      const inactiveTabs = within(dialog)
+        .getAllByRole("tab")
+        .filter((tab) => tab.getAttribute("tabindex") === "-1")
+
+      expect(dialog.contains(document.activeElement)).toBe(true)
+      expect(document.activeElement).toBeInstanceOf(HTMLElement)
+      expect((document.activeElement as HTMLElement).tabIndex).toBeGreaterThanOrEqual(0)
+      expect(inactiveTabs).not.toContain(document.activeElement as HTMLElement)
+
+      for (let index = 0; index < 12; index += 1) {
+        await user.tab()
+        expect(dialog.contains(document.activeElement)).toBe(true)
+        expect(inactiveTabs).not.toContain(document.activeElement as HTMLElement)
+      }
+
+      for (let index = 0; index < 12; index += 1) {
+        await user.tab({ shift: true })
+        expect(dialog.contains(document.activeElement)).toBe(true)
+        expect(inactiveTabs).not.toContain(document.activeElement as HTMLElement)
+      }
+    },
+  )
+
+  it("inerts external top-level controls while fullscreen is open and restores them on close", async () => {
+    const user = userEvent.setup()
+    const headerContainer = document.createElement("div")
+    const appContainer = document.createElement("div")
+    const footerContainer = document.createElement("div")
+
+    headerContainer.setAttribute("data-fullscreen-test-root", "")
+    appContainer.setAttribute("data-fullscreen-test-root", "")
+    footerContainer.setAttribute("data-fullscreen-test-root", "")
+
+    headerContainer.innerHTML = '<button type="button">Global search</button>'
+    footerContainer.innerHTML = '<button type="button">Theme toggle</button>'
+
+    document.body.append(headerContainer, appContainer, footerContainer)
+
+    render(<CustomizationApp />, { container: appContainer })
+
+    const openFullscreenButton = screen.getByRole("button", { name: /enter fullscreen preview/i })
+
+    await user.click(openFullscreenButton)
+
+    const dialog = screen.getByRole("dialog", { name: /fullscreen preview/i })
+
+    expect(dialog.contains(document.activeElement)).toBe(true)
+    expect(headerContainer).toHaveAttribute("aria-hidden", "true")
+    expect(appContainer).toHaveAttribute("aria-hidden", "true")
+    expect(footerContainer).toHaveAttribute("aria-hidden", "true")
+    expect(headerContainer.inert).toBe(true)
+    expect(appContainer.inert).toBe(true)
+    expect(footerContainer.inert).toBe(true)
+
+    await user.keyboard("{Escape}")
+
+    expect(screen.queryByRole("dialog", { name: /fullscreen preview/i })).not.toBeInTheDocument()
+    expect(headerContainer).not.toHaveAttribute("aria-hidden")
+    expect(appContainer).not.toHaveAttribute("aria-hidden")
+    expect(footerContainer).not.toHaveAttribute("aria-hidden")
+    expect(headerContainer.inert).not.toBe(true)
+    expect(appContainer.inert).not.toBe(true)
+    expect(footerContainer.inert).not.toBe(true)
+    expect(openFullscreenButton).toHaveFocus()
+
+    headerContainer.remove()
+    appContainer.remove()
+    footerContainer.remove()
+  })
+
+  it("keeps external page controls out of the fullscreen tab sequence", async () => {
+    const user = userEvent.setup()
+
+    render(
+      <>
+        <button type="button">Global search</button>
+        <CustomizationApp />
+        <button type="button">Theme toggle</button>
+      </>,
+    )
+
+    const globalSearchButton = screen.getByRole("button", { name: /global search/i })
+    const themeToggleButton = screen.getByRole("button", { name: /theme toggle/i })
+    const openFullscreenButton = screen.getByRole("button", { name: /enter fullscreen preview/i })
+
+    await user.click(openFullscreenButton)
+
+    const dialog = screen.getByRole("dialog", { name: /fullscreen preview/i })
+
+    expect(dialog.contains(document.activeElement)).toBe(true)
+
+    for (let index = 0; index < 20; index += 1) {
+      await user.tab()
+      expect(dialog.contains(document.activeElement)).toBe(true)
+      expect(document.activeElement).not.toBe(globalSearchButton)
+      expect(document.activeElement).not.toBe(themeToggleButton)
+    }
+
+    for (let index = 0; index < 20; index += 1) {
+      await user.tab({ shift: true })
+      expect(dialog.contains(document.activeElement)).toBe(true)
+      expect(document.activeElement).not.toBe(globalSearchButton)
+      expect(document.activeElement).not.toBe(themeToggleButton)
+    }
+
+    globalSearchButton.focus()
+    expect(dialog.contains(document.activeElement)).toBe(true)
+
+    themeToggleButton.focus()
+    expect(dialog.contains(document.activeElement)).toBe(true)
+
+    await user.keyboard("{Escape}")
+
+    expect(screen.queryByRole("dialog", { name: /fullscreen preview/i })).not.toBeInTheDocument()
+    expect(openFullscreenButton).toHaveFocus()
   })
 
   it("describes which preview mode is currently active", async () => {
@@ -963,6 +1214,134 @@ describe("CustomizationApp", () => {
     expect(within(previewRegion).getByRole("tabpanel", { name: /settings/i })).toBeInTheDocument()
   })
 
+  it("switches preview scenes with keyboard navigation in the workspace toolbar", async () => {
+    const user = userEvent.setup()
+
+    render(<CustomizationApp />)
+
+    const previewRegion = screen.getByRole("complementary", { name: /preview/i })
+    const tablist = screen.getByRole("tablist", { name: /preview scenes/i })
+    const dashboardTab = within(tablist).getByRole("tab", { name: /dashboard/i })
+
+    dashboardTab.focus()
+    await user.keyboard("{ArrowRight}")
+
+    const settingsTab = within(tablist).getByRole("tab", { name: /settings/i })
+
+    expect(settingsTab).toHaveFocus()
+    expect(settingsTab).toHaveAttribute("aria-selected", "true")
+    expect(within(previewRegion).getByRole("tabpanel", { name: /settings/i })).toBeInTheDocument()
+
+    await user.keyboard("{ArrowLeft}")
+
+    expect(dashboardTab).toHaveFocus()
+    expect(dashboardTab).toHaveAttribute("aria-selected", "true")
+    expect(within(previewRegion).getByRole("tabpanel", { name: /dashboard/i })).toBeInTheDocument()
+
+    await user.keyboard("{ArrowUp}")
+
+    const contentTab = within(tablist).getByRole("tab", { name: /content/i })
+
+    expect(contentTab).toHaveFocus()
+    expect(contentTab).toHaveAttribute("aria-selected", "true")
+    expect(within(previewRegion).getByRole("tabpanel", { name: /content/i })).toBeInTheDocument()
+
+    await user.keyboard("{Home}")
+
+    expect(dashboardTab).toHaveFocus()
+    expect(dashboardTab).toHaveAttribute("aria-selected", "true")
+    expect(within(previewRegion).getByRole("tabpanel", { name: /dashboard/i })).toBeInTheDocument()
+
+    await user.keyboard("{End}")
+
+    expect(contentTab).toHaveFocus()
+    expect(contentTab).toHaveAttribute("aria-selected", "true")
+    expect(within(previewRegion).getByRole("tabpanel", { name: /content/i })).toBeInTheDocument()
+  })
+
+  it("switches fullscreen preview scenes with keyboard navigation", async () => {
+    const user = userEvent.setup()
+
+    render(<CustomizationApp />)
+
+    await user.click(screen.getByRole("button", { name: /enter fullscreen preview/i }))
+
+    const dialog = screen.getByRole("dialog", { name: /fullscreen preview/i })
+    const previewRegion = within(dialog).getByRole("complementary", { name: /preview/i })
+    const tablist = within(dialog).getByRole("tablist", { name: /preview scenes/i })
+    const dashboardTab = within(tablist).getByRole("tab", { name: /dashboard/i })
+
+    dashboardTab.focus()
+    await user.keyboard("{End}")
+
+    const contentTab = within(tablist).getByRole("tab", { name: /content/i })
+
+    expect(contentTab).toHaveFocus()
+    expect(contentTab).toHaveAttribute("aria-selected", "true")
+    expect(within(previewRegion).getByRole("tabpanel", { name: /content/i })).toBeInTheDocument()
+
+    await user.keyboard("{Home}")
+
+    expect(dashboardTab).toHaveFocus()
+    expect(dashboardTab).toHaveAttribute("aria-selected", "true")
+    expect(within(previewRegion).getByRole("tabpanel", { name: /dashboard/i })).toBeInTheDocument()
+
+    await user.keyboard("{ArrowDown}")
+
+    const settingsTab = within(tablist).getByRole("tab", { name: /settings/i })
+
+    expect(settingsTab).toHaveFocus()
+    expect(settingsTab).toHaveAttribute("aria-selected", "true")
+    expect(within(previewRegion).getByRole("tabpanel", { name: /settings/i })).toBeInTheDocument()
+
+    await user.keyboard("{ArrowLeft}")
+
+    expect(dashboardTab).toHaveFocus()
+    expect(dashboardTab).toHaveAttribute("aria-selected", "true")
+    expect(within(previewRegion).getByRole("tabpanel", { name: /dashboard/i })).toBeInTheDocument()
+  })
+
+  it("keeps visible preview tab aria-controls references pointed at existing panels", async () => {
+    const user = userEvent.setup()
+
+    render(<CustomizationApp />)
+
+    const workspaceTablist = screen.getByRole("tablist", { name: /preview scenes/i })
+
+    for (const tab of within(workspaceTablist).getAllByRole("tab")) {
+      const controlsId = tab.getAttribute("aria-controls")
+
+      expect(controlsId).toBeTruthy()
+      expect(document.getElementById(controlsId ?? "")).not.toBeNull()
+    }
+
+    await user.click(screen.getByRole("button", { name: /enter fullscreen preview/i }))
+
+    const dialog = screen.getByRole("dialog", { name: /fullscreen preview/i })
+    const fullscreenTablist = within(dialog).getByRole("tablist", { name: /preview scenes/i })
+
+    for (const tab of within(fullscreenTablist).getAllByRole("tab")) {
+      const controlsId = tab.getAttribute("aria-controls")
+
+      expect(controlsId).toBeTruthy()
+      expect(document.getElementById(controlsId ?? "")).not.toBeNull()
+    }
+  })
+
+  it("uses unique preview tab and panel ids across workspace and fullscreen", async () => {
+    const user = userEvent.setup()
+
+    render(<CustomizationApp />)
+
+    await user.click(screen.getByRole("button", { name: /enter fullscreen preview/i }))
+
+    const ids = Array.from(document.querySelectorAll<HTMLElement>("[id]"))
+      .map((element) => element.id)
+      .filter((id) => id.includes("preview-tab-") || id.includes("preview-panel-"))
+
+    expect(new Set(ids).size).toBe(ids.length)
+  })
+
   it("announces copy feedback in a live region", async () => {
     const user = userEvent.setup()
 
@@ -982,6 +1361,7 @@ describe("CustomizationApp", () => {
     expect(screen.getByRole("toolbar", { name: /customization actions/i })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Light" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Dark" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /enter fullscreen preview/i })).toBeInTheDocument()
     expect(screen.getByRole("region", { name: /token controls/i })).toBeInTheDocument()
     expect(screen.getByRole("complementary", { name: /preview/i })).toBeInTheDocument()
     expect(screen.getByRole("tablist", { name: /preview scenes/i })).toBeInTheDocument()
