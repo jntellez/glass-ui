@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "pnpm prebuild && astro dev",
     "prebuild": "pnpm --filter=@glass-ui-kit/schema build && pnpm --filter=@glass-ui-kit/glass build:registry",
-    "build": "rm -rf .astro && astro build",
+    "build": "rm -rf .astro && astro build && node ./scripts/assert-customization-build.mjs",
     "preview": "astro preview",
     "lint": "tsc --noEmit",
     "test": "vitest run",
