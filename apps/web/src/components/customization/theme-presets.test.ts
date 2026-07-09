@@ -35,13 +35,13 @@ describe("theme-presets", () => {
 
   it("applies preset token values for a representative light and dark palette", () => {
     expect(resolveThemePresetTokens("midnight-bloom", "light")).toMatchObject({
-      "--accent": "#6d5efc",
-      "--glass-bg": "rgba(245, 240, 255, 0.76)",
+      "--accent": "#5b4df6",
+      "--glass-bg": "rgba(245, 240, 255, 0.84)",
       "--glass-blur": "16px",
     })
     expect(resolveThemePresetTokens("midnight-bloom", "dark")).toMatchObject({
-      "--accent": "#8b5cf6",
-      "--glass-bg": "rgba(30, 27, 75, 0.72)",
+      "--accent": "#a78bfa",
+      "--glass-bg": "rgba(30, 27, 75, 0.8)",
       "--glass-blur": "18px",
     })
   })
@@ -64,8 +64,8 @@ describe("theme-presets", () => {
     const lightSwatches = resolvePresetSwatches(candylandPreset, "light")
     const darkSwatches = resolvePresetSwatches(candylandPreset, "dark")
 
-    expect(lightSwatches).toEqual(["#5b214f", "#06b6d4", "#ec4899", "rgba(255, 240, 250, 0.82)"])
-    expect(darkSwatches).toEqual(["#ffe4f3", "#67e8f9", "#4ade80", "rgba(91, 33, 75, 0.72)"])
+    expect(lightSwatches).toEqual(["#5b214f", "#0891b2", "#ec4899", "rgba(255, 240, 250, 0.88)"])
+    expect(darkSwatches).toEqual(["#ffe4f3", "#7dd3fc", "#86efac", "rgba(91, 33, 75, 0.8)"])
   })
 
   it("falls back to light defaults when no mode is provided", () => {

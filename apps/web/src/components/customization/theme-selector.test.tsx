@@ -88,6 +88,6 @@ describe("ThemeSelector", () => {
     const candylandSwatches = within(candylandOption).getAllByTestId("preset-swatch")
 
     expect(candylandSwatches[0]).toHaveStyle({ backgroundColor: "rgb(255, 228, 243)" })
-    expect(candylandSwatches[1]).toHaveStyle({ backgroundColor: "rgb(103, 232, 249)" })
+    expect(candylandSwatches[1]).toHaveStyle({ backgroundColor: "rgb(125, 211, 252)" })
   })
 })
