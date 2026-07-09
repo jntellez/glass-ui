@@ -8,9 +8,11 @@ export default defineConfig({
     },
   },
   test: {
+    exclude: ["e2e/**"],
     forbidOnly: Boolean(process.env.CI),
     environment: "jsdom",
     globals: true,
+    include: ["src/**/*.{test,spec}.{ts,tsx}"],
     setupFiles: ["./src/test/setup.ts"],
   },
 })
