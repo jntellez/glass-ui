@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { Button } from "@glass-ui-kit/glass"
+import { Button, Popover, PopoverContent, PopoverTrigger, Textarea } from "@glass-ui-kit/glass"
 import { Maximize2, Minimize2 } from "lucide-react"
 import { PREVIEW_SCENES, type PreviewSceneId } from "./preview-scenes"
 import { getPreviewPanelId, getPreviewTabId } from "./preview-dom-ids"
@@ -14,6 +14,8 @@ interface CustomizationToolbarProps {
   onPreviewModeChange: (mode: PreviewMode) => void
   onReset: () => void
   onCopyExport: () => Promise<boolean>
+  onDownloadExport: () => boolean
+  onImportConfig: (value: string) => { ok: true } | { ok: false; error: string }
   activeScene: PreviewSceneId
   onSceneChange: (scene: PreviewSceneId) => void
   onFullscreenToggle: () => void
@@ -21,7 +23,13 @@ interface CustomizationToolbarProps {
   idNamespace?: string
 }
 
-type CopyStatus = "idle" | "success" | "error"
+type ActionStatus =
+  | "idle"
+  | "copy-success"
+  | "copy-error"
+  | "download-success"
+  | "download-error"
+  | "import-success"
 
 const SCENE_KEYBOARD_NAVIGATION_KEYS = new Set([
   "ArrowRight",
@@ -41,29 +49,53 @@ export function CustomizationToolbar({
   onPreviewModeChange,
   onReset,
   onCopyExport,
+  onDownloadExport,
+  onImportConfig,
   activeScene,
   onSceneChange,
   onFullscreenToggle,
   variant = "default",
   idNamespace = "workspace",
 }: CustomizationToolbarProps) {
-  const [copyStatus, setCopyStatus] = React.useState<CopyStatus>("idle")
+  const [actionStatus, setActionStatus] = React.useState<ActionStatus>("idle")
+  const [isImportOpen, setIsImportOpen] = React.useState(false)
+  const [importValue, setImportValue] = React.useState("")
+  const [importError, setImportError] = React.useState<string | null>(null)
   const scene = PREVIEW_SCENES.find((item) => item.id === activeScene) ?? PREVIEW_SCENES[0]
   const isFullscreen = variant === "fullscreen"
 
   React.useEffect(() => {
-    if (copyStatus !== "success") {
+    if (actionStatus === "idle") {
       return
     }
 
-    const timeout = window.setTimeout(() => setCopyStatus("idle"), 2000)
+    const timeout = window.setTimeout(() => setActionStatus("idle"), 2000)
     return () => window.clearTimeout(timeout)
-  }, [copyStatus])
+  }, [actionStatus])
 
   const handleCopy = React.useCallback(async () => {
     const didCopy = await onCopyExport()
-    setCopyStatus(didCopy ? "success" : "error")
+    setActionStatus(didCopy ? "copy-success" : "copy-error")
   }, [onCopyExport])
+
+  const handleDownload = React.useCallback(() => {
+    const didDownload = onDownloadExport()
+    setActionStatus(didDownload ? "download-success" : "download-error")
+  }, [onDownloadExport])
+
+  const handleImport = React.useCallback(() => {
+    const result = onImportConfig(importValue)
+
+    if (!result.ok) {
+      setImportError(result.error)
+      return
+    }
+
+    setImportValue("")
+    setImportError(null)
+    setIsImportOpen(false)
+    setActionStatus("import-success")
+  }, [importValue, onImportConfig])
 
   const handleSceneTabKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>, sceneId: PreviewSceneId) => {
@@ -111,17 +143,23 @@ export function CustomizationToolbar({
     [idNamespace, onSceneChange],
   )
 
-  const copyMessage =
-    copyStatus === "success"
+  const statusMessage =
+    actionStatus === "copy-success"
       ? "CSS export copied to clipboard."
-      : copyStatus === "error"
+      : actionStatus === "copy-error"
         ? "Copy failed. Select the generated CSS and copy it manually."
-        : ""
+        : actionStatus === "download-success"
+          ? "Configuration JSON downloaded."
+          : actionStatus === "download-error"
+            ? "Download failed. Try copying or importing the configuration manually."
+            : actionStatus === "import-success"
+              ? "Configuration imported."
+              : ""
 
   return (
     <div className="glass glass-soft flex min-h-15 flex-wrap items-center justify-between gap-3 rounded-glass-md px-4 py-3">
       <p role="status" className="sr-only">
-        {copyMessage}
+        {statusMessage}
       </p>
       <div role="tablist" aria-label="Preview scenes" className="flex flex-wrap gap-3">
         {PREVIEW_SCENES.map((item) => {
@@ -182,8 +220,73 @@ export function CustomizationToolbar({
               Reset
             </Button>
             <Button type="button" onClick={handleCopy} aria-label="Copy export" className="">
-              {copyStatus === "success" ? "Copied" : "Copy export"}
+              {actionStatus === "copy-success" ? "Copied" : "Copy export"}
             </Button>
+            <Button type="button" onClick={handleDownload} aria-label="Download configuration">
+              Download config
+            </Button>
+            <Popover
+              open={isImportOpen}
+              onOpenChange={(open) => {
+                setIsImportOpen(open)
+                if (!open) {
+                  setImportError(null)
+                }
+              }}
+            >
+              <PopoverTrigger asChild>
+                <Button type="button" aria-label="Import configuration">
+                  Import config
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                align="end"
+                aria-label="Import customization JSON"
+                className="w-[28rem] max-w-[calc(100vw-2rem)] p-3"
+              >
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-foreground">Import customization JSON</p>
+                    <p className="text-xs text-muted-foreground">
+                      Paste an exported configuration to restore tokens, preset selection, and
+                      editor state.
+                    </p>
+                  </div>
+                  <Textarea
+                    rows={10}
+                    aria-label="Customization config JSON"
+                    placeholder='{"version":1,"light":{...}}'
+                    value={importValue}
+                    onChange={(event) => {
+                      setImportValue(event.target.value)
+                      if (importError) {
+                        setImportError(null)
+                      }
+                    }}
+                  />
+                  {importError ? (
+                    <p role="alert" className="text-sm text-destructive">
+                      {importError}
+                    </p>
+                  ) : null}
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      type="button"
+                      variant="soft"
+                      onClick={() => {
+                        setIsImportOpen(false)
+                        setImportError(null)
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="button" onClick={handleImport}>
+                      Apply import
+                    </Button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
             <Button
               type="button"
               size="icon"

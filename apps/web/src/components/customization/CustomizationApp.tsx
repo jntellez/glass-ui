@@ -22,6 +22,11 @@ import {
   persistEditorState,
   readPersistedEditorState,
 } from "./customization-storage"
+import {
+  parseCustomizationConfig,
+  serializeCustomizationConfig,
+  type CustomizationConfigState,
+} from "./customization-config"
 
 interface EditorState {
   light: ThemeTokenValues
@@ -383,6 +388,57 @@ export function CustomizationApp() {
     }
   }, [editorState.dark, editorState.light, editorState.radius])
 
+  const handleDownloadExport = React.useCallback(() => {
+    if (typeof document === "undefined" || typeof URL.createObjectURL !== "function") {
+      return false
+    }
+
+    try {
+      const configState: CustomizationConfigState = {
+        light: editorState.light,
+        dark: editorState.dark,
+        radius: editorState.radius,
+        previewMode: editorState.previewMode,
+        activeScene: editorState.activeScene,
+        activePreset: editorState.activePreset,
+      }
+      const blob = new Blob([serializeCustomizationConfig(configState)], {
+        type: "application/json;charset=utf-8",
+      })
+      const href = URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.href = href
+      link.download = "glass-ui-customization-config.json"
+      link.click()
+      URL.revokeObjectURL(href)
+      return true
+    } catch {
+      return false
+    }
+  }, [
+    editorState.activePreset,
+    editorState.activeScene,
+    editorState.dark,
+    editorState.light,
+    editorState.previewMode,
+    editorState.radius,
+  ])
+
+  const handleImportConfig = React.useCallback((value: string) => {
+    const result = parseCustomizationConfig(value)
+
+    if (!result.ok) {
+      return result
+    }
+
+    setEditorState({
+      ...result.state,
+      filterQuery: "",
+    })
+
+    return { ok: true } as const
+  }, [])
+
   const handleOpenFullscreen = React.useCallback(() => {
     const activeElement = document.activeElement
     lastFocusedElementRef.current = activeElement instanceof HTMLElement ? activeElement : null
@@ -419,6 +475,8 @@ export function CustomizationApp() {
               onPreviewModeChange={handlePreviewModeChange}
               onReset={handleReset}
               onCopyExport={handleCopyExport}
+              onDownloadExport={handleDownloadExport}
+              onImportConfig={handleImportConfig}
               activeScene={editorState.activeScene}
               onSceneChange={handleSceneChange}
               onFullscreenToggle={handleOpenFullscreen}
@@ -451,6 +509,8 @@ export function CustomizationApp() {
                   onPreviewModeChange={handlePreviewModeChange}
                   onReset={handleReset}
                   onCopyExport={handleCopyExport}
+                  onDownloadExport={handleDownloadExport}
+                  onImportConfig={handleImportConfig}
                   activeScene={editorState.activeScene}
                   onSceneChange={handleSceneChange}
                   onFullscreenToggle={handleCloseFullscreen}

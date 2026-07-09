@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import { parseCustomizationConfig } from "./customization-config"
 import { CUSTOMIZATION_STORAGE_KEY, readPersistedEditorState } from "./customization-storage"
 import {
   DEFAULT_DARK_TOKENS,
@@ -33,6 +34,15 @@ describe("CustomizationApp", () => {
       value: {
         writeText: vi.fn(),
       },
+    })
+
+    Object.defineProperty(URL, "createObjectURL", {
+      configurable: true,
+      value: vi.fn(() => "blob:glass-ui-config"),
+    })
+    Object.defineProperty(URL, "revokeObjectURL", {
+      configurable: true,
+      value: vi.fn(),
     })
   })
 
@@ -1063,10 +1073,10 @@ describe("CustomizationApp", () => {
     )
 
     expect(screen.getByRole("textbox", { name: "Background" })).toHaveValue(
-      "rgba(245, 240, 255, 0.76)",
+      "rgba(245, 240, 255, 0.84)",
     )
     expect(
-      within(defaultSample).getByText("Background rgba(245, 240, 255, 0.76)"),
+      within(defaultSample).getByText("Background rgba(245, 240, 255, 0.84)"),
     ).toBeInTheDocument()
     expect(within(defaultSample).getByText("Blur 16px")).toBeInTheDocument()
 
@@ -1350,6 +1360,111 @@ describe("CustomizationApp", () => {
     await user.click(screen.getByRole("button", { name: /copy export/i }))
 
     expect(screen.getByRole("status")).toHaveTextContent("CSS export copied to clipboard.")
+  })
+
+  it("downloads the current configuration as JSON", async () => {
+    const user = userEvent.setup()
+    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {})
+    const createObjectURLSpy = vi.mocked(URL.createObjectURL)
+
+    render(<CustomizationApp />)
+
+    fireEvent.change(screen.getByRole("textbox", { name: "Background" }), {
+      target: { value: "rgba(12, 34, 56, 0.7)" },
+    })
+
+    await user.click(screen.getByRole("button", { name: /download configuration/i }))
+
+    expect(createObjectURLSpy).toHaveBeenCalledTimes(1)
+
+    const blob = createObjectURLSpy.mock.calls[0]?.[0]
+    expect(blob).toBeInstanceOf(Blob)
+    expect(clickSpy).toHaveBeenCalledTimes(1)
+
+    const exportedText = await (blob as Blob).text()
+    const parsedConfig = parseCustomizationConfig(exportedText)
+
+    expect(parsedConfig).toEqual(
+      expect.objectContaining({
+        ok: true,
+      }),
+    )
+    expect(exportedText).toContain('"previewMode": "light"')
+    expect(exportedText).toContain('"--glass-bg": "rgba(12, 34, 56, 0.7)"')
+    expect(screen.getByRole("status")).toHaveTextContent("Configuration JSON downloaded.")
+
+    clickSpy.mockRestore()
+  })
+
+  it("imports a customization config and restores editor state", async () => {
+    const user = userEvent.setup()
+
+    render(<CustomizationApp />)
+
+    await user.click(screen.getByRole("button", { name: /import configuration/i }))
+    fireEvent.change(screen.getByRole("textbox", { name: /customization config json/i }), {
+      target: {
+        value: JSON.stringify({
+          version: 1,
+          light: {
+            ...DEFAULT_LIGHT_TOKENS,
+            "--accent": "#123456",
+          },
+          dark: {
+            ...DEFAULT_DARK_TOKENS,
+            "--glass-bg": "rgba(17, 24, 39, 0.92)",
+          },
+          radius: {
+            ...DEFAULT_RADIUS_TOKENS,
+            "--glass-radius-md": "1.25rem",
+          },
+          editor: {
+            previewMode: "dark",
+            activeScene: "content",
+            activePreset: {
+              light: null,
+              dark: null,
+            },
+          },
+        }),
+      },
+    })
+
+    await user.click(screen.getByRole("button", { name: /apply import/i }))
+
+    expect(screen.getByRole("status")).toHaveTextContent("Configuration imported.")
+    expect(
+      screen.queryByRole("textbox", { name: /customization config json/i }),
+    ).not.toBeInTheDocument()
+    expect(screen.getByTestId("preview-scope")).toHaveAttribute("data-preview-mode", "dark")
+    expect(screen.getByRole("tab", { name: /content/i })).toHaveAttribute("aria-selected", "true")
+    expect(screen.getByRole("textbox", { name: "Border" })).toHaveValue("rgba(255, 255, 255, 0.1)")
+    expect(screen.getByRole("button", { name: "Select theme: Default" })).toBeInTheDocument()
+
+    await user.click(screen.getByRole("button", { name: "Light" }))
+    expect(screen.getByRole("textbox", { name: "Accent" })).toHaveValue("#123456")
+
+    await user.click(screen.getByRole("tab", { name: "Other" }))
+    expect(screen.getByRole("textbox", { name: "Radius medium" })).toHaveValue("1.25")
+  })
+
+  it("shows an error for invalid imported config without crashing", async () => {
+    const user = userEvent.setup()
+
+    render(<CustomizationApp />)
+
+    await user.click(screen.getByRole("button", { name: /import configuration/i }))
+    fireEvent.change(screen.getByRole("textbox", { name: /customization config json/i }), {
+      target: { value: "{oops" },
+    })
+    await user.click(screen.getByRole("button", { name: /apply import/i }))
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Invalid JSON. Paste a valid customization config.",
+    )
+    expect(screen.getByRole("textbox", { name: "Background" })).toHaveValue(
+      DEFAULT_LIGHT_TOKENS["--glass-bg"],
+    )
   })
 
   it("renders toolbar actions, controls, and preview region reachable on a narrow viewport", () => {
