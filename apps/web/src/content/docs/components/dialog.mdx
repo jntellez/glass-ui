@@ -1,0 +1,180 @@
+---
+title: Dialog
+description: A modal surface for focused decisions, confirmation flows, and short-form editing.
+---
+
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="dialog-demo" client:load />
+
+`Dialog` presents a modal surface that temporarily takes focus away from the page so the user can complete a focused task. It is built on Radix UI, which means escape handling, focus trapping, overlay semantics, and title/description relationships work the way assistive technology expects.
+
+Use it for confirmations, short forms, and actions that should pause the surrounding workflow until the user responds. If the content only needs lightweight supporting context, use `Popover` instead.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add dialog"
+  pnpm="pnpm dlx @glass-ui-kit/cli add dialog"
+  yarn="yarn dlx @glass-ui-kit/cli add dialog"
+  bun="bunx @glass-ui-kit/cli add dialog"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { Button } from "@/components/ui/button"
+  import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
+
+  export default function App() {
+    return (
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="strong">Delete project</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete project</DialogTitle>
+            <DialogDescription>
+              This action removes the current workspace for everyone on the team.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="ghost">Cancel</Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button variant="strong">Confirm</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    )
+  }`}
+/>
+
+## Examples
+
+### Variants
+
+Use the `variant` prop on `DialogContent` to tune the modal surface depth without changing its structure.
+
+<ComponentPreview name="dialog-variants" height={320} client:load />
+
+### Width control
+
+Use `className` on `DialogContent` when the layout needs a tighter or wider modal body.
+
+<ComponentPreview name="dialog-sizes" height={320} client:load />
+
+### Controlled
+
+Use `open` and `onOpenChange` when another part of the interface needs to coordinate the modal state.
+
+<CodeBlock
+  lang="tsx"
+  code={`import { useState } from "react"
+  import { Button } from "@/components/ui/button"
+  import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
+
+  export default function ControlledDialog() {
+    const [open, setOpen] = useState(false)
+
+    return (
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button>Open review</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Ready to publish?</DialogTitle>
+            <DialogDescription>
+              Keep dialog state in sync with the rest of your interface.
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    )
+  }`}
+/>
+
+## Styling
+
+Dialog keeps the API small. Reach for `variant` on `DialogContent` first, use `DialogHeader` and `DialogFooter` to keep structure consistent, and use `className` as the escape hatch for modal width or internal spacing.
+
+<CodeBlock
+  lang="tsx"
+  code={`/* Content variants */
+  <DialogContent variant="default" />
+  <DialogContent variant="soft" />
+  <DialogContent variant="strong" />
+
+  /* Controlled state */
+  <Dialog open={open} onOpenChange={setOpen} />
+
+  /* Escape hatch */
+  <DialogContent className="max-w-2xl" />`}
+/>
+
+## API Reference
+
+### Dialog
+
+Accepts all Radix `Dialog.Root` props.
+
+| Prop | Type |
+| --- | --- |
+| `defaultOpen` | `boolean` |
+| `open` | `boolean` |
+| `onOpenChange` | `(open: boolean) => void` |
+| `modal` | `boolean` |
+
+### DialogTrigger / DialogClose
+
+Accept all Radix trigger and close props.
+
+| Prop | Type |
+| --- | --- |
+| `asChild` | `boolean` |
+| `disabled` | `boolean` |
+| `className` | `string` |
+
+### DialogContent
+
+| Prop | Type |
+| --- | --- |
+| `variant` | `"default" \| "soft" \| "strong"` |
+| `forceMount` | `boolean` |
+| `onEscapeKeyDown` | `(event: KeyboardEvent) => void` |
+| `onPointerDownOutside` | `(event: PointerDownOutsideEvent) => void` |
+| `className` | `string` |
+
+`DialogContent` defaults to a centered modal layout with `max-w-lg`. Use `className` to tune width without changing accessibility wiring.
+
+### DialogHeader / DialogFooter
+
+Use these helpers to keep modal titles, descriptions, and action areas consistently spaced without adding custom layout wrappers every time.
+
+### DialogTitle / DialogDescription
+
+Use these helpers whenever the modal needs a visible label or supporting text. Radix automatically wires them to the dialog surface so screen readers announce the modal clearly.

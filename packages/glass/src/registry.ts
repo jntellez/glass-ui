@@ -94,6 +94,17 @@ export const registry: RegistryIndex = [
     ],
   },
   {
+    name: "dialog",
+    type: "registry:ui",
+    dependencies: ["@radix-ui/react-dialog", "class-variance-authority", "clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/dialog/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "dropdown-menu",
     type: "registry:ui",
     dependencies: [

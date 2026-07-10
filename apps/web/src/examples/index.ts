@@ -5,6 +5,7 @@ import { checkboxExamples } from "./checkbox"
 import { cardExamples } from "./card"
 import { collapsibleExamples } from "./collapsible"
 import { colorPickerExamples } from "./color-picker"
+import { dialogExamples } from "./dialog"
 import { dropdownMenuExamples } from "./dropdown-menu"
 import { fieldExamples } from "./field"
 import { inputExamples } from "./input"
@@ -25,6 +26,7 @@ export const examples = {
   ...cardExamples,
   ...collapsibleExamples,
   ...colorPickerExamples,
+  ...dialogExamples,
   ...dropdownMenuExamples,
   ...fieldExamples,
   ...inputExamples,

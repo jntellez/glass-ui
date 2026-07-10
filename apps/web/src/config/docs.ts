@@ -29,6 +29,7 @@ export const sidebarNav: SidebarSection[] = [
       { title: "Checkbox", href: "/docs/components/checkbox" },
       { title: "Collapsible", href: "/docs/components/collapsible" },
       { title: "Color Picker", href: "/docs/components/color-picker" },
+      { title: "Dialog", href: "/docs/components/dialog" },
       { title: "Dropdown Menu", href: "/docs/components/dropdown-menu" },
       { title: "Field", href: "/docs/components/field" },
       { title: "Input", href: "/docs/components/input" },
