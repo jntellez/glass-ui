@@ -1,0 +1,133 @@
+---
+title: Radio Group
+description: Accessible single-selection control for mutually exclusive choices.
+---
+
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="radio-group-demo" client:load />
+
+`RadioGroup` is built on Radix UI, so it ships with controlled and uncontrolled state, roving focus, and arrow-key navigation out of the box while keeping the glass-ui visual style.
+
+Use it when the user must pick exactly one option from a short list. For independent on/off choices, reach for `Checkbox` or `Switch` instead.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add radio-group"
+  pnpm="pnpm dlx @glass-ui-kit/cli add radio-group"
+  yarn="yarn dlx @glass-ui-kit/cli add radio-group"
+  bun="bunx @glass-ui-kit/cli add radio-group"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+  import { Label } from "@/components/ui/label"
+
+  export default function App() {
+    return (
+      <RadioGroup defaultValue="starter" aria-label="Plan" className="gap-3">
+        <div className="flex items-center gap-3">
+          <RadioGroupItem id="plan-starter" value="starter" />
+          <Label htmlFor="plan-starter">Starter</Label>
+        </div>
+        <div className="flex items-center gap-3">
+          <RadioGroupItem id="plan-growth" value="growth" />
+          <Label htmlFor="plan-growth">Growth</Label>
+        </div>
+      </RadioGroup>
+    )
+  }`}
+/>
+
+## Examples
+
+### Default
+
+Pair each `RadioGroupItem` with a `Label` using `id` and `htmlFor` so the full row stays easy to target.
+
+<ComponentPreview name="radio-group-demo" client:load />
+
+### Disabled states
+
+Disable the whole group when the choice is informative only, or disable a single item when one option is temporarily unavailable.
+
+<ComponentPreview name="radio-group-disabled" client:load />
+
+### Controlled
+
+Use `value` and `onValueChange` when a parent component owns the selection state.
+
+<CodeBlock
+  lang="tsx"
+  code={`import { useState } from "react"
+  import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+  import { Label } from "@/components/ui/label"
+
+  export default function ControlledRadioGroup() {
+    const [value, setValue] = useState("system")
+
+    return (
+      <RadioGroup value={value} onValueChange={setValue} aria-label="Theme" className="gap-3">
+        <div className="flex items-center gap-3">
+          <RadioGroupItem id="theme-light" value="light" />
+          <Label htmlFor="theme-light">Light</Label>
+        </div>
+        <div className="flex items-center gap-3">
+          <RadioGroupItem id="theme-dark" value="dark" />
+          <Label htmlFor="theme-dark">Dark</Label>
+        </div>
+        <div className="flex items-center gap-3">
+          <RadioGroupItem id="theme-system" value="system" />
+          <Label htmlFor="theme-system">System</Label>
+        </div>
+      </RadioGroup>
+    )
+  }`}
+/>
+
+## Styling
+
+Keep the control styling simple and consistent. Reach for `size` and standard Radix props first, then use `className` for layout adjustments around the group.
+
+<CodeBlock
+  lang="tsx"
+  code={`<RadioGroup defaultValue="a" orientation="horizontal" className="gap-4">
+    <RadioGroupItem value="a" />
+    <RadioGroupItem value="b" size="sm" />
+    <RadioGroupItem value="c" size="lg" />
+  </RadioGroup>`}
+/>
+
+## API Reference
+
+`RadioGroup` accepts all Radix `RadioGroup.Root` props.
+
+| Prop | Type |
+| --- | --- |
+| `orientation` | `"vertical" \| "horizontal"` |
+| `value` | `string` |
+| `defaultValue` | `string` |
+| `onValueChange` | `(value: string) => void` |
+| `disabled` | `boolean` |
+| `required` | `boolean` |
+| `name` | `string` |
+| `className` | `string` |
+
+`RadioGroupItem` accepts all Radix `RadioGroup.Item` props.
+
+| Prop | Type |
+| --- | --- |
+| `size` | `"sm" \| "md" \| "lg"` |
+| `value` | `string` |
+| `disabled` | `boolean` |
+| `id` | `string` |
+| `className` | `string` |
+
+Keyboard support follows native radio-group expectations: `Tab` moves in and out of the group, while arrow keys move the active selection.

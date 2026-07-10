@@ -176,6 +176,22 @@ export const registry: RegistryIndex = [
     ],
   },
   {
+    name: "radio-group",
+    type: "registry:ui",
+    dependencies: [
+      "@radix-ui/react-radio-group",
+      "class-variance-authority",
+      "clsx",
+      "tailwind-merge",
+    ],
+    files: [
+      {
+        path: "ui/radio-group/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "select",
     type: "registry:ui",
     dependencies: ["@radix-ui/react-select", "class-variance-authority", "clsx", "tailwind-merge"],

@@ -12,6 +12,7 @@ import { inputExamples } from "./input"
 import { labelExamples } from "./label"
 import { nativeSelectExamples } from "./native-select"
 import { popoverExamples } from "./popover"
+import { radioGroupExamples } from "./radio-group"
 import { selectExamples } from "./select"
 import { sliderExamples } from "./slider"
 import { switchExamples } from "./switch"
@@ -33,6 +34,7 @@ export const examples = {
   ...labelExamples,
   ...nativeSelectExamples,
   ...popoverExamples,
+  ...radioGroupExamples,
   ...selectExamples,
   ...sliderExamples,
   ...switchExamples,
