@@ -1,0 +1,108 @@
+---
+title: Separator
+description: A subtle divider for grouping related content and actions.
+---
+
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="separator-demo" height={280} client:load />
+
+`Separator` adds visual rhythm between related blocks without introducing extra layout wrappers. It is built on Radix UI, so you can choose between semantic separators that stay in the accessibility tree and decorative separators that are ignored by assistive technology.
+
+Use it when content or controls need a clear boundary inside cards, menus, sidebars, toolbars, and stacked settings rows. Keep it subtle. A separator should support hierarchy, not become the focal point.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add separator"
+  pnpm="pnpm dlx @glass-ui-kit/cli add separator"
+  yarn="yarn dlx @glass-ui-kit/cli add separator"
+  bun="bunx @glass-ui-kit/cli add separator"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { Separator } from "@/components/ui/separator"
+
+  export default function App() {
+    return (
+      <div className="rounded-glass-md border border-glass-border/60 glass p-4">
+        <div className="space-y-1">
+          <h3 className="text-sm font-medium">Profile</h3>
+          <p className="text-sm text-muted-foreground">Manage the basics for your public page.</p>
+        </div>
+
+        <Separator className="my-4" decorative />
+
+        <div className="space-y-1">
+          <h3 className="text-sm font-medium">Security</h3>
+          <p className="text-sm text-muted-foreground">Update devices, sessions, and recovery options.</p>
+        </div>
+      </div>
+    )
+  }`}
+/>
+
+## Examples
+
+### Decorative separators
+
+Use `decorative` when the divider is purely visual and the surrounding content already makes sense without an accessibility announcement.
+
+<ComponentPreview name="separator-demo" height={280} client:load />
+
+### Vertical separators
+
+Set `orientation="vertical"` for compact toolbars, inline actions, or split panes.
+
+<ComponentPreview name="separator-vertical" height={180} client:load />
+
+### Semantic separators
+
+Leave `decorative` unset when the separator communicates structure. Add an accessible name when that boundary benefits screen reader users.
+
+<ComponentPreview name="separator-semantic" height={280} client:load />
+
+## Accessibility guidance
+
+- Use `decorative` for visual-only dividers inside cards, toolbars, or dense layout groupings.
+- Keep the default semantic behavior when the separator marks a meaningful section boundary.
+- Add `aria-label` or `aria-labelledby` for semantic separators when the boundary needs extra context.
+- Prefer spacing alone when a visual rule does not improve understanding.
+
+## Styling
+
+Separator keeps the line treatment intentionally subtle. Reach for `inset` first, then use `className` when a layout needs a shorter rule or custom spacing.
+
+<CodeBlock
+  lang="tsx"
+  code={`<Separator />
+  <Separator inset />
+  <Separator orientation="vertical" className="h-6" />
+
+  /* Decorative */
+  <Separator decorative />
+
+  /* Semantic */
+  <Separator aria-label="Billing section boundary" />`}
+/>
+
+## API Reference
+
+Accepts all Radix `Separator.Root` props.
+
+| Prop | Type |
+| --- | --- |
+| `orientation` | `"horizontal" \| "vertical"` |
+| `decorative` | `boolean` |
+| `inset` | `boolean` |
+| `className` | `string` |
+| `aria-label` | `string` |
+| `aria-labelledby` | `string` |
+
+`Separator` defaults to semantic horizontal output. Switch to `decorative` only when the line is visual polish rather than meaningful document structure.

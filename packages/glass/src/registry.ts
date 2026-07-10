@@ -203,6 +203,22 @@ export const registry: RegistryIndex = [
     ],
   },
   {
+    name: "separator",
+    type: "registry:ui",
+    dependencies: [
+      "@radix-ui/react-separator",
+      "class-variance-authority",
+      "clsx",
+      "tailwind-merge",
+    ],
+    files: [
+      {
+        path: "ui/separator/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "slider",
     type: "registry:ui",
     dependencies: ["@radix-ui/react-slider", "class-variance-authority", "clsx", "tailwind-merge"],

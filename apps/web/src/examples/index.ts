@@ -14,6 +14,7 @@ import { nativeSelectExamples } from "./native-select"
 import { popoverExamples } from "./popover"
 import { radioGroupExamples } from "./radio-group"
 import { selectExamples } from "./select"
+import { separatorExamples } from "./separator"
 import { sliderExamples } from "./slider"
 import { switchExamples } from "./switch"
 import { tabsExamples } from "./tabs"
@@ -36,6 +37,7 @@ export const examples = {
   ...popoverExamples,
   ...radioGroupExamples,
   ...selectExamples,
+  ...separatorExamples,
   ...sliderExamples,
   ...switchExamples,
   ...tabsExamples,
