@@ -1,6 +1,7 @@
 export * from "./accordion"
 export * from "./badge"
 export * from "./checkbox"
+export * from "./command"
 export * from "./collapsible"
 export * from "./color-picker"
 export * from "./dialog"

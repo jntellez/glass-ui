@@ -150,4 +150,22 @@ describe("Dialog", () => {
     expect(DialogClose).toBeDefined()
     expect(dialogVariants).toBeDefined()
   })
+
+  it("lets consumers customize the overlay classes without losing defaults", async () => {
+    const user = userEvent.setup()
+
+    render(
+      <Dialog>
+        <DialogTrigger>Open dialog</DialogTrigger>
+        <DialogContent overlayClassName="backdrop-blur-none" data-testid="dialog-content">
+          <DialogTitle>Overlay override</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    await user.click(screen.getByRole("button", { name: "Open dialog" }))
+
+    const overlay = screen.getByTestId("dialog-content").previousElementSibling
+    expect(overlay).toHaveClass("bg-black/45", "backdrop-blur-none")
+  })
 })

@@ -1,0 +1,141 @@
+---
+title: Command
+description: A composable command menu for fast search, grouped actions, and keyboard-first navigation.
+---
+
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="command-demo" height={360} client:load />
+
+`Command` gives you a lightweight command surface with built-in filtering, roving keyboard selection, grouped results, and empty states. It is powered by `cmdk`, so typing, arrow-key navigation, and enter-to-select behavior already work the way users expect from a command palette.
+
+Use it for docs search, quick navigation, action launchers, or settings menus where fast filtering matters more than a traditional dropdown. When you need a modal palette, compose it with `Dialog` instead of reaching for a separate command-specific overlay API.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add command"
+  pnpm="pnpm dlx @glass-ui-kit/cli add command"
+  yarn="yarn dlx @glass-ui-kit/cli add command"
+  bun="bunx @glass-ui-kit/cli add command"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+    CommandShortcut,
+  } from "@/components/ui/command"
+
+  export default function App() {
+    return (
+      <Command className="max-w-xl">
+        <CommandInput placeholder="Search documentation..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Pages">
+            <CommandItem>
+              Command
+              <CommandShortcut>/docs/components/command</CommandShortcut>
+            </CommandItem>
+            <CommandItem>
+              Dialog
+              <CommandShortcut>/docs/components/dialog</CommandShortcut>
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </Command>
+    )
+  }`}
+/>
+
+## Examples
+
+### Groups and separators
+
+Use groups when the same search surface mixes pages, actions, and component categories.
+
+<ComponentPreview name="command-groups" height={360} client:load />
+
+### Dialog composition
+
+Compose `Command` inside `Dialog` when the search surface should open as a modal command palette.
+
+<ComponentPreview name="command-dialog" client:load />
+
+## Styling
+
+Command keeps the API class-based and composable. Reach for `className` to tune width, max height, or item layout, and use `CommandShortcut` for lightweight metadata such as key hints or routes.
+
+<CodeBlock
+  lang="tsx"
+  code={`/* Layout */
+  <Command className="max-w-2xl" />
+  <CommandList className="max-h-80" />
+
+  /* Item metadata */
+  <CommandItem>
+    Settings
+    <CommandShortcut>⌘,</CommandShortcut>
+  </CommandItem>
+
+  /* Modal composition */
+  <Dialog>
+    <DialogContent className="max-w-2xl overflow-hidden p-0">
+      <Command />
+    </DialogContent>
+  </Dialog>`}
+/>
+
+## API Reference
+
+### Command
+
+Accepts all `cmdk` root props.
+
+| Prop | Type |
+| --- | --- |
+| `label` | `string` |
+| `value` | `string` |
+| `onValueChange` | `(value: string) => void` |
+| `loop` | `boolean` |
+| `className` | `string` |
+
+### CommandInput
+
+Accepts all `cmdk` input props.
+
+| Prop | Type |
+| --- | --- |
+| `placeholder` | `string` |
+| `value` | `string` |
+| `onValueChange` | `(value: string) => void` |
+| `className` | `string` |
+
+### CommandList / CommandEmpty / CommandGroup / CommandSeparator
+
+Use these helpers to structure results, headings, and empty states without rebuilding the filtering surface.
+
+### CommandItem
+
+| Prop | Type |
+| --- | --- |
+| `value` | `string` |
+| `keywords` | `string[]` |
+| `disabled` | `boolean` |
+| `onSelect` | `(value: string) => void` |
+| `className` | `string` |
+
+### CommandShortcut
+
+Use `CommandShortcut` for route hints, key labels, or compact metadata aligned to the trailing edge of an item.

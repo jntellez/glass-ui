@@ -3,6 +3,7 @@ import { badgeExamples } from "./badge"
 import { buttonExamples } from "./button"
 import { checkboxExamples } from "./checkbox"
 import { cardExamples } from "./card"
+import { commandExamples } from "./command"
 import { collapsibleExamples } from "./collapsible"
 import { colorPickerExamples } from "./color-picker"
 import { dialogExamples } from "./dialog"
@@ -27,6 +28,7 @@ export const examples = {
   ...buttonExamples,
   ...checkboxExamples,
   ...cardExamples,
+  ...commandExamples,
   ...collapsibleExamples,
   ...colorPickerExamples,
   ...dialogExamples,

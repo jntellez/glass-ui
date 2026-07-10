@@ -9,3 +9,7 @@ class ResizeObserverMock implements ResizeObserver {
 if (typeof globalThis.ResizeObserver === "undefined") {
   globalThis.ResizeObserver = ResizeObserverMock
 }
+
+if (typeof Element !== "undefined" && !Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = () => {}
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { darkModeDocs, flattenedDocs, installationDocs, sidebarNav } from "./docs"
+import { darkModeDocs, docsCommandItems, flattenedDocs, installationDocs, sidebarNav } from "./docs"
 
 describe("docs config", () => {
   it("keeps flattened docs in sync with the sidebar navigation", () => {
@@ -22,5 +22,23 @@ describe("docs config", () => {
       "/docs/dark-mode/astro",
       "/docs/dark-mode/manual",
     ])
+  })
+
+  it("exposes command items for sidebar and guide routes", () => {
+    expect(docsCommandItems).toContainEqual({
+      title: "Command",
+      href: "/docs/components/command",
+      section: "Components",
+    })
+    expect(docsCommandItems).toContainEqual({
+      title: "Next.js",
+      href: "/docs/installation/next",
+      section: "Installation Guides",
+    })
+    expect(docsCommandItems).toContainEqual({
+      title: "Manual",
+      href: "/docs/dark-mode/manual",
+      section: "Dark Mode Guides",
+    })
   })
 })

@@ -1,4 +1,5 @@
 ---
+import DocsCommand from "@/components/layout/DocsCommand.tsx"
 import ThemeToggle from "@/components/theme/ThemeToggle.tsx"
 import { getHeaderNavigation, HEADER_NAV_BUTTON_CLASS_NAME } from "@/components/layout/nav"
 import Button from "@/components/ui/Button.astro"
@@ -45,13 +46,7 @@ const navigation = getHeaderNavigation(pathname)
     </div>
 
     <div class="flex flex-1 items-center justify-end gap-3">
-      <Button
-        variant="transparent"
-        className="hidden md:inline-flex items-center font-normal hover:scale-none pr-20 md:pr-26"
-      >
-        <span class="lg:hidden">Search...</span>
-        <span class="hidden lg:inline">Search documentation...</span>
-      </Button>
+      <DocsCommand client:load />
 
       <Button asChild variant="transparent" size="icon">
         <a href="https://github.com/jntellez/glass-ui" target="_blank" rel="noreferrer">

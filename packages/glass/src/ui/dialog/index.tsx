@@ -35,7 +35,9 @@ type DialogOverlayProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.
   VariantProps<typeof dialogOverlayVariants>
 
 type DialogContentProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> &
-  VariantProps<typeof dialogContentVariants>
+  VariantProps<typeof dialogContentVariants> & {
+    overlayClassName?: string
+  }
 
 const Dialog = DialogPrimitive.Root
 const DialogTrigger = DialogPrimitive.Trigger
@@ -58,9 +60,9 @@ DialogOverlay.displayName = "DialogOverlay"
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   DialogContentProps
->(({ className, variant, ...props }, ref) => (
+>(({ className, overlayClassName, variant, ...props }, ref) => (
   <DialogPortal>
-    <DialogOverlay />
+    <DialogOverlay className={overlayClassName} />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(dialogContentVariants({ variant }), className)}

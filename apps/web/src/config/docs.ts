@@ -8,6 +8,10 @@ export type SidebarSection = {
   items: NavItem[]
 }
 
+export type DocsCommandItem = NavItem & {
+  section: string
+}
+
 export const sidebarNav: SidebarSection[] = [
   {
     title: "Getting Started",
@@ -27,6 +31,7 @@ export const sidebarNav: SidebarSection[] = [
       { title: "Button", href: "/docs/components/button" },
       { title: "Card", href: "/docs/components/card" },
       { title: "Checkbox", href: "/docs/components/checkbox" },
+      { title: "Command", href: "/docs/components/command" },
       { title: "Collapsible", href: "/docs/components/collapsible" },
       { title: "Color Picker", href: "/docs/components/color-picker" },
       { title: "Dialog", href: "/docs/components/dialog" },
@@ -66,3 +71,22 @@ export const darkModeDocs: NavItem[] = [
   { title: "Astro", href: "/docs/dark-mode/astro" },
   { title: "Manual", href: "/docs/dark-mode/manual" },
 ]
+
+export const docsCommandGroups: SidebarSection[] = [
+  ...sidebarNav,
+  {
+    title: "Installation Guides",
+    items: installationDocs,
+  },
+  {
+    title: "Dark Mode Guides",
+    items: darkModeDocs,
+  },
+]
+
+export const docsCommandItems: DocsCommandItem[] = docsCommandGroups.flatMap((section) =>
+  section.items.map((item) => ({
+    ...item,
+    section: section.title,
+  })),
+)

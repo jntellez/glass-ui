@@ -8,6 +8,7 @@ const expectedNames = [
   "button",
   "card",
   "checkbox",
+  "command",
   "collapsible",
   "color-picker",
   "dialog",
@@ -37,6 +38,7 @@ const expectedDependenciesByName = {
     "tailwind-merge",
   ],
   "color-picker": ["class-variance-authority", "clsx", "tailwind-merge"],
+  command: ["clsx", "cmdk", "tailwind-merge"],
   dialog: ["@radix-ui/react-dialog", "class-variance-authority", "clsx", "tailwind-merge"],
   "dropdown-menu": [
     "@radix-ui/react-dropdown-menu",

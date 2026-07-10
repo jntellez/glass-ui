@@ -67,6 +67,17 @@ export const registry: RegistryIndex = [
     ],
   },
   {
+    name: "command",
+    type: "registry:ui",
+    dependencies: ["clsx", "cmdk", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/command/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "collapsible",
     type: "registry:ui",
     dependencies: [
