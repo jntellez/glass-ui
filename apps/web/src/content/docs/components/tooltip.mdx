@@ -1,0 +1,141 @@
+---
+title: Tooltip
+description: A lightweight floating hint for supplemental context near a trigger.
+---
+
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="tooltip-demo" height={260} client:load />
+
+`Tooltip` reveals concise supporting information on hover or keyboard focus while keeping the user in the current flow. It is built on Radix UI, so it preserves expected accessibility behavior, focus handling, and pointer interactions while matching the glass-ui visual system.
+
+Use it for short hints, icon labels, and extra context that is helpful but not essential to complete a task. Do not use tooltips for required form instructions, validation errors, or any information users must discover to succeed.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add tooltip"
+  pnpm="pnpm dlx @glass-ui-kit/cli add tooltip"
+  yarn="yarn dlx @glass-ui-kit/cli add tooltip"
+  bun="bunx @glass-ui-kit/cli add tooltip"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { Button } from "@/components/ui/button"
+  import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+  } from "@/components/ui/tooltip"
+
+  export default function App() {
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="strong" size="sm">Share</Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            Share this project with your team.
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    )
+  }`}
+/>
+
+## Examples
+
+### Provider composition
+
+Wrap related tooltips with `TooltipProvider` so delay settings stay consistent across a section of the interface.
+
+<ComponentPreview name="tooltip-demo" height={260} client:load />
+
+### Sides
+
+Use Radix placement props like `side`, `align`, and `sideOffset` when a tooltip needs to stay clear of nearby UI.
+
+<ComponentPreview name="tooltip-sides" height={320} client:load />
+
+## Accessibility guidance
+
+- Keep tooltip copy short and supplemental.
+- Ensure the trigger already has an accessible name without relying on the tooltip.
+- Do not hide required instructions or error feedback inside a tooltip.
+- Prefer visible text or descriptions when users must act on the information.
+
+## Styling
+
+Tooltip keeps the API intentionally small. Use Radix placement props for positioning and `className` as the escape hatch for custom width or spacing.
+
+<CodeBlock
+  lang="tsx"
+  code={`/* Placement */
+  <TooltipContent side="top" align="start" sideOffset={8} />
+
+  /* Provider defaults */
+  <TooltipProvider delayDuration={150} skipDelayDuration={300} />
+
+  /* Escape hatch */
+  <TooltipContent className="max-w-48 px-4" />`}
+/>
+
+## API Reference
+
+### TooltipProvider
+
+Accepts all Radix `Tooltip.Provider` props.
+
+| Prop | Type |
+| --- | --- |
+| `delayDuration` | `number` |
+| `skipDelayDuration` | `number` |
+| `disableHoverableContent` | `boolean` |
+
+### Tooltip
+
+Accepts all Radix `Tooltip.Root` props.
+
+| Prop | Type |
+| --- | --- |
+| `defaultOpen` | `boolean` |
+| `open` | `boolean` |
+| `onOpenChange` | `(open: boolean) => void` |
+| `delayDuration` | `number` |
+| `disableHoverableContent` | `boolean` |
+
+### TooltipTrigger
+
+Accepts all Radix `Tooltip.Trigger` props.
+
+| Prop | Type |
+| --- | --- |
+| `asChild` | `boolean` |
+| `disabled` | `boolean` |
+| `className` | `string` |
+
+### TooltipContent
+
+| Prop | Type |
+| --- | --- |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` |
+| `align` | `"start" \| "center" \| "end"` |
+| `sideOffset` | `number` |
+| `collisionPadding` | `number \| Partial<Record<"top" \| "right" \| "bottom" \| "left", number>>` |
+| `avoidCollisions` | `boolean` |
+| `forceMount` | `boolean` |
+| `className` | `string` |
+
+`TooltipContent` defaults to `sideOffset={10}` and `collisionPadding={8}` so small hints stay close to the trigger while avoiding cramped edges.
+
+### TooltipArrow
+
+Accepts all Radix `Tooltip.Arrow` props.

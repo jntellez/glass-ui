@@ -262,4 +262,15 @@ export const registry: RegistryIndex = [
       },
     ],
   },
+  {
+    name: "tooltip",
+    type: "registry:ui",
+    dependencies: ["@radix-ui/react-tooltip", "class-variance-authority", "clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/tooltip/index.tsx",
+        type: "client",
+      },
+    ],
+  },
 ]

@@ -19,6 +19,7 @@ import { sliderExamples } from "./slider"
 import { switchExamples } from "./switch"
 import { tabsExamples } from "./tabs"
 import { textareaExamples } from "./textarea"
+import { tooltipExamples } from "./tooltip"
 
 export const examples = {
   ...accordionExamples,
@@ -42,6 +43,7 @@ export const examples = {
   ...switchExamples,
   ...tabsExamples,
   ...textareaExamples,
+  ...tooltipExamples,
 } as const
 
 export type ExampleName = keyof typeof examples

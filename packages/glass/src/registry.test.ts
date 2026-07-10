@@ -24,6 +24,7 @@ const expectedNames = [
   "switch",
   "tabs",
   "textarea",
+  "tooltip",
 ] as const
 
 const expectedDependenciesByName = {
@@ -55,6 +56,7 @@ const expectedDependenciesByName = {
   slider: ["@radix-ui/react-slider", "class-variance-authority", "clsx", "tailwind-merge"],
   switch: ["@radix-ui/react-switch", "class-variance-authority", "clsx", "tailwind-merge"],
   tabs: ["@radix-ui/react-tabs", "class-variance-authority", "clsx", "tailwind-merge"],
+  tooltip: ["@radix-ui/react-tooltip", "class-variance-authority", "clsx", "tailwind-merge"],
 } satisfies Partial<Record<(typeof expectedNames)[number], string[]>>
 
 describe("registry", () => {

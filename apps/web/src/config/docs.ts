@@ -43,6 +43,7 @@ export const sidebarNav: SidebarSection[] = [
       { title: "Switch", href: "/docs/components/switch" },
       { title: "Tabs", href: "/docs/components/tabs" },
       { title: "Textarea", href: "/docs/components/textarea" },
+      { title: "Tooltip", href: "/docs/components/tooltip" },
     ],
   },
 ]
