@@ -1,10 +1,14 @@
 import { Label, RadioGroup, RadioGroupItem } from "@glass-ui-kit/glass"
 
-const shippingOptions = [
+const shippingOptions: ReadonlyArray<{
+  value: string
+  label: string
+  disabled?: boolean
+}> = [
   { value: "standard", label: "Standard shipping" },
   { value: "express", label: "Express shipping", disabled: true },
   { value: "pickup", label: "Store pickup" },
-] as const
+]
 
 export default function RadioGroupDisabled() {
   return (

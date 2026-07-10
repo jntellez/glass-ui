@@ -72,20 +72,29 @@ describe("registry", () => {
     expect(new Set(names)).toHaveLength(expectedNames.length)
   })
 
-  it("keeps each entry pointed at a single client ui file with shared deps", () => {
+  it("keeps each entry pointed at the expected client ui files with shared deps", () => {
     for (const entry of registry) {
       expect(entry.type).toBe("registry:ui")
       expect(entry.dependencies).toEqual(
         expectedDependenciesByName[entry.name] ?? ["clsx", "tailwind-merge"],
       )
-      expect(entry.files).toHaveLength(1)
-      expect(entry.files[0]).toMatchObject({
-        path:
-          entry.name === "native-select"
-            ? "ui/native-select/index.tsx"
-            : `ui/${entry.name}/index.tsx`,
-        type: "client",
-      })
+
+      const expectedPaths = [
+        entry.name === "native-select"
+          ? "ui/native-select/index.tsx"
+          : `ui/${entry.name}/index.tsx`,
+        ...(entry.name === "radio-group" || entry.name === "switch"
+          ? ["ui/field/context.tsx", "ui/field/use-field-control-props.ts"]
+          : []),
+      ]
+
+      expect(entry.files).toHaveLength(expectedPaths.length)
+      expect(entry.files).toEqual(
+        expectedPaths.map((filePath) => ({
+          path: filePath,
+          type: "client",
+        })),
+      )
     }
   })
 })

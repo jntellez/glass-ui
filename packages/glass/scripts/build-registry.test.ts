@@ -60,10 +60,11 @@ describe("buildRegistry", () => {
     expect(parsed).toHaveLength(registry.length)
 
     for (const entry of parsed) {
-      const sourcePath = path.resolve(packageDir, "src", entry.files[0].path)
+      for (const file of entry.files) {
+        const sourcePath = path.resolve(packageDir, "src", file.path)
 
-      expect(entry.files).toHaveLength(1)
-      expect(entry.files[0].content).toBe(readFileSync(sourcePath, "utf8"))
+        expect(file.content).toBe(readFileSync(sourcePath, "utf8"))
+      }
     }
   })
 

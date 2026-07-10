@@ -28,8 +28,8 @@ export function buildWritePlan(
     item.files
       .filter((file) => Boolean(file.content))
       .map((file) => {
-        const fileName = path.basename(file.path)
-        const filePath = path.join(targetDir, fileName)
+        const relativeFilePath = file.path.startsWith("ui/") ? file.path.slice(3) : file.path
+        const filePath = path.join(targetDir, relativeFilePath)
 
         return {
           filePath,

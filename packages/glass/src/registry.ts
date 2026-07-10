@@ -189,6 +189,14 @@ export const registry: RegistryIndex = [
         path: "ui/radio-group/index.tsx",
         type: "client",
       },
+      {
+        path: "ui/field/context.tsx",
+        type: "client",
+      },
+      {
+        path: "ui/field/use-field-control-props.ts",
+        type: "client",
+      },
     ],
   },
   {
@@ -236,6 +244,14 @@ export const registry: RegistryIndex = [
     files: [
       {
         path: "ui/switch/index.tsx",
+        type: "client",
+      },
+      {
+        path: "ui/field/context.tsx",
+        type: "client",
+      },
+      {
+        path: "ui/field/use-field-control-props.ts",
         type: "client",
       },
     ],

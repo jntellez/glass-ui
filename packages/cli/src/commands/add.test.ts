@@ -259,6 +259,80 @@ describe("runAddCommand", () => {
     )
   })
 
+  it("preserves nested registry paths and helper files for standalone component installs", async () => {
+    const writeFile = vi.fn().mockResolvedValue(undefined)
+    const installDependencies = vi.fn().mockResolvedValue(undefined)
+
+    await runAddCommand(
+      ["switch"],
+      {},
+      {
+        cwd: () => "/project",
+        exists: (filePath) => filePath === "glass.config.json" || filePath === "src",
+        readFile: async () =>
+          JSON.stringify({
+            framework: "vite",
+            style: "default",
+            css: "src/index.css",
+            aliases: {
+              components: "@/components/ui",
+              utils: "@/lib/utils",
+            },
+          }),
+        writeFile,
+        fetchRegistry: async () => [
+          {
+            name: "switch",
+            type: "registry:ui",
+            dependencies: ["@radix-ui/react-switch", "class-variance-authority"],
+            files: [
+              {
+                type: "client",
+                path: "ui/switch/index.tsx",
+                content:
+                  'import { useFieldControlProps } from "../field/use-field-control-props"\nexport const Switch = () => useFieldControlProps({})',
+              },
+              {
+                type: "client",
+                path: "ui/field/context.tsx",
+                content: "export const fieldContext = true",
+              },
+              {
+                type: "client",
+                path: "ui/field/use-field-control-props.ts",
+                content:
+                  'import { fieldContext } from "./context"\nexport const useFieldControlProps = () => fieldContext',
+              },
+            ],
+          },
+        ],
+        getPackageManager: async () => "pnpm",
+        installDependencies,
+        log: vi.fn(),
+      },
+    )
+
+    expect(writeFile).toHaveBeenCalledTimes(3)
+    expect(writeFile).toHaveBeenNthCalledWith(
+      1,
+      "src/components/ui/switch/index.tsx",
+      'import { useFieldControlProps } from "../field/use-field-control-props"\nexport const Switch = () => useFieldControlProps({})',
+      "/project",
+    )
+    expect(writeFile).toHaveBeenNthCalledWith(
+      2,
+      "src/components/ui/field/context.tsx",
+      "export const fieldContext = true",
+      "/project",
+    )
+    expect(writeFile).toHaveBeenNthCalledWith(
+      3,
+      "src/components/ui/field/use-field-control-props.ts",
+      'import { fieldContext } from "./context"\nexport const useFieldControlProps = () => fieldContext',
+      "/project",
+    )
+  })
+
   it("skips existing files by default and reports them", async () => {
     const writeFile = vi.fn().mockResolvedValue(undefined)
     const installDependencies = vi.fn().mockResolvedValue(undefined)
