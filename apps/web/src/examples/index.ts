@@ -13,6 +13,7 @@ import { nativeSelectExamples } from "./native-select"
 import { popoverExamples } from "./popover"
 import { selectExamples } from "./select"
 import { sliderExamples } from "./slider"
+import { switchExamples } from "./switch"
 import { tabsExamples } from "./tabs"
 import { textareaExamples } from "./textarea"
 
@@ -32,6 +33,7 @@ export const examples = {
   ...popoverExamples,
   ...selectExamples,
   ...sliderExamples,
+  ...switchExamples,
   ...tabsExamples,
   ...textareaExamples,
 } as const

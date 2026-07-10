@@ -1,0 +1,113 @@
+---
+title: Switch
+description: Accessible on/off control for settings, preferences, and binary toggles.
+---
+
+import CodeBlock from "@/components/docs/CodeBlock.tsx"
+import CommandTabs from "@/components/docs/CommandTabs.tsx"
+import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
+
+<ComponentPreview name="switch-demo" client:load />
+
+`Switch` is built on Radix UI, so it supports controlled and uncontrolled state, keyboard interaction, and form-friendly behavior while matching the glass-ui visual language.
+
+Use it for settings and preference toggles where the user is turning a feature on or off. If the choice should submit as a standard checkbox in a dense form row, `Checkbox` is still the simpler option.
+
+## Installation
+
+<CommandTabs
+  npm="npx @glass-ui-kit/cli add switch"
+  pnpm="pnpm dlx @glass-ui-kit/cli add switch"
+  yarn="yarn dlx @glass-ui-kit/cli add switch"
+  bun="bunx @glass-ui-kit/cli add switch"
+  client:load
+/>
+
+## Usage
+
+<CodeBlock
+  lang="tsx"
+  code={`import { FieldDescription } from "@/components/ui/field"
+  import { Label } from "@/components/ui/label"
+  import { Switch } from "@/components/ui/switch"
+
+  export default function App() {
+    return (
+      <div className="flex items-start justify-between gap-4 rounded-glass-md border border-glass-border/60 glass p-4">
+        <div className="space-y-1">
+          <Label htmlFor="email-updates">Email updates</Label>
+          <FieldDescription>Only the important product news.</FieldDescription>
+        </div>
+        <Switch id="email-updates" defaultChecked />
+      </div>
+    )
+  }`}
+/>
+
+## Examples
+
+### Sizes
+
+Use `size` when the toggle needs to align with denser settings rows or larger touch targets.
+
+<ComponentPreview name="switch-sizes" client:load />
+
+### Disabled
+
+Use `disabled` when the current state is informative but the user should not change it.
+
+<ComponentPreview name="switch-disabled" client:load />
+
+### Controlled
+
+Use `checked` and `onCheckedChange` when a parent component owns the setting state.
+
+<CodeBlock
+  lang="tsx"
+  code={`import { useState } from "react"
+  import { Label } from "@/components/ui/label"
+  import { Switch } from "@/components/ui/switch"
+
+  export default function ControlledSwitch() {
+    const [checked, setChecked] = useState(false)
+
+    return (
+      <div className="flex items-center justify-between gap-4 rounded-glass-md border border-glass-border/60 glass p-4">
+        <Label htmlFor="presence">Show presence</Label>
+        <Switch id="presence" checked={checked} onCheckedChange={setChecked} />
+      </div>
+    )
+  }`}
+/>
+
+## Styling
+
+Switch keeps the visual treatment intentionally fixed. Reach for `size` first, then use `className` for one-off layout tweaks around the baseline control.
+
+<CodeBlock
+  lang="tsx"
+  code={`<Switch defaultChecked />
+  <Switch size="sm" />
+  <Switch size="lg" className="mt-1" />
+
+  /* Controlled */
+  <Switch checked={checked} onCheckedChange={setChecked} />`}
+/>
+
+## API Reference
+
+Accepts all Radix `Switch.Root` props.
+
+| Prop | Type |
+| --- | --- |
+| `size` | `"sm" \| "md" \| "lg"` |
+| `checked` | `boolean` |
+| `defaultChecked` | `boolean` |
+| `onCheckedChange` | `(checked: boolean) => void` |
+| `disabled` | `boolean` |
+| `required` | `boolean` |
+| `name` | `string` |
+| `value` | `string` |
+| `className` | `string` |
+
+Pair `Switch` with `Label` using `id` and `htmlFor` for explicit associations, or compose it inside `Field` when you want shared label and description wiring.

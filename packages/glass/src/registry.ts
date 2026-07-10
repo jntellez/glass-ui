@@ -187,6 +187,17 @@ export const registry: RegistryIndex = [
     ],
   },
   {
+    name: "switch",
+    type: "registry:ui",
+    dependencies: ["@radix-ui/react-switch", "class-variance-authority", "clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "ui/switch/index.tsx",
+        type: "client",
+      },
+    ],
+  },
+  {
     name: "tabs",
     type: "registry:ui",
     dependencies: ["@radix-ui/react-tabs", "class-variance-authority", "clsx", "tailwind-merge"],
