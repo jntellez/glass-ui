@@ -1,7 +1,7 @@
 {
   "name": "@glass-ui-kit/schema",
   "version": "0.0.1",
-  "private": false,
+  "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "lint": "eslint src"
+    "lint": "tsc --noEmit"
   },
   "devDependencies": {
     "@glass-ui-kit/tsconfig": "workspace:*",

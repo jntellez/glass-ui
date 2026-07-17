@@ -76,10 +76,12 @@ describe("registry", () => {
 
   it("keeps each entry pointed at the expected client ui files with shared deps", () => {
     for (const entry of registry) {
+      const expectedDependencies = expectedDependenciesByName[
+        entry.name as keyof typeof expectedDependenciesByName
+      ] ?? ["clsx", "tailwind-merge"]
+
       expect(entry.type).toBe("registry:ui")
-      expect(entry.dependencies).toEqual(
-        expectedDependenciesByName[entry.name] ?? ["clsx", "tailwind-merge"],
-      )
+      expect(entry.dependencies).toEqual(expectedDependencies)
 
       const expectedPaths = [
         entry.name === "native-select"

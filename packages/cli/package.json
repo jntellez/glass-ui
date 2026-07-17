@@ -36,7 +36,7 @@
     "sync": "node scripts/sync-styles.mjs",
     "build": "pnpm run sync && tsup src/index.ts --format esm --clean",
     "dev": "pnpm run sync && bun run ./src/index.ts",
-    "lint": "eslint src",
+    "lint": "tsc --noEmit",
     "test": "vitest run",
     "prepublishOnly": "pnpm run build"
   },

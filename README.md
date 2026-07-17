@@ -45,6 +45,17 @@ This repository is managed with [Turbo](https://turbo.build/) and pnpm.
 - `packages/cli`: The command line interface (`@glass-ui-kit/cli`).
 - `packages/glass`: The source of truth for all components.
 
+## Release maintenance
+
+`@glass-ui-kit/cli` is already published on npm as the `latest` CLI package.
+
+For follow-up patches to published packages:
+
+1. Add the code change.
+2. Run `pnpm changeset` only when a published package needs a release.
+3. Run `pnpm version-packages` to apply pending release metadata.
+4. Run `pnpm release` to build and publish the release.
+
 ## License
 
 MIT © [Glass UI](LICENSE)

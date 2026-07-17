@@ -7,7 +7,7 @@
   "types": "./src/ui/index.ts",
   "sideEffects": false,
   "scripts": {
-    "lint": "eslint src",
+    "lint": "tsc --noEmit",
     "build:registry": "bun run ./scripts/build-registry.ts",
     "test": "vitest run",
     "test:watch": "vitest",
