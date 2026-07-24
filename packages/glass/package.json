@@ -9,6 +9,7 @@
   "scripts": {
     "lint": "tsc --noEmit",
     "build:registry": "bun run ./scripts/build-registry.ts",
+    "pretest": "pnpm --filter=@glass-ui-kit/schema build && pnpm build:registry",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
