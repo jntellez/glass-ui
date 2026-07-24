@@ -1,5 +1,18 @@
 import type { RegistryIndex } from "@glass-ui-kit/schema"
 
+const fieldContextFile = {
+  path: "ui/field/context.tsx",
+  type: "client",
+} as const
+
+const fieldControlFiles = [
+  fieldContextFile,
+  {
+    path: "ui/field/use-field-control-props.ts",
+    type: "client",
+  },
+] as const
+
 /**
  * MASTER REGISTRY INDEX
  * Aquí se definen manualmente los componentes disponibles.
@@ -64,6 +77,7 @@ export const registry: RegistryIndex = [
         path: "ui/checkbox/index.tsx",
         type: "client",
       },
+      ...fieldControlFiles,
     ],
   },
   {
@@ -102,6 +116,7 @@ export const registry: RegistryIndex = [
         path: "ui/color-picker/index.tsx",
         type: "client",
       },
+      ...fieldControlFiles,
     ],
   },
   {
@@ -140,6 +155,7 @@ export const registry: RegistryIndex = [
         path: "ui/field/index.tsx",
         type: "client",
       },
+      fieldContextFile,
     ],
   },
   {
@@ -151,6 +167,7 @@ export const registry: RegistryIndex = [
         path: "ui/input/index.tsx",
         type: "client",
       },
+      ...fieldControlFiles,
     ],
   },
   {
@@ -162,6 +179,7 @@ export const registry: RegistryIndex = [
         path: "ui/label/index.tsx",
         type: "client",
       },
+      fieldContextFile,
     ],
   },
   {
@@ -173,6 +191,7 @@ export const registry: RegistryIndex = [
         path: "ui/native-select/index.tsx",
         type: "client",
       },
+      ...fieldControlFiles,
     ],
   },
   {
@@ -200,14 +219,7 @@ export const registry: RegistryIndex = [
         path: "ui/radio-group/index.tsx",
         type: "client",
       },
-      {
-        path: "ui/field/context.tsx",
-        type: "client",
-      },
-      {
-        path: "ui/field/use-field-control-props.ts",
-        type: "client",
-      },
+      ...fieldControlFiles,
     ],
   },
   {
@@ -219,6 +231,7 @@ export const registry: RegistryIndex = [
         path: "ui/select/index.tsx",
         type: "client",
       },
+      ...fieldControlFiles,
     ],
   },
   {
@@ -246,6 +259,7 @@ export const registry: RegistryIndex = [
         path: "ui/slider/index.tsx",
         type: "client",
       },
+      ...fieldControlFiles,
     ],
   },
   {
@@ -257,14 +271,7 @@ export const registry: RegistryIndex = [
         path: "ui/switch/index.tsx",
         type: "client",
       },
-      {
-        path: "ui/field/context.tsx",
-        type: "client",
-      },
-      {
-        path: "ui/field/use-field-control-props.ts",
-        type: "client",
-      },
+      ...fieldControlFiles,
     ],
   },
   {
@@ -287,6 +294,7 @@ export const registry: RegistryIndex = [
         path: "ui/textarea/index.tsx",
         type: "client",
       },
+      ...fieldControlFiles,
     ],
   },
   {

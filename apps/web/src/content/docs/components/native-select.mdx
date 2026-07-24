@@ -14,10 +14,10 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 ## Installation
 
 <CommandTabs
-  npm="npx @glass-ui-kit/cli add select"
-  pnpm="pnpm dlx @glass-ui-kit/cli add select"
-  yarn="yarn dlx @glass-ui-kit/cli add select"
-  bun="bunx @glass-ui-kit/cli add select"
+  npm="npx @glass-ui-kit/cli add native-select"
+  pnpm="pnpm dlx @glass-ui-kit/cli add native-select"
+  yarn="yarn dlx @glass-ui-kit/cli add native-select"
+  bun="bunx @glass-ui-kit/cli add native-select"
   client:load
 />
 
@@ -25,23 +25,25 @@ import ComponentPreview from "@/components/docs/ComponentPreview.tsx"
 
 <CodeBlock
   lang="tsx"
-  code={`import { NativeGroup, NativeOption, NativeSelect } from "@/components/ui/native-select"
-
-  export default function App() {
-    return (
-      <NativeSelect defaultValue="frontend" variant="soft">
-        <NativeGroup label="Engineering">
-          <NativeOption value="frontend">Frontend</NativeOption>
-            <NativeOption value="backend">Backend</NativeOption>
-          </NativeGroup>
-
-          <NativeGroup label="Product">
-            <NativeOption value="design">Design</NativeOption>
-          <NativeOption value="pm">Product Manager</NativeOption>
-        </NativeGroup>
-      </NativeSelect>
-    )
-  }`}
+  code={[
+    'import { NativeGroup, NativeOption, NativeSelect } from "@/components/ui/native-select"',
+    "",
+    "export default function App() {",
+    "  return (",
+    '    <NativeSelect defaultValue="frontend" variant="soft">',
+    '      <NativeGroup label="Engineering">',
+    '        <NativeOption value="frontend">Frontend</NativeOption>',
+    '        <NativeOption value="backend">Backend</NativeOption>',
+    "      </NativeGroup>",
+    "",
+    '      <NativeGroup label="Product">',
+    '        <NativeOption value="design">Design</NativeOption>',
+    '        <NativeOption value="pm">Product Manager</NativeOption>',
+    "      </NativeGroup>",
+    "    </NativeSelect>",
+    "  )",
+    "}",
+  ].join("\n")}
 />
 
 ## Examples
@@ -76,35 +78,33 @@ NativeSelect follows the same prop-first direction as Input and Textarea, but it
 
 <CodeBlock
   lang="tsx"
-  code={`/* Variants */
-
-  <NativeSelect variant="default" />
-  <NativeSelect variant="soft" />
-  <NativeSelect variant="strong" />
-  <NativeSelect variant="transparent" />
-
-  /* UI sizes (defaults to md) */
-
-  <NativeSelect uiSize="sm" />
-  <NativeSelect uiSize="md" />
-  <NativeSelect uiSize="lg" />
-
-  /* Native select behavior stays available */
-
-  <NativeSelect size={6} />
-  <NativeSelect multiple />
-  <NativeSelect aria-invalid="true" />
-
-  /* Escape hatch */
-
-  <NativeSelect className="max-w-xs" />
-
-  <NativeSelect defaultValue="frontend" variant="soft">
-    <NativeGroup label="Engineering">
-      <NativeOption value="frontend">Frontend</NativeOption>
-      <NativeOption value="backend">Backend</NativeOption>
-    </NativeGroup>
-  </NativeSelect>`}
+  code={[
+    "/* Variants */",
+    '<NativeSelect variant="default" />',
+    '<NativeSelect variant="soft" />',
+    '<NativeSelect variant="strong" />',
+    '<NativeSelect variant="transparent" />',
+    "",
+    "/* UI sizes (defaults to md) */",
+    '<NativeSelect uiSize="sm" />',
+    '<NativeSelect uiSize="md" />',
+    '<NativeSelect uiSize="lg" />',
+    "",
+    "/* Native select behavior stays available */",
+    "<NativeSelect size={6} />",
+    "<NativeSelect multiple />",
+    '<NativeSelect aria-invalid="true" />',
+    "",
+    "/* Escape hatch */",
+    '<NativeSelect className="max-w-xs" />',
+    "",
+    '<NativeSelect defaultValue="frontend" variant="soft">',
+    '  <NativeGroup label="Engineering">',
+    '    <NativeOption value="frontend">Frontend</NativeOption>',
+    '    <NativeOption value="backend">Backend</NativeOption>',
+    "  </NativeGroup>",
+    "</NativeSelect>",
+  ].join("\n")}
 />
 
 ## API Reference

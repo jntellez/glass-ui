@@ -1,6 +1,11 @@
+import { readFileSync } from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 import { describe, expect, it } from "vitest"
 import { registryIndexSchema } from "@glass-ui-kit/schema"
 import { registry } from "./registry"
+
+const sourceDir = path.dirname(fileURLToPath(import.meta.url))
 
 const expectedNames = [
   "accordion",
@@ -61,6 +66,23 @@ const expectedDependenciesByName = {
   tooltip: ["@radix-ui/react-tooltip", "class-variance-authority", "clsx", "tailwind-merge"],
 } satisfies Partial<Record<(typeof expectedNames)[number], string[]>>
 
+const fieldControlImporters: readonly string[] = [
+  "checkbox",
+  "color-picker",
+  "input",
+  "native-select",
+  "radio-group",
+  "select",
+  "slider",
+  "switch",
+  "textarea",
+]
+const directFieldContextImporters: readonly string[] = ["field", "label"]
+
+function readComponentSource(name: string) {
+  return readFileSync(path.join(sourceDir, "ui", name, "index.tsx"), "utf8")
+}
+
 describe("registry", () => {
   it("matches the registry schema", () => {
     expect(() => registryIndexSchema.parse(registry)).not.toThrow()
@@ -72,6 +94,28 @@ describe("registry", () => {
     expect(registry).toHaveLength(expectedNames.length)
     expect(names).toEqual(expectedNames)
     expect(new Set(names)).toHaveLength(expectedNames.length)
+  })
+
+  it("tracks every component that imports the shared field internals", () => {
+    const componentSources = registry.map((entry) => ({
+      name: entry.name,
+      source: readComponentSource(entry.name),
+    }))
+
+    expect(
+      componentSources
+        .filter(({ source }) => source.includes("../field/use-field-control-props"))
+        .map(({ name }) => name),
+    ).toEqual(fieldControlImporters)
+    expect(
+      componentSources
+        .filter(({ name, source }) =>
+          name === "field"
+            ? source.includes('from "./context"')
+            : source.includes("../field/context"),
+        )
+        .map(({ name }) => name),
+    ).toEqual(directFieldContextImporters)
   })
 
   it("keeps each entry pointed at the expected client ui files with shared deps", () => {
@@ -87,8 +131,12 @@ describe("registry", () => {
         entry.name === "native-select"
           ? "ui/native-select/index.tsx"
           : `ui/${entry.name}/index.tsx`,
-        ...(entry.name === "radio-group" || entry.name === "switch"
-          ? ["ui/field/context.tsx", "ui/field/use-field-control-props.ts"]
+        ...(directFieldContextImporters.includes(entry.name) ||
+        fieldControlImporters.includes(entry.name)
+          ? ["ui/field/context.tsx"]
+          : []),
+        ...(fieldControlImporters.includes(entry.name)
+          ? ["ui/field/use-field-control-props.ts"]
           : []),
       ]
 
