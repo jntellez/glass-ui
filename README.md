@@ -2,8 +2,8 @@
 
 # Glass UI
 
-<a href="https://ui-glass.vercel.app">
-  <img src="apps/web/public/web-ss.png" alt="Glass UI documentation site" />
+<a href="https://ui-glass.vercel.app/docs/components/button">
+  <img src="apps/web/public/web-ss.png" alt="Glass UI Button documentation" width="92%" />
 </a>
 
 [Documentation](https://ui-glass.vercel.app) &middot; [Components](https://ui-glass.vercel.app/docs/components) &middot; [npm](https://www.npmjs.com/package/@glass-ui-kit/cli)
