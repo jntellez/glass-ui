@@ -5,7 +5,7 @@ const SITE_URL = "https://ui-glass.vercel.app"
 
 export const GET: APIRoute = async () => {
   const docsEntries = await getCollection("docs")
-  const paths = docsEntries.map((entry) => {
+  const paths = docsEntries.map((entry: { id: string }) => {
     let slug = entry.id.replace(/\.mdx?$/, "").replace(/\/index$/, "")
 
     if (slug === "index") {
