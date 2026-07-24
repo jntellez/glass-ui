@@ -4,6 +4,12 @@ import { darkModeDocs, docsCommandItems, flattenedDocs, installationDocs, sideba
 describe("docs config", () => {
   it("keeps flattened docs in sync with the sidebar navigation", () => {
     expect(flattenedDocs).toEqual(sidebarNav.flatMap((section) => section.items))
+    expect(sidebarNav.find((section) => section.title === "Getting Started")?.items).toContainEqual(
+      {
+        title: "AI Skills",
+        href: "/docs/ai-skills",
+      },
+    )
   })
 
   it("keeps installation docs under the installation section", () => {
@@ -25,6 +31,11 @@ describe("docs config", () => {
   })
 
   it("exposes command items for sidebar and guide routes", () => {
+    expect(docsCommandItems).toContainEqual({
+      title: "AI Skills",
+      href: "/docs/ai-skills",
+      section: "Getting Started",
+    })
     expect(docsCommandItems).toContainEqual({
       title: "Command",
       href: "/docs/components/command",

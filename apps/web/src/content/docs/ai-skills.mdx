@@ -1,0 +1,115 @@
+---
+title: AI Skills
+description: Give coding agents a safe, repeatable workflow for building complete Glass UI pages.
+---
+
+import CodeBlock from "@/components/docs/CodeBlock"
+import ExternalLink from "@/components/docs/ExternalLink"
+import Steps from "@/components/docs/Steps"
+
+<div className="not-prose my-8 overflow-hidden rounded-glass-xl border border-glass-border glass-soft p-6 sm:p-8">
+  <p className="mb-3 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+    Portable Agent Skill
+  </p>
+  <p className="max-w-2xl text-xl font-medium leading-relaxed text-foreground sm:text-2xl">
+    Turn a page brief into project-native Glass UI source, without hiding your UI behind a package.
+  </p>
+  <div className="mt-6 flex flex-wrap gap-2 text-sm text-muted-foreground">
+    <span className="rounded-glass-sm border border-glass-border px-3 py-1.5 glass">React 18+</span>
+    <span className="rounded-glass-sm border border-glass-border px-3 py-1.5 glass">
+      Tailwind CSS v4
+    </span>
+    <span className="rounded-glass-sm border border-glass-border px-3 py-1.5 glass">MIT</span>
+  </div>
+</div>
+
+## Purpose
+
+`glass-ui-page-builder` teaches OpenCode, Claude Code, Codex, and Gemini to inspect your project before generating a complete page. It preserves the copy-source model, reuses local components, applies the `glass`, `glass-soft`, and `glass-strong` visual grammar, and validates the result.
+
+The skill includes practical patterns for landing pages, dashboards, settings screens, and content workspaces.
+
+## Requirements
+
+- An existing React 18+ project using Tailwind CSS v4
+- Glass UI initialized with a valid `glass.config.json`
+- A coding agent with Agent Skills support
+- Permission for the agent to inspect the project and run its validation scripts
+
+## Install
+
+<Steps>
+
+### OpenCode, Codex, or Gemini
+
+Install the skill in the portable `.agents/skills` location:
+
+<CodeBlock
+  code={`mkdir -p .agents/skills/glass-ui-page-builder
+curl -fsSL https://ui-glass.vercel.app/skills/glass-ui-page-builder/SKILL.md \\
+  -o .agents/skills/glass-ui-page-builder/SKILL.md`}
+  lang="bash"
+/>
+
+### Claude Code
+
+Claude Code can load the same file from `.claude/skills`:
+
+<CodeBlock
+  code={`mkdir -p .claude/skills/glass-ui-page-builder
+curl -fsSL https://ui-glass.vercel.app/skills/glass-ui-page-builder/SKILL.md \\
+  -o .claude/skills/glass-ui-page-builder/SKILL.md`}
+  lang="bash"
+/>
+
+### Start a new agent session
+
+Restart or open a new session so the agent discovers the installed skill. Keep the skill in the repository when you want the workflow shared with your team.
+
+</Steps>
+
+## Invoke it
+
+Name the skill and describe the route, audience, primary action, and required states. The agent should inspect the existing project before proposing files or CLI changes.
+
+| Agent       | Invocation                                                              |
+| ----------- | ----------------------------------------------------------------------- |
+| OpenCode    | Mention `glass-ui-page-builder` in the request or let the agent load it |
+| Claude Code | Run `/glass-ui-page-builder` before the page brief                      |
+| Codex       | Include `$glass-ui-page-builder` in the prompt                          |
+| Gemini      | Confirm it with `/skills list`, then mention `glass-ui-page-builder`    |
+
+<CodeBlock
+  code={`Use glass-ui-page-builder to build an operations dashboard at /dashboard.
+Reuse local components, include an accessible activity table and mobile navigation,
+support light and dark themes, and run the project's targeted checks.`}
+  lang="text"
+/>
+
+More useful prompts:
+
+- **Landing:** "Create a conversion-focused landing page for a privacy-first finance app, with product proof, responsive navigation, and one dominant CTA."
+- **Settings:** "Build `/settings/profile` with validation, save feedback, keyboard access, and a clearly separated danger zone."
+- **Workspace:** "Create `/articles` as a responsive list-detail content workspace with search, draft status, empty states, and protected unsaved work."
+- **Audit:** "Audit this page for Glass UI grammar, copy-source imports, accessibility, responsive behavior, and theme parity; make only the necessary fixes."
+
+## Safety and limits
+
+The skill directs agents to run read-only `doctor`, `list`, and `info` checks before using `add`, and to add only named components that are actually missing. It never permits package imports in generated application code.
+
+It also prohibits `--force`, `--overwrite`, and `--all` unless you explicitly authorize the exact operation. Review generated source and diffs before merging; the skill improves agent behavior but does not replace product requirements, visual review, or accessibility testing with real users.
+
+<div className="not-prose mt-8 rounded-glass-lg border border-glass-border glass p-5 sm:flex sm:items-center sm:justify-between sm:gap-6">
+  <div>
+    <p className="font-medium text-foreground">Inspect the portable source</p>
+    <p className="mt-1 text-sm text-muted-foreground">
+      One Markdown file, no manifest or runtime dependency.
+    </p>
+  </div>
+  <ExternalLink
+    href="/skills/glass-ui-page-builder/SKILL.md"
+    className="mt-4 inline-flex rounded-glass-md border border-glass-border px-4 py-2 glass-strong sm:mt-0"
+  >
+    Open SKILL.md
+  </ExternalLink>
+</div>
