@@ -1,61 +1,74 @@
-# 🧊 Glass UI
+<div align="center">
 
-Beautifully designed glassmorphism components built with React, TypeScript, and Tailwind CSS.
+# Glass UI
 
-This is **not** a component library. It's a collection of re-usable components that you can copy and paste into your apps.
+<a href="https://ui-glass.vercel.app">
+  <img src="apps/web/public/web-ss.png" alt="Glass UI documentation site" />
+</a>
 
-**[Read the documentation](https://ui-glass.vercel.app)**
+[Documentation](https://ui-glass.vercel.app) &middot; [Components](https://ui-glass.vercel.app/docs/components) &middot; [npm](https://www.npmjs.com/package/@glass-ui-kit/cli)
 
-## Philosophy
+Accessible glassmorphism components for React and Tailwind CSS.
 
-Glass UI follows the philosophy of ownership. We do not distribute the components as an npm package. instead, we provide a CLI to scaffold the code directly into your project.
+</div>
 
-- **Copy and paste.** You own the code. Customize it to your needs.
-- **Glassmorphism.** Physics-based tokens for blur, saturation, and transparency.
-- **Type-safe.** Written in TypeScript.
-- **Accessible.** Built on top of accessible primitives.
+## About
+
+Glass UI is a collection of reusable components that you copy into your project and own. Use the CLI to scaffold accessible, type-safe components, then customize every detail to fit your interface.
+
+## Stack
+
+- **UI** — [React](https://react.dev)
+- **Language** — [TypeScript](https://www.typescriptlang.org)
+- **Styling** — [Tailwind CSS](https://tailwindcss.com)
+- **Documentation** — [Astro](https://astro.build)
+- **Workspace** — [Turborepo](https://turbo.build) / [pnpm](https://pnpm.io)
 
 ## Quick Start
 
-Use the CLI to initialize your project and add components.
-
-### Initialize
-
-Run the `init` command to set up the base configuration and CSS variables.
+Initialize Glass UI in your project:
 
 ```bash
 npx @glass-ui-kit/cli@latest init
-
 ```
 
-### Add components
-
-Use the `add` command to add components to your project. The CLI will automatically install dependencies and resolve imports.
+Add a component:
 
 ```bash
 npx @glass-ui-kit/cli@latest add card
-
 ```
 
-## Monorepo Structure
+The generated source code lives in your project, ready to edit without depending on a component package.
 
-This repository is managed with [Turbo](https://turbo.build/) and pnpm.
+## Development
 
-- `apps/web`: The documentation site and component registry.
-- `packages/cli`: The command line interface (`@glass-ui-kit/cli`).
-- `packages/glass`: The source of truth for all components.
+1. Clone the repository:
 
-## Release maintenance
+```bash
+git clone https://github.com/jntellez/glass-ui.git
+cd glass-ui
+```
 
-`@glass-ui-kit/cli` is already published on npm as the `latest` CLI package.
+2. Install dependencies:
 
-For follow-up patches to published packages:
+```bash
+pnpm install
+```
 
-1. Add the code change.
-2. Run `pnpm changeset` only when a published package needs a release.
-3. Run `pnpm version-packages` to apply pending release metadata.
-4. Run `pnpm release` to build and publish the release.
+3. Start the development server:
+
+```bash
+pnpm dev
+```
+
+4. Open [http://localhost:4321](http://localhost:4321) in your browser.
+
+## Structure
+
+- `apps/web` — Documentation site and component registry
+- `packages/cli` — CLI for scaffolding components
+- `packages/glass` — Source of truth for reusable components
 
 ## License
 
-MIT © [Glass UI](LICENSE)
+[MIT](LICENSE) © Juan Tellez
