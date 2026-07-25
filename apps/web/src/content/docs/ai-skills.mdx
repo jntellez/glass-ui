@@ -4,24 +4,23 @@ description: Give coding agents a safe, repeatable workflow for building complet
 ---
 
 import CodeBlock from "@/components/docs/CodeBlock"
-import ExternalLink from "@/components/docs/ExternalLink"
+import SkillSourceLink from "@/components/docs/SkillSourceLink"
 import Steps from "@/components/docs/Steps"
+import { Badge, Card } from "@glass-ui-kit/glass"
 
-<div className="not-prose my-8 overflow-hidden rounded-glass-xl border border-glass-border glass-soft p-6 sm:p-8">
-  <p className="mb-3 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+<Card variant="soft" padding="sm" className="not-prose my-6">
+  <p className="mb-2 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
     Portable Agent Skill
   </p>
-  <p className="max-w-2xl text-xl font-medium leading-relaxed text-foreground sm:text-2xl">
+  <p className="max-w-2xl text-base font-medium leading-relaxed text-foreground sm:text-lg">
     Turn a page brief into project-native Glass UI source, without hiding your UI behind a package.
   </p>
-  <div className="mt-6 flex flex-wrap gap-2 text-sm text-muted-foreground">
-    <span className="rounded-glass-sm border border-glass-border px-3 py-1.5 glass">React 18+</span>
-    <span className="rounded-glass-sm border border-glass-border px-3 py-1.5 glass">
-      Tailwind CSS v4
-    </span>
-    <span className="rounded-glass-sm border border-glass-border px-3 py-1.5 glass">MIT</span>
+  <div className="mt-4 flex flex-wrap gap-1.5">
+    <Badge size="sm">React 18+</Badge>
+    <Badge size="sm">Tailwind CSS v4</Badge>
+    <Badge size="sm">MIT</Badge>
   </div>
-</div>
+</Card>
 
 ## Purpose
 
@@ -99,17 +98,14 @@ The skill directs agents to run read-only `doctor`, `list`, and `info` checks be
 
 It also prohibits `--force`, `--overwrite`, and `--all` unless you explicitly authorize the exact operation. Review generated source and diffs before merging; the skill improves agent behavior but does not replace product requirements, visual review, or accessibility testing with real users.
 
-<div className="not-prose mt-8 rounded-glass-lg border border-glass-border glass p-5 sm:flex sm:items-center sm:justify-between sm:gap-6">
+<Card padding="sm" className="not-prose mt-6 sm:flex sm:items-center sm:justify-between sm:gap-4">
   <div>
     <p className="font-medium text-foreground">Inspect the portable source</p>
     <p className="mt-1 text-sm text-muted-foreground">
       One Markdown file, no manifest or runtime dependency.
     </p>
   </div>
-  <ExternalLink
-    href="/skills/glass-ui-page-builder/SKILL.md"
-    className="mt-4 inline-flex rounded-glass-md border border-glass-border px-4 py-2 glass-strong sm:mt-0"
-  >
-    Open SKILL.md
-  </ExternalLink>
-</div>
+  <div className="mt-3 sm:mt-0">
+    <SkillSourceLink />
+  </div>
+</Card>
